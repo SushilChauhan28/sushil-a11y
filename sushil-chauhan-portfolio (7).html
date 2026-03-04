@@ -1,0 +1,1744 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sushil Chauhan - IAAP-CPWA | WCAG Accessibility Services</title>
+  <meta name="description" content="IAAP-CPWA Certified accessibility specialist in Mumbai. WCAG 2.2 testing $50/page, VPAT reports from $500, PDF remediation $30/hr. 7+ years, 100+ projects worldwide.">
+  <meta name="keywords" content="WCAG testing, VPAT report, mobile accessibility, PDF remediation, accessibility audit, IAAP CPWA, screen reader testing, ARIA, Section 508">
+  <meta name="author" content="Sushil Chauhan">
+  <meta property="og:title" content="Sushil Chauhan - IAAP-CPWA | WCAG Accessibility Services">
+  <meta property="og:description" content="Professional WCAG Accessibility Services - $50/page testing, VPAT reports, PDF remediation. IAAP-CPWA certified, 7+ years experience.">
+  <meta property="og:type" content="website">
+  <link rel="canonical" href="https://sushilchauhan.com/">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,300&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ─── CSS Variables ─── */
+    :root {
+      --bg: #0a0a0a;
+      --bg2: #111111;
+      --bg3: #181818;
+      --text: #ffffff;
+      --text-muted: rgba(255,255,255,0.55);
+      --accent: #ff6b6b;
+      --accent-dim: rgba(255,107,107,0.12);
+      --accent-glow: rgba(255,107,107,0.25);
+      --border: rgba(255,255,255,0.08);
+      --border-hover: rgba(255,107,107,0.4);
+      --glass: rgba(255,255,255,0.04);
+      --glass-hover: rgba(255,255,255,0.07);
+      --radius: 20px;
+      --radius-sm: 10px;
+      --mono: 'Space Mono', monospace;
+      --sans: 'DM Sans', sans-serif;
+      --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* ─── Reset & Base ─── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 16px; }
+    body {
+      font-family: var(--sans);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+    img { max-width: 100%; display: block; }
+    a { color: inherit; text-decoration: none; }
+    ul { list-style: none; }
+
+    /* ─── Skip Link ─── */
+    .skip-link {
+      position: absolute;
+      top: -100px;
+      left: 1rem;
+      background: var(--accent);
+      color: #fff;
+      padding: 0.75rem 1.5rem;
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+      font-size: 0.9rem;
+      z-index: 9999;
+      transition: top var(--transition);
+    }
+    .skip-link:focus {
+      top: 1rem;
+      outline: 3px solid #fff;
+      outline-offset: 2px;
+    }
+
+    /* ─── Background Texture ─── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 50% at 20% 10%, rgba(255,107,107,0.06) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 40% at 80% 80%, rgba(255,107,107,0.04) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ─── Header / Nav ─── */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      background: rgba(10,10,10,0.8);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      height: 68px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 2rem;
+    }
+    .logo {
+      font-family: var(--mono);
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.02em;
+    }
+    .logo span { color: var(--accent); }
+    nav[role="navigation"] ul {
+      display: flex;
+      gap: 0.25rem;
+      align-items: center;
+    }
+    nav[role="navigation"] a {
+      display: block;
+      padding: 0.4rem 0.85rem;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      border-radius: 8px;
+      transition: color var(--transition), background var(--transition);
+      letter-spacing: 0.01em;
+    }
+    nav[role="navigation"] a:hover,
+    nav[role="navigation"] a:focus {
+      color: var(--text);
+      background: var(--glass-hover);
+      outline: none;
+    }
+    nav[role="navigation"] a:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+    .nav-cta {
+      background: var(--accent) !important;
+      color: #fff !important;
+      padding: 0.4rem 1rem !important;
+      border-radius: 8px !important;
+    }
+    .nav-cta:hover { opacity: 0.85; }
+
+    /* ─── Hamburger ─── */
+    .hamburger {
+      display: none;
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 0.5rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: border-color var(--transition);
+    }
+    .hamburger:hover, .hamburger:focus-visible { border-color: var(--accent); outline: 2px solid var(--accent); }
+    .hamburger svg { display: block; }
+
+    /* ─── Wrapper ─── */
+    .page-wrapper { position: relative; z-index: 1; }
+
+    /* ─── Section Common ─── */
+    section { padding: 5rem 2rem; }
+    .container { max-width: 1200px; margin: 0 auto; }
+    .section-label {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      margin-bottom: 0.75rem;
+      display: block;
+    }
+    .section-title {
+      font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+      font-weight: 300;
+      line-height: 1.2;
+      letter-spacing: -0.03em;
+      margin-bottom: 1rem;
+    }
+    .section-title strong { font-weight: 700; }
+    .section-subtitle {
+      font-size: 1rem;
+      color: var(--text-muted);
+      max-width: 560px;
+      line-height: 1.7;
+    }
+
+    /* ─── Glass Card ─── */
+    .glass-card {
+      background: var(--glass);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      transition: transform var(--transition), border-color var(--transition), box-shadow var(--transition);
+    }
+    .glass-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--border-hover);
+      box-shadow: 0 20px 60px rgba(255,107,107,0.1);
+    }
+
+    /* ─── HERO ─── */
+    #home {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding-top: 68px;
+      padding-bottom: 4rem;
+    }
+    .hero-inner {
+      text-align: center;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--accent-dim);
+      border: 1px solid rgba(255,107,107,0.25);
+      border-radius: 100px;
+      padding: 0.35rem 1rem;
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 2rem;
+    }
+    .hero-badge::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.8); }
+    }
+    h1 {
+      font-size: clamp(2.4rem, 7vw, 5.5rem);
+      font-weight: 300;
+      line-height: 1.05;
+      letter-spacing: -0.04em;
+      margin-bottom: 1.5rem;
+    }
+    h1 strong {
+      font-weight: 700;
+      background: linear-gradient(135deg, #fff 40%, rgba(255,255,255,0.6));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    h1 .accent-word {
+      color: var(--accent);
+      -webkit-text-fill-color: var(--accent);
+    }
+    .hero-sub {
+      font-size: clamp(0.9rem, 2vw, 1.1rem);
+      color: var(--text-muted);
+      margin-bottom: 3rem;
+      letter-spacing: 0.01em;
+    }
+    .hero-sub span {
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    /* Pricing Cards */
+    .pricing-cards {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.25rem;
+      max-width: 560px;
+      margin: 0 auto 3rem;
+    }
+    .price-card {
+      padding: 1.75rem;
+      border-radius: var(--radius);
+      text-align: left;
+      position: relative;
+      overflow: hidden;
+    }
+    .price-card.featured {
+      background: var(--accent);
+      border-color: var(--accent);
+    }
+    .price-card.featured:hover {
+      border-color: var(--accent);
+      box-shadow: 0 20px 60px rgba(255,107,107,0.3);
+    }
+    .price-card-label {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
+      display: block;
+    }
+    .price-card.featured .price-card-label { color: rgba(255,255,255,0.7); }
+    .price-card-amount {
+      font-size: 2.2rem;
+      font-weight: 700;
+      line-height: 1;
+      letter-spacing: -0.04em;
+      margin-bottom: 0.25rem;
+    }
+    .price-card-unit {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      font-weight: 400;
+    }
+    .price-card.featured .price-card-unit { color: rgba(255,255,255,0.75); }
+
+    /* Hero CTA */
+    .hero-ctas {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.8rem 1.75rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.9rem;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+      transition: all var(--transition);
+      cursor: pointer;
+      border: none;
+    }
+    .btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+    }
+    .btn-primary:hover { background: #ff5252; transform: translateY(-2px); box-shadow: 0 10px 30px rgba(255,107,107,0.35); }
+    .btn-ghost {
+      background: var(--glass);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .btn-ghost:hover { background: var(--glass-hover); border-color: rgba(255,255,255,0.2); transform: translateY(-2px); }
+
+    /* Trust Strip */
+    .trust-strip {
+      margin-top: 3.5rem;
+      display: flex;
+      justify-content: center;
+      gap: 2.5rem;
+      flex-wrap: wrap;
+    }
+    .trust-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.3rem;
+    }
+    .trust-number {
+      font-family: var(--mono);
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: -0.04em;
+    }
+    .trust-label {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    /* ─── ABOUT ─── */
+    #about { background: var(--bg2); }
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+    .about-bio { font-size: 1rem; color: var(--text-muted); line-height: 1.8; margin-bottom: 1.5rem; }
+    .about-bio strong { color: var(--text); }
+    .cert-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      background: var(--accent-dim);
+      border: 1px solid rgba(255,107,107,0.2);
+      border-radius: 12px;
+      padding: 0.65rem 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .cert-badge-icon {
+      width: 32px;
+      height: 32px;
+      background: var(--accent);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.7rem;
+      font-family: var(--mono);
+      flex-shrink: 0;
+    }
+    .cert-badge-text { font-size: 0.82rem; font-weight: 600; line-height: 1.3; }
+    .cert-badge-text small { font-weight: 400; color: var(--text-muted); font-size: 0.72rem; display: block; }
+
+    .skills-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+    }
+    .skill-item {
+      padding: 0.85rem 1rem;
+      background: var(--glass);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-size: 0.82rem;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .skill-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      flex-shrink: 0;
+    }
+
+    /* ─── SERVICES ─── */
+    #services { background: var(--bg); }
+    .services-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 2rem;
+      margin-bottom: 3rem;
+      flex-wrap: wrap;
+    }
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.25rem;
+    }
+    .service-card {
+      padding: 2rem;
+    }
+    .service-icon {
+      width: 44px;
+      height: 44px;
+      background: var(--accent-dim);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.25rem;
+      font-size: 1.1rem;
+    }
+    .service-name {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 0.3rem;
+      letter-spacing: -0.01em;
+    }
+    .service-price {
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      color: var(--accent);
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      margin-bottom: 0.75rem;
+    }
+    .service-desc {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.65;
+    }
+    .service-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-top: 1rem;
+    }
+    .tag {
+      font-size: 0.68rem;
+      font-weight: 600;
+      padding: 0.2rem 0.6rem;
+      border-radius: 100px;
+      background: rgba(255,255,255,0.06);
+      color: var(--text-muted);
+      letter-spacing: 0.04em;
+    }
+
+    /* ─── SAMPLE REMEDIATION TABLE ─── */
+    #remediation { background: var(--bg2); }
+    .table-wrap {
+      overflow-x: auto;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      margin-top: 2rem;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.875rem;
+    }
+    thead { background: rgba(255,107,107,0.08); }
+    thead th {
+      padding: 1rem 1.25rem;
+      text-align: left;
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+    }
+    tbody tr { border-bottom: 1px solid rgba(255,255,255,0.04); transition: background var(--transition); }
+    tbody tr:hover { background: var(--glass); }
+    tbody tr:last-child { border-bottom: none; }
+    tbody td { padding: 1rem 1.25rem; vertical-align: top; color: var(--text-muted); }
+    tbody td:first-child { color: var(--text); font-weight: 500; }
+    .wcag-badge {
+      display: inline-block;
+      background: var(--accent-dim);
+      color: var(--accent);
+      border-radius: 6px;
+      padding: 0.15rem 0.5rem;
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      font-weight: 700;
+    }
+    .fix-code {
+      font-family: var(--mono);
+      font-size: 0.73rem;
+      background: rgba(255,255,255,0.05);
+      border-radius: 6px;
+      padding: 0.15rem 0.5rem;
+      color: #7dd3fc;
+      white-space: nowrap;
+    }
+
+    /* ─── PORTFOLIO ─── */
+    #portfolio { background: var(--bg); }
+    .portfolio-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.25rem;
+      margin-top: 2.5rem;
+    }
+    .project-card {
+      padding: 2rem;
+      position: relative;
+    }
+    .project-number {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+    .project-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.5rem;
+    }
+    .project-desc {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+      margin-bottom: 1rem;
+    }
+    .project-stats {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .project-stat {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+    .project-stat::before {
+      content: '';
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: var(--accent);
+      flex-shrink: 0;
+    }
+
+    /* ─── CONTACT ─── */
+    #contact { background: var(--bg2); }
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.5fr;
+      gap: 4rem;
+      align-items: flex-start;
+    }
+    .contact-info h2 { margin-bottom: 1rem; }
+    .contact-intro { font-size: 0.9rem; color: var(--text-muted); line-height: 1.8; margin-bottom: 2rem; }
+    .contact-items { display: flex; flex-direction: column; gap: 1rem; }
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem 1.25rem;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      background: var(--glass);
+      transition: border-color var(--transition);
+    }
+    .contact-item:hover { border-color: var(--border-hover); }
+    .contact-item-icon {
+      width: 36px;
+      height: 36px;
+      background: var(--accent-dim);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+    .contact-item-text { font-size: 0.82rem; color: var(--text-muted); }
+    .contact-item-text strong { display: block; color: var(--text); font-size: 0.9rem; margin-bottom: 0.1rem; }
+    .contact-item a { color: inherit; }
+    .contact-item a:hover { color: var(--accent); }
+    .contact-item a:focus-visible { outline: 2px solid var(--accent); border-radius: 2px; }
+
+    /* Contact Form */
+    .contact-form-wrap { padding: 2.5rem; }
+    .form-heading {
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 1.5rem;
+    }
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+    .form-group.full { grid-column: 1 / -1; }
+    label {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      letter-spacing: 0.04em;
+    }
+    label .req { color: var(--accent); }
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    select,
+    textarea {
+      width: 100%;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 0.75rem 1rem;
+      color: var(--text);
+      font-family: var(--sans);
+      font-size: 0.875rem;
+      transition: border-color var(--transition), box-shadow var(--transition);
+      -webkit-appearance: none;
+      appearance: none;
+    }
+    input:hover, select:hover, textarea:hover { border-color: rgba(255,255,255,0.15); }
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(255,107,107,0.15);
+    }
+    input::placeholder, textarea::placeholder { color: rgba(255,255,255,0.25); }
+    select { cursor: pointer; }
+    select option { background: #1a1a1a; color: #fff; }
+    textarea { resize: vertical; min-height: 110px; }
+    .form-hint {
+      font-size: 0.72rem;
+      color: rgba(255,255,255,0.3);
+      line-height: 1.4;
+    }
+    .btn-submit {
+      width: 100%;
+      padding: 0.9rem;
+      font-size: 0.9rem;
+      margin-top: 0.5rem;
+      justify-content: center;
+    }
+    .form-note {
+      font-size: 0.72rem;
+      color: rgba(255,255,255,0.25);
+      text-align: center;
+      margin-top: 0.75rem;
+    }
+
+    /* ─── Client Grid ─── */
+    .client-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-top: 2.5rem;
+    }
+    .client-card {
+      padding: 1.75rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+      cursor: default;
+    }
+    .client-name {
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.3;
+    }
+    .client-sector {
+      font-size: 0.72rem;
+      font-family: var(--mono);
+      color: var(--accent);
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    /* ─── Blog Coming Soon ─── */
+    /* ─── Blog Grid ─── */
+    .blog-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1.75rem;
+      margin-top: 3rem;
+    }
+    .blog-card {
+      display: flex;
+      flex-direction: column;
+      padding: 2rem;
+      border-radius: var(--radius);
+      background: var(--glass);
+      border: 1px solid var(--border);
+      text-decoration: none;
+      color: inherit;
+      transition: border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .blog-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(255,107,107,0.06) 0%, transparent 70%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .blog-card:hover {
+      border-color: var(--border-hover);
+      transform: translateY(-4px);
+      box-shadow: 0 16px 40px rgba(0,0,0,0.35);
+    }
+    .blog-card:hover::before { opacity: 1; }
+    .blog-card:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 3px;
+    }
+    .blog-card-category {
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .blog-card-category::before {
+      content: '';
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: var(--accent);
+      flex-shrink: 0;
+    }
+    .blog-card-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      line-height: 1.4;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      margin-bottom: 0.85rem;
+      flex: 1;
+    }
+    .blog-card-excerpt {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+      margin-bottom: 1.5rem;
+    }
+    .blog-card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--border);
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .blog-card-meta {
+      display: flex;
+      gap: 1rem;
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      color: var(--text-muted);
+      letter-spacing: 0.04em;
+    }
+    .blog-card-cta {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      transition: gap 0.2s ease;
+    }
+    .blog-card:hover .blog-card-cta { gap: 0.6rem; }
+    .blog-card-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-bottom: 1.25rem;
+    }
+    .blog-tag {
+      font-size: 0.65rem;
+      font-weight: 600;
+      padding: 0.15rem 0.55rem;
+      border-radius: 100px;
+      background: rgba(255,107,107,0.08);
+      border: 1px solid rgba(255,107,107,0.18);
+      color: var(--accent);
+      letter-spacing: 0.04em;
+    }
+    .blog-more-soon {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1.25rem 1.75rem;
+      border-radius: var(--radius);
+      background: var(--glass);
+      border: 1px dashed rgba(255,255,255,0.1);
+      margin-top: 0;
+    }
+    .blog-more-soon p {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin: 0;
+    }
+    @media (max-width: 600px) {
+      .blog-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ─── Footer ─── */
+    footer {
+      background: var(--bg);
+      border-top: 1px solid var(--border);
+      padding: 2.5rem 2rem;
+    }
+    .footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .footer-copy {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+    .footer-links {
+      display: flex;
+      gap: 1.5rem;
+    }
+    .footer-links a {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      transition: color var(--transition);
+    }
+    .footer-links a:hover { color: var(--accent); }
+    .footer-links a:focus-visible { outline: 2px solid var(--accent); border-radius: 2px; }
+    .footer-wcag {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border: 1px solid rgba(255,107,107,0.2);
+      border-radius: 6px;
+      padding: 0.2rem 0.6rem;
+    }
+
+    /* ─── Animations ─── */
+
+    /* ─── Divider ─── */
+    .divider {
+      width: 1px;
+      height: 2rem;
+      background: var(--border);
+      display: inline-block;
+    }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 1024px) {
+      .services-grid { grid-template-columns: 1fr 1fr; }
+      .portfolio-grid { grid-template-columns: 1fr 1fr; }
+      .client-grid { grid-template-columns: 1fr 1fr; }
+      .about-grid { grid-template-columns: 1fr; gap: 3rem; }
+      .contact-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+    }
+    @media (max-width: 768px) {
+      .nav-inner { padding: 0 1.25rem; }
+      nav[role="navigation"] {
+        display: none;
+        position: absolute;
+        top: 68px;
+        left: 0;
+        right: 0;
+        background: rgba(10,10,10,0.98);
+        backdrop-filter: blur(20px);
+        border-bottom: 1px solid var(--border);
+        padding: 1rem 1.25rem;
+      }
+      nav[role="navigation"].open { display: block; }
+      nav[role="navigation"] ul { flex-direction: column; gap: 0.25rem; }
+      nav[role="navigation"] a { padding: 0.7rem 1rem; font-size: 0.95rem; }
+      .hamburger { display: flex; }
+      section { padding: 4rem 1.25rem; }
+      .services-grid { grid-template-columns: 1fr; }
+      .portfolio-grid { grid-template-columns: 1fr; }
+      .client-grid { grid-template-columns: 1fr 1fr; }
+      .pricing-cards { grid-template-columns: 1fr 1fr; max-width: 100%; }
+      .skills-grid { grid-template-columns: 1fr; }
+      .form-grid { grid-template-columns: 1fr; }
+      .services-header { flex-direction: column; align-items: flex-start; }
+      .trust-strip { gap: 1.5rem; }
+    }
+    @media (max-width: 480px) {
+      h1 { font-size: 2.2rem; }
+      .pricing-cards { grid-template-columns: 1fr; max-width: 280px; }
+      .hero-ctas { flex-direction: column; align-items: center; }
+      .footer-inner { flex-direction: column; align-items: flex-start; }
+    }
+
+    /* ─── Focus Styles ─── */
+    *:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+    a:focus-visible, button:focus-visible { border-radius: 4px; }
+  </style>
+</head>
+
+<body>
+  <!-- Skip Navigation -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- ── HEADER ── -->
+  <header role="banner">
+    <div class="nav-inner">
+      <a href="#home" class="logo" aria-label="Sushil Chauhan - Home">
+        SC<span>.</span>
+      </a>
+      <nav role="navigation" aria-label="Primary navigation" id="main-nav">
+        <ul>
+          <li><a href="#home">Home</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#services">Services</a></li>
+          <li><a href="#portfolio">Portfolio</a></li>
+          <li><a href="#blog">Blog</a></li>
+          <li><a href="#contact" class="nav-cta">Hire Me</a></li>
+        </ul>
+      </nav>
+      <button class="hamburger" aria-label="Open navigation menu" aria-expanded="false" aria-controls="main-nav" id="hamburger-btn">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true" focusable="false">
+          <path class="ham-top" d="M3 5h14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          <path class="ham-mid" d="M3 10h14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          <path class="ham-bot" d="M3 15h14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- ── MAIN ── -->
+  <main id="main-content" tabindex="-1">
+    <div class="page-wrapper">
+
+      <!-- ── HERO ── -->
+      <section id="home" aria-labelledby="hero-heading">
+        <div class="container">
+          <div class="hero-inner">
+            <div class="hero-badge" role="note" aria-label="Certification status: IAAP-CPWA Certified Professional">
+              IAAP-CPWA Certified
+            </div>
+
+            <h1 id="hero-heading">
+              Professional <strong><span class="accent-word">WCAG</span><br>Accessibility</strong> Services
+            </h1>
+
+            <p class="hero-sub">
+              <span>7+ Years</span> &nbsp;·&nbsp; <span>500+ Projects</span> &nbsp;·&nbsp;
+              Web&nbsp;•&nbsp;Mobile&nbsp;•&nbsp;Documents &nbsp;·&nbsp; <span>Remote Worldwide</span>
+            </p>
+
+            <!-- Pricing Cards -->
+            <div class="pricing-cards" role="list" aria-label="Service pricing highlights">
+              <article class="glass-card price-card featured" role="listitem">
+                <span class="price-card-label">Web / Mobile Testing</span>
+                <div class="price-card-amount" aria-label="50 US dollars">$50</div>
+                <div class="price-card-unit">Per Page / Screen</div>
+              </article>
+              <article class="glass-card price-card" role="listitem">
+                <span class="price-card-label">Consulting / Remediation</span>
+                <div class="price-card-amount" aria-label="30 US dollars">$30</div>
+                <div class="price-card-unit">Per Hour</div>
+              </article>
+            </div>
+
+            <div class="hero-ctas">
+              <a href="#services" class="btn btn-primary" aria-label="View all services and pricing">
+                View Services
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true" focusable="false">
+                  <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </a>
+              <a href="#contact" class="btn btn-ghost" aria-label="Get a free project quote">
+                Get a Quote
+              </a>
+            </div>
+
+            <!-- Trust Strip -->
+            <div class="trust-strip" role="list" aria-label="Key credentials and statistics">
+              <div class="trust-item" role="listitem">
+                <span class="trust-number" aria-label="7 plus years">7+</span>
+                <span class="trust-label">Years Experience</span>
+              </div>
+              <div class="divider" aria-hidden="true"></div>
+              <div class="trust-item" role="listitem">
+                <span class="trust-number" aria-label="500 plus">500+</span>
+                <span class="trust-label">Web Projects</span>
+              </div>
+              <div class="divider" aria-hidden="true"></div>
+              <div class="trust-item" role="listitem">
+                <span class="trust-number" aria-label="5000 plus">5000+</span>
+                <span class="trust-label">Issues Reported</span>
+              </div>
+              <div class="divider" aria-hidden="true"></div>
+              <div class="trust-item" role="listitem">
+                <span class="trust-number" aria-label="50 plus">50+</span>
+                <span class="trust-label">Mobile Apps</span>
+              </div>
+              <div class="divider" aria-hidden="true"></div>
+              <div class="trust-item" role="listitem">
+                <span class="trust-number" aria-label="200 plus">200+</span>
+                <span class="trust-label">Documents</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── ABOUT ── -->
+      <section id="about" aria-labelledby="about-heading">
+        <div class="container">
+          <div class="about-grid">
+            <!-- Left: Bio -->
+            <div>
+              <span class="section-label" aria-hidden="true">About</span>
+              <h2 id="about-heading" class="section-title">
+                <strong>Sushil Chauhan</strong><br>Accessibility Specialist
+              </h2>
+              <p class="about-bio">
+                Based in <strong>Panvel, Mumbai, Maharashtra</strong>, I am an IAAP-Certified Professional in Web Accessibility (CPWA) with <strong>7+ years</strong> of hands-on experience delivering inclusive digital solutions for clients across the USA, Europe, and India.
+              </p>
+              <p class="about-bio">
+                My work spans enterprise web platforms, native and hybrid mobile applications, PDF document remediation, and legal compliance documentation including <strong>VPAT/ACR reports</strong>. I have delivered <strong>500+ web projects</strong>, reported <strong>5000+ accessibility issues</strong>, and remediated <strong>200+ documents</strong> with a meticulous, standards-driven approach rooted in WCAG 2.2 A/AA.
+              </p>
+
+              <div class="cert-badge" role="note" aria-label="Certification: IAAP CPWA - Certified Professional in Web Accessibility">
+                <div class="cert-badge-icon" aria-hidden="true">✓</div>
+                <div class="cert-badge-text">
+                  IAAP-CPWA
+                  <small>Certified Professional in Web Accessibility</small>
+                </div>
+              </div>
+
+              <div style="margin-top:1.5rem;">
+                <a href="#contact" class="btn btn-primary">Work With Me</a>
+              </div>
+            </div>
+
+            <!-- Right: Skills -->
+            <div>
+              <p class="section-subtitle" style="margin-bottom:1.5rem;">
+                Core competencies spanning standards, assistive technologies, and remediation code.
+              </p>
+              <div class="skills-grid" role="list" aria-label="Technical skills">
+                <div class="skill-item" role="listitem"><span class="skill-dot" aria-hidden="true"></span>WCAG 2.2 A / AA</div>
+                <div class="skill-item" role="listitem"><span class="skill-dot" aria-hidden="true"></span>NVDA &amp; JAWS</div>
+                <div class="skill-item" role="listitem"><span class="skill-dot" aria-hidden="true"></span>VoiceOver (iOS/macOS)</div>
+                <div class="skill-item" role="listitem"><span class="skill-dot" aria-hidden="true"></span>TalkBack (Android)</div>
+                <div class="skill-item" role="listitem"><span class="skill-dot" aria-hidden="true"></span>HTML / CSS / JavaScript</div>
+                <div class="skill-item" role="listitem"><span class="skill-dot" aria-hidden="true"></span>ARIA Authoring Practices</div>
+                <div class="skill-item" role="listitem"><span class="skill-dot" aria-hidden="true"></span>VPAT / ACR Reporting</div>
+                <div class="skill-item" role="listitem"><span class="skill-dot" aria-hidden="true"></span>PDF / Word Remediation</div>
+                <div class="skill-item" role="listitem"><span class="skill-dot" aria-hidden="true"></span>Section 508 Compliance</div>
+                <div class="skill-item" role="listitem"><span class="skill-dot" aria-hidden="true"></span>EN 301 549 (EU Standard)</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── SERVICES ── -->
+      <section id="services" aria-labelledby="services-heading">
+        <div class="container">
+          <div class="services-header">
+            <div>
+              <span class="section-label" aria-hidden="true">Services &amp; Pricing</span>
+              <h2 id="services-heading" class="section-title">
+                What I <strong>Deliver</strong>
+              </h2>
+            </div>
+            <p class="section-subtitle">
+              Transparent, fixed pricing. Every service includes a detailed findings report with prioritised issue lists.
+            </p>
+          </div>
+
+          <div class="services-grid" role="list" aria-label="Service offerings">
+
+            <article class="glass-card service-card" role="listitem">
+              <div class="service-icon" aria-hidden="true">🌐</div>
+              <div class="service-name">Web Accessibility Testing</div>
+              <div class="service-price">$50 / PAGE</div>
+              <p class="service-desc">Manual WCAG 2.2 AA audit of each page using keyboard navigation, screen readers (NVDA, JAWS, VoiceOver), and automated tools. Includes annotated findings report.</p>
+              <ul class="service-tags" aria-label="Includes">
+                <li class="tag">WCAG 2.2 A/AA</li>
+                <li class="tag">NVDA / JAWS</li>
+                <li class="tag">Findings Report</li>
+              </ul>
+            </article>
+
+            <article class="glass-card service-card" role="listitem">
+              <div class="service-icon" aria-hidden="true">📱</div>
+              <div class="service-name">Mobile App Testing</div>
+              <div class="service-price">$60 / SCREEN &nbsp;·&nbsp; iOS + ANDROID</div>
+              <p class="service-desc">Each screen is tested on both iOS VoiceOver and Android TalkBack — one price covers both platforms. Covers gestures, focus order, semantic labels, and dynamic content for native and hybrid apps.</p>
+              <ul class="service-tags" aria-label="Includes">
+                <li class="tag">VoiceOver</li>
+                <li class="tag">TalkBack</li>
+                <li class="tag">Native &amp; Hybrid</li>
+              </ul>
+            </article>
+
+            <article class="glass-card service-card" role="listitem">
+              <div class="service-icon" aria-hidden="true">📋</div>
+              <div class="service-name">VPAT / ACR Reports</div>
+              <div class="service-price">FROM $500</div>
+              <p class="service-desc">Legally compliant Voluntary Product Accessibility Templates using ITIC 2008 and 2.4REV formats. Required for US federal contracts and procurement processes.</p>
+              <ul class="service-tags" aria-label="Includes">
+                <li class="tag">ITIC 2.4REV</li>
+                <li class="tag">Section 508</li>
+                <li class="tag">Legal Compliance</li>
+              </ul>
+            </article>
+
+            <article class="glass-card service-card" role="listitem">
+              <div class="service-icon" aria-hidden="true">📄</div>
+              <div class="service-name">PDF / Word Remediation</div>
+              <div class="service-price">$3 / PAGE &nbsp;·&nbsp; $30 / HR</div>
+              <p class="service-desc">Document structure tagging, reading order correction, OCR for scanned documents, alt text for images, bookmarks, and form field accessibility in PDF and Word formats.</p>
+              <ul class="service-tags" aria-label="Includes">
+                <li class="tag">PDF Tagging</li>
+                <li class="tag">OCR</li>
+                <li class="tag">Reading Order</li>
+              </ul>
+            </article>
+
+            <article class="glass-card service-card" role="listitem">
+              <div class="service-icon" aria-hidden="true">🔧</div>
+              <div class="service-name">Detailed Remediation Support</div>
+              <div class="service-price">$30 / HOUR</div>
+              <p class="service-desc">Issue-by-issue remediation guidance with annotated HTML, CSS, and JavaScript fix code. Structured in Navigant-style tables with WCAG success criteria mapping.</p>
+              <ul class="service-tags" aria-label="Includes">
+                <li class="tag">HTML / CSS / JS Fixes</li>
+                <li class="tag">WCAG Mapping</li>
+                <li class="tag">Fix Tables</li>
+              </ul>
+            </article>
+
+            
+          <article class="glass-card service-card" role="listitem">
+              <div class="service-icon" aria-hidden="true">🎓</div>
+              <div class="service-name">Live Accessibility Training</div>
+              <div class="service-price">$200 / SESSION</div>
+              <p class="service-desc">Interactive Zoom sessions tailored for developers and QA teams. Covers screen reader usage, ARIA patterns, code review, and live remediation walkthroughs.</p>
+              <ul class="service-tags" aria-label="Includes">
+                <li class="tag">Live Zoom</li>
+                <li class="tag">Code Review</li>
+                <li class="tag">Screen Reader Demo</li>
+              </ul>
+            </article>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- ── SAMPLE REMEDIATION TABLE ── -->
+      <section id="remediation" aria-labelledby="remediation-heading">
+        <div class="container">
+          <span class="section-label" aria-hidden="true">Sample Work</span>
+          <h2 id="remediation-heading" class="section-title">
+            Remediation <strong>Report Sample</strong>
+          </h2>
+          <p class="section-subtitle">
+            A representative extract from a client accessibility audit report, demonstrating the issue-by-issue format with WCAG criterion mapping and concrete fix code.
+          </p>
+
+          <div class="table-wrap">
+            <table aria-label="Sample accessibility remediation report extract">
+              <thead>
+                <tr>
+                  <th scope="col">Page / Location</th>
+                  <th scope="col">Issue Description</th>
+                  <th scope="col">WCAG SC</th>
+                  <th scope="col">Severity</th>
+                  <th scope="col">Recommended Fix</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Contact Page — Section Header</td>
+                  <td>Heading tag skips level: &lt;h3&gt; used directly after &lt;h1&gt;, breaking document outline</td>
+                  <td><span class="wcag-badge">1.3.1</span></td>
+                  <td>High</td>
+                  <td><code class="fix-code">&lt;h2&gt;Contact Us&lt;/h2&gt;</code></td>
+                </tr>
+                <tr>
+                  <td>Resources Page — PDF Download Link</td>
+                  <td>Image link has no alt text; screen readers announce URL string only</td>
+                  <td><span class="wcag-badge">1.1.1</span></td>
+                  <td>Critical</td>
+                  <td><code class="fix-code">alt="Download Annual Report PDF"</code></td>
+                </tr>
+                <tr>
+                  <td>Homepage — Navigation Menu</td>
+                  <td>Dropdown menu not keyboard operable; cannot be opened or dismissed with keyboard</td>
+                  <td><span class="wcag-badge">2.1.1</span></td>
+                  <td>Critical</td>
+                  <td><code class="fix-code">aria-expanded + keydown handler</code></td>
+                </tr>
+                <tr>
+                  <td>Sign-up Form — Email Field</td>
+                  <td>Input has no visible label; placeholder used as sole label disappears on input</td>
+                  <td><span class="wcag-badge">1.3.1</span></td>
+                  <td>High</td>
+                  <td><code class="fix-code">&lt;label for="email"&gt;Email&lt;/label&gt;</code></td>
+                </tr>
+                <tr>
+                  <td>Dashboard — Status Alerts</td>
+                  <td>Error messages conveyed by colour alone; users with colour blindness receive no indication</td>
+                  <td><span class="wcag-badge">1.4.1</span></td>
+                  <td>High</td>
+                  <td><code class="fix-code">role="alert" + text indicator</code></td>
+                </tr>
+                <tr>
+                  <td>Blog Post — Body Text</td>
+                  <td>Text on grey background fails contrast ratio: measured 3.2:1 (required minimum 4.5:1)</td>
+                  <td><span class="wcag-badge">1.4.3</span></td>
+                  <td>High</td>
+                  <td><code class="fix-code">color: #767676 → #595959</code></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── PORTFOLIO ── -->
+      <section id="portfolio" aria-labelledby="portfolio-heading">
+        <div class="container">
+          <span class="section-label" aria-hidden="true">Portfolio</span>
+          <h2 id="portfolio-heading" class="section-title">
+            Selected <strong>Projects</strong>
+          </h2>
+          <p class="section-subtitle">
+            Trusted by global enterprise clients across banking, healthcare, retail, insurance, education, and technology sectors.
+          </p>
+
+          <!-- Client Logo Grid -->
+          <div class="client-grid" role="list" aria-label="Enterprise clients served">
+            <div class="client-card glass-card" role="listitem">
+              <div class="client-name">Bank of America</div>
+              <div class="client-sector">Banking &amp; Finance</div>
+            </div>
+            <div class="client-card glass-card" role="listitem">
+              <div class="client-name">HSBC</div>
+              <div class="client-sector">Banking &amp; Finance</div>
+            </div>
+            <div class="client-card glass-card" role="listitem">
+              <div class="client-name">CVS Health</div>
+              <div class="client-sector">Healthcare</div>
+            </div>
+            <div class="client-card glass-card" role="listitem">
+              <div class="client-name">MetLife</div>
+              <div class="client-sector">Insurance</div>
+            </div>
+            <div class="client-card glass-card" role="listitem">
+              <div class="client-name">Amazon</div>
+              <div class="client-sector">E-Commerce &amp; Technology</div>
+            </div>
+            <div class="client-card glass-card" role="listitem">
+              <div class="client-name">Costco</div>
+              <div class="client-sector">Retail</div>
+            </div>
+            <div class="client-card glass-card" role="listitem">
+              <div class="client-name">Pearson</div>
+              <div class="client-sector">Education &amp; Publishing</div>
+            </div>
+            <div class="client-card glass-card" role="listitem">
+              <div class="client-name">Infor</div>
+              <div class="client-sector">Enterprise Software</div>
+            </div>
+            <div class="client-card glass-card" role="listitem">
+              <div class="client-name">University of Arizona<br>Global Campus</div>
+              <div class="client-sector">Higher Education</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── BLOG ── -->
+      <section id="blog" aria-labelledby="blog-heading" style="background: var(--bg2);">
+        <div class="container">
+          <span class="section-label" aria-hidden="true">Blog</span>
+          <h2 id="blog-heading" class="section-title">
+            Insights &amp; <strong>Articles</strong>
+          </h2>
+          <p class="section-subtitle">
+            Practical accessibility knowledge, WCAG deep-dives, and screen reader testing guides — from real-world audits.
+          </p>
+
+          <div class="blog-grid">
+
+            <!-- Article 01 -->
+            <a href="blog-ios-accessibility-voiceover-2026.html"
+               class="blog-card"
+               aria-label="Read article: Complete Guide to iOS Accessibility Testing with VoiceOver — 2026 Edition">
+              <div class="blog-card-category">iOS Accessibility</div>
+              <h3 class="blog-card-title">Complete Guide to iOS Mobile App Accessibility Testing with VoiceOver: From WCAG Compliance to VPAT Reporting</h3>
+              <p class="blog-card-excerpt">VoiceOver gestures, UIKit traits, SwiftUI semantic grouping, VPAT creation — everything you need to audit iOS apps for WCAG 2.2 compliance.</p>
+              <div class="blog-card-tags" aria-label="Article tags">
+                <span class="blog-tag">WCAG 2.2</span>
+                <span class="blog-tag">VoiceOver</span>
+                <span class="blog-tag">SwiftUI</span>
+                <span class="blog-tag">UIKit</span>
+                <span class="blog-tag">VPAT</span>
+              </div>
+              <div class="blog-card-footer">
+                <div class="blog-card-meta">
+                  <span>Jan 2026</span>
+                  <span>20 min read</span>
+                </div>
+                <span class="blog-card-cta" aria-hidden="true">
+                  Read Article
+                  <svg width="13" height="13" viewBox="0 0 13 13" fill="none" focusable="false">
+                    <path d="M2 6.5h9M7 2.5l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </span>
+              </div>
+            </a>
+
+            <!-- Article 02 -->
+            <a href="blog-word-accessibility-2026.html"
+               class="blog-card"
+               aria-label="Read article: Complete Guide to Creating Accessible Microsoft Word Documents — 2026 Edition">
+              <div class="blog-card-category">Document Accessibility</div>
+              <h3 class="blog-card-title">Complete Guide to Creating Accessible Microsoft Word Documents</h3>
+              <p class="blog-card-excerpt">Headings, lists, tables, images, alt text, colour contrast, links, language settings, and accessible PDF export — everything your Word documents need to meet WCAG 2.2.</p>
+              <div class="blog-card-tags" aria-label="Article tags">
+                <span class="blog-tag">Word</span>
+                <span class="blog-tag">WCAG 2.2</span>
+                <span class="blog-tag">Alt Text</span>
+                <span class="blog-tag">PDF Export</span>
+                <span class="blog-tag">Screen Reader</span>
+              </div>
+              <div class="blog-card-footer">
+                <div class="blog-card-meta">
+                  <span>Feb 2026</span>
+                  <span>18 min read</span>
+                </div>
+                <span class="blog-card-cta" aria-hidden="true">
+                  Read Article
+                  <svg width="13" height="13" viewBox="0 0 13 13" fill="none" focusable="false">
+                    <path d="M2 6.5h9M7 2.5l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </span>
+              </div>
+            </a>
+
+            
+            <!-- Article 03 -->
+            <a href="blog-style-guide-accessibility-2026.html"
+               class="blog-card"
+               aria-label="Read article: Complete UI Component Accessibility Patterns Guide — 2026 Edition">
+              <div class="blog-card-category">UI Accessibility</div>
+              <h3 class="blog-card-title">Complete UI Component Accessibility Patterns Guide</h3>
+              <p class="blog-card-excerpt">24 components audited end-to-end — breadcrumbs, modals, tabs, chips, toolbars, datepickers and more. Every ARIA pattern, keyboard model, and contrast fix in one place.</p>
+              <div class="blog-card-tags" aria-label="Article tags">
+                <span class="blog-tag">ARIA Patterns</span>
+                <span class="blog-tag">WCAG 2.2</span>
+                <span class="blog-tag">Keyboard Nav</span>
+                <span class="blog-tag">24 Components</span>
+              </div>
+              <div class="blog-card-footer">
+                <div class="blog-card-meta">
+                  <span>Mar 2026</span>
+                  <span>28 min read</span>
+                </div>
+                <span class="blog-card-cta" aria-hidden="true">
+                  Read Article
+                  <svg width="13" height="13" viewBox="0 0 13 13" fill="none" focusable="false">
+                    <path d="M2 6.5h9M7 2.5l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </span>
+              </div>
+            </a>
+
+            <!-- More coming soon card -->
+            <div class="blog-more-soon" role="note" aria-label="More articles coming soon">
+              <span style="font-size:1.6rem; flex-shrink:0;" aria-hidden="true">&#x270D;&#xFE0F;</span>
+              <p>More articles on <strong style="color:var(--text);">PDF remediation</strong>, <strong style="color:var(--text);">Android TalkBack</strong>, <strong style="color:var(--text);">PowerPoint accessibility</strong>, and <strong style="color:var(--text);">WCAG 2.2 deep-dives</strong> are coming soon. Use the contact form below to get notified.</p>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- ── CONTACT ── -->
+      <section id="contact" aria-labelledby="contact-heading">
+        <div class="container">
+          <div class="contact-grid">
+
+            <!-- Contact Info -->
+            <div class="contact-info">
+              <span class="section-label" aria-hidden="true">Contact</span>
+              <h2 id="contact-heading" class="section-title">
+                Let's Work <strong>Together</strong>
+              </h2>
+              <p class="contact-intro">
+                Available for remote engagements worldwide. Typical response time is within 24 hours on business days. Preferred contact for project inquiries is WhatsApp or email.
+              </p>
+
+              <address>
+                <ul class="contact-items" aria-label="Contact details">
+                  <li>
+                    <a class="contact-item" href="tel:+917021555982" aria-label="Call or WhatsApp Sushil Chauhan at plus 91 70 2155 5982">
+                      <div class="contact-item-icon" aria-hidden="true">📞</div>
+                      <div class="contact-item-text">
+                        <strong>Phone / WhatsApp</strong>
+                        +91 70215 55982
+                      </div>
+                    </a>
+                  </li>
+                  <li>
+                    <a class="contact-item" href="/cdn-cgi/l/email-protection#41382e343301242c20282d6f222e2c" aria-label="Email Sushil Chauhan — update this address">
+                      <div class="contact-item-icon" aria-hidden="true">✉️</div>
+                      <div class="contact-item-text">
+                        <strong>Email</strong>
+                        <span class="__cf_email__" data-cfemail="b9c0d6cccbf9dcd4d8d0d597dad6d4">[email&#160;protected]</span>
+                      </div>
+                    </a>
+                  </li>
+                  <li>
+                    <div class="contact-item">
+                      <div class="contact-item-icon" aria-hidden="true">📍</div>
+                      <div class="contact-item-text">
+                        <strong>Location</strong>
+                        Panvel, Maharashtra, India · Remote Worldwide
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="contact-item">
+                      <div class="contact-item-icon" aria-hidden="true">🕐</div>
+                      <div class="contact-item-text">
+                        <strong>Availability</strong>
+                        IST (UTC+5:30) · Flexible for US/EU time zones
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </address>
+            </div>
+
+            <!-- Contact Form -->
+            <div class="glass-card contact-form-wrap" role="region" aria-labelledby="form-heading">
+              <h3 id="form-heading" class="form-heading">Send a Project Enquiry</h3>
+
+              <form action="#" method="post" novalidate aria-describedby="form-required-note">
+                <p id="form-required-note" class="form-hint" style="margin-bottom:1rem;">
+                  Fields marked with <span aria-label="required">*</span> are required.
+                </p>
+                <div class="form-grid">
+
+                  <div class="form-group">
+                    <label for="full-name">Full Name <span class="req" aria-label="required">*</span></label>
+                    <input
+                      type="text"
+                      id="full-name"
+                      name="full_name"
+                      required
+                      autocomplete="name"
+                      placeholder="Jane Smith"
+                      aria-required="true"
+                      aria-describedby="name-hint"
+                    >
+                    <span id="name-hint" class="form-hint">Your full legal or professional name.</span>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="email-address">Email Address <span class="req" aria-label="required">*</span></label>
+                    <input
+                      type="email"
+                      id="email-address"
+                      name="email"
+                      required
+                      autocomplete="email"
+                      placeholder="jane@company.com"
+                      aria-required="true"
+                      aria-describedby="email-hint"
+                    >
+                    <span id="email-hint" class="form-hint">Used only to respond to your enquiry.</span>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="phone-number">Phone Number</label>
+                    <input
+                      type="tel"
+                      id="phone-number"
+                      name="phone"
+                      autocomplete="tel"
+                      placeholder="+1 555 000 0000"
+                      aria-describedby="phone-hint"
+                    >
+                    <span id="phone-hint" class="form-hint">Optional. Include country code.</span>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="service-type">Service Required <span class="req" aria-label="required">*</span></label>
+                    <select
+                      id="service-type"
+                      name="service"
+                      required
+                      aria-required="true"
+                      aria-describedby="service-hint"
+                    >
+                      <option value="" disabled selected>Select a service…</option>
+                      <option value="web-testing">Web Accessibility Testing — $50/page</option>
+                      <option value="mobile-testing">Mobile App Testing — $60/screen (iOS + Android)</option>
+                      <option value="vpat">VPAT / ACR Report — from $500</option>
+                      <option value="pdf-remediation">PDF / Word Remediation — $3/page or $30/hr</option>
+                      <option value="remediation-support">Detailed Remediation Support — $30/hr</option>
+                      <option value="training">Live Training Session — $200/session</option>
+                      <option value="other">Other / General Enquiry</option>
+                    </select>
+                    <span id="service-hint" class="form-hint">Select the service closest to your needs.</span>
+                  </div>
+
+                  <div class="form-group full">
+                    <label for="project-url">Website / App URL</label>
+                    <input
+                      type="text"
+                      id="project-url"
+                      name="url"
+                      placeholder="https://yourwebsite.com"
+                      aria-describedby="url-hint"
+                    >
+                    <span id="url-hint" class="form-hint">Optional. Helps scope the project faster.</span>
+                  </div>
+
+                  <div class="form-group full">
+                    <label for="message">Project Details <span class="req" aria-label="required">*</span></label>
+                    <textarea
+                      id="message"
+                      name="message"
+                      required
+                      rows="5"
+                      placeholder="Describe your project, number of pages/screens, deadline, and any compliance standards required (WCAG 2.2, Section 508, EN 301 549)…"
+                      aria-required="true"
+                      aria-describedby="message-hint"
+                    ></textarea>
+                    <span id="message-hint" class="form-hint">Include approximate page count, platform, and target compliance level.</span>
+                  </div>
+
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-submit" aria-label="Submit project enquiry form">
+                  Send Enquiry
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true" focusable="false">
+                    <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </button>
+                <p class="form-note">Your information is never shared with third parties.</p>
+              </form>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- ── FOOTER ── -->
+  <footer role="contentinfo">
+    <div class="footer-inner">
+      <div class="footer-copy">
+        <strong style="color:#fff;">Sushil Chauhan</strong> &mdash; IAAP-CPWA Accessibility Specialist<br>
+        <span style="font-size:0.72rem;">&copy; 2024 Sushil Chauhan. Panvel, Maharashtra, India. All rights reserved.</span>
+      </div>
+      <nav aria-label="Footer links">
+        <ul class="footer-links">
+          <li><a href="#home">Home</a></li>
+          <li><a href="#services">Services</a></li>
+          <li><a href="#portfolio">Portfolio</a></li>
+          <li><a href="#blog">Blog</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+      <span class="footer-wcag" role="note" aria-label="This site targets WCAG 2.2 AA compliance">WCAG 2.2 AA</span>
+    </div>
+  </footer>
+
+  <!-- ── JAVASCRIPT ── -->
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+    // Hamburger menu
+    const hamburger = document.getElementById('hamburger-btn');
+    const nav = document.getElementById('main-nav');
+    hamburger.addEventListener('click', () => {
+      const isOpen = nav.classList.toggle('open');
+      hamburger.setAttribute('aria-expanded', isOpen);
+      hamburger.setAttribute('aria-label', isOpen ? 'Close navigation menu' : 'Open navigation menu');
+    });
+    // Close on link click
+    nav.querySelectorAll('a').forEach(a => {
+      a.addEventListener('click', () => {
+        nav.classList.remove('open');
+        hamburger.setAttribute('aria-expanded', 'false');
+        hamburger.setAttribute('aria-label', 'Open navigation menu');
+      });
+    });
+    // Close on outside click
+    document.addEventListener('click', (e) => {
+      if (!nav.contains(e.target) && !hamburger.contains(e.target)) {
+        nav.classList.remove('open');
+        hamburger.setAttribute('aria-expanded', 'false');
+        hamburger.setAttribute('aria-label', 'Open navigation menu');
+      }
+    });
+
+    // Intersection Observer for fade-in
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0, rootMargin: '0px 0px 0px 0px' });
+
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+    // Fallback: reveal all after short delay in case observer doesn't fire
+    setTimeout(() => {
+      document.querySelectorAll('.fade-in').forEach(el => el.classList.add('visible'));
+    }, 400);
+
+    // Active nav link on scroll
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('nav[role="navigation"] a');
+    const scrollSpy = () => {
+      let current = '';
+      sections.forEach(s => {
+        if (window.scrollY >= s.offsetTop - 100) current = s.id;
+      });
+      navLinks.forEach(a => {
+        a.removeAttribute('aria-current');
+        if (a.getAttribute('href') === `#${current}`) a.setAttribute('aria-current', 'page');
+      });
+    };
+    window.addEventListener('scroll', scrollSpy, { passive: true });
+
+    // Form submission (no actual backend)
+    document.querySelector('form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const btn = e.target.querySelector('button[type="submit"]');
+      const orig = btn.innerHTML;
+      btn.textContent = 'Message Sent ✓';
+      btn.disabled = true;
+      btn.style.background = '#22c55e';
+      btn.setAttribute('aria-label', 'Enquiry submitted successfully');
+      setTimeout(() => {
+        btn

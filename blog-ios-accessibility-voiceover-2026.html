@@ -1,0 +1,1045 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Complete Guide to iOS Accessibility Testing with VoiceOver (2026) — Sushil Chauhan</title>
+  <meta name="description" content="A comprehensive guide to iOS mobile app accessibility testing with VoiceOver — covering WCAG 2.2, UIKit, SwiftUI, gestures, traits, VPAT reporting and more. By Sushil Chauhan, IAAP-CPWA.">
+  <meta name="keywords" content="iOS accessibility, VoiceOver testing, WCAG 2.2, SwiftUI accessibility, UIKit accessibility, VPAT report, mobile accessibility audit, IAAP CPWA">
+  <meta name="author" content="Sushil Chauhan">
+  <meta property="og:title" content="Complete Guide to iOS Accessibility Testing with VoiceOver (2026)">
+  <meta property="og:description" content="From VoiceOver gestures to VPAT reporting — everything you need to audit iOS apps for WCAG 2.2 compliance.">
+  <meta property="og:type" content="article">
+  <link rel="canonical" href="https://sushilchauhan.com/blog/ios-accessibility-voiceover-2026">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=Space+Mono:wght@400;700&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0a0a0a;
+      --bg2: #111111;
+      --bg3: #181818;
+      --text: #ffffff;
+      --text-body: rgba(255,255,255,0.82);
+      --text-muted: rgba(255,255,255,0.5);
+      --accent: #ff6b6b;
+      --accent-dim: rgba(255,107,107,0.12);
+      --border: rgba(255,255,255,0.08);
+      --border-hover: rgba(255,107,107,0.35);
+      --glass: rgba(255,255,255,0.04);
+      --code-bg: rgba(255,255,255,0.06);
+      --radius: 16px;
+      --radius-sm: 8px;
+      --mono: 'Space Mono', monospace;
+      --sans: 'DM Sans', sans-serif;
+      --serif: 'Lora', Georgia, serif;
+      --transition: 0.3s cubic-bezier(0.4,0,0.2,1);
+      --content-width: 760px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 16px; }
+    body {
+      font-family: var(--sans);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Skip link */
+    .skip-link {
+      position: absolute; top: -100px; left: 1rem;
+      background: var(--accent); color: #fff;
+      padding: 0.75rem 1.5rem; border-radius: var(--radius-sm);
+      font-weight: 600; font-size: 0.9rem; z-index: 9999;
+      transition: top var(--transition);
+    }
+    .skip-link:focus { top: 1rem; outline: 3px solid #fff; outline-offset: 2px; }
+
+    /* Background glow */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background: radial-gradient(ellipse 70% 40% at 50% 0%, rgba(255,107,107,0.07) 0%, transparent 60%);
+      pointer-events: none; z-index: 0;
+    }
+
+    /* ── HEADER ── */
+    header {
+      position: sticky; top: 0; z-index: 100;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      background: rgba(10,10,10,0.85);
+      border-bottom: 1px solid var(--border);
+    }
+    .header-inner {
+      max-width: 1100px; margin: 0 auto;
+      padding: 0 2rem; height: 64px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .logo {
+      font-family: var(--mono); font-size: 0.95rem;
+      font-weight: 700; color: var(--text); letter-spacing: -0.02em;
+      text-decoration: none;
+    }
+    .logo span { color: var(--accent); }
+    .header-back {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      font-size: 0.82rem; font-weight: 500; color: var(--text-muted);
+      text-decoration: none; padding: 0.4rem 0.85rem;
+      border: 1px solid var(--border); border-radius: var(--radius-sm);
+      transition: all var(--transition);
+    }
+    .header-back:hover { color: var(--text); border-color: rgba(255,255,255,0.2); }
+    .header-back:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+    /* ── HERO ── */
+    .post-hero {
+      position: relative; z-index: 1;
+      padding: 5rem 2rem 3rem;
+      max-width: var(--content-width);
+      margin: 0 auto;
+    }
+    .post-category {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      font-family: var(--mono); font-size: 0.68rem; font-weight: 700;
+      letter-spacing: 0.16em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 1.25rem;
+    }
+    .post-category::before {
+      content: ''; width: 6px; height: 6px;
+      border-radius: 50%; background: var(--accent);
+    }
+    .post-title {
+      font-size: clamp(1.9rem, 4.5vw, 3rem);
+      font-weight: 700; line-height: 1.15;
+      letter-spacing: -0.035em; margin-bottom: 1.25rem;
+      color: var(--text);
+    }
+    .post-excerpt {
+      font-size: 1.1rem; color: var(--text-muted);
+      line-height: 1.7; margin-bottom: 2rem;
+      max-width: 620px;
+    }
+    .post-meta {
+      display: flex; align-items: center; gap: 1.5rem;
+      flex-wrap: wrap; padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+    }
+    .post-author {
+      display: flex; align-items: center; gap: 0.75rem;
+    }
+    .author-avatar {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: var(--accent-dim); border: 1px solid rgba(255,107,107,0.25);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--mono); font-size: 0.75rem; font-weight: 700;
+      color: var(--accent); flex-shrink: 0;
+    }
+    .author-name { font-size: 0.9rem; font-weight: 600; }
+    .author-cert {
+      font-size: 0.72rem; color: var(--text-muted);
+      font-family: var(--mono); letter-spacing: 0.04em;
+    }
+    .post-details {
+      display: flex; gap: 1.25rem; flex-wrap: wrap;
+      font-size: 0.78rem; color: var(--text-muted);
+      font-family: var(--mono);
+    }
+    .post-details span { display: flex; align-items: center; gap: 0.35rem; }
+
+    /* Tags */
+    .post-tags {
+      display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 1.5rem;
+    }
+    .tag {
+      font-size: 0.68rem; font-weight: 600; padding: 0.2rem 0.65rem;
+      border-radius: 100px; background: var(--glass);
+      border: 1px solid var(--border); color: var(--text-muted);
+      letter-spacing: 0.04em;
+    }
+    .tag.primary { background: var(--accent-dim); border-color: rgba(255,107,107,0.25); color: var(--accent); }
+
+    /* ── DIVIDER ── */
+    .post-divider {
+      max-width: var(--content-width); margin: 0 auto;
+      padding: 0 2rem;
+    }
+    .post-divider hr {
+      border: none; border-top: 1px solid var(--border); margin-bottom: 3rem;
+    }
+
+    /* ── TOC ── */
+    .toc-wrap {
+      max-width: var(--content-width); margin: 0 auto 3rem;
+      padding: 0 2rem;
+    }
+    .toc {
+      background: var(--glass); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 1.75rem 2rem;
+    }
+    .toc-title {
+      font-family: var(--mono); font-size: 0.68rem; font-weight: 700;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 1rem;
+    }
+    .toc ol { list-style: none; counter-reset: toc; }
+    .toc ol li { counter-increment: toc; }
+    .toc ol li a {
+      display: flex; align-items: baseline; gap: 0.75rem;
+      font-size: 0.875rem; color: var(--text-muted); padding: 0.3rem 0;
+      text-decoration: none; transition: color var(--transition);
+      border-bottom: 1px solid transparent;
+    }
+    .toc ol li a::before {
+      content: counter(toc, decimal-leading-zero);
+      font-family: var(--mono); font-size: 0.65rem; color: var(--accent);
+      flex-shrink: 0;
+    }
+    .toc ol li a:hover { color: var(--text); }
+    .toc ol li a:focus-visible { outline: 2px solid var(--accent); border-radius: 2px; }
+
+    /* ── ARTICLE BODY ── */
+    .post-body {
+      max-width: var(--content-width); margin: 0 auto;
+      padding: 0 2rem 5rem;
+      position: relative; z-index: 1;
+    }
+
+    /* Section headings */
+    .post-body h2 {
+      font-size: clamp(1.4rem, 3vw, 1.75rem);
+      font-weight: 700; letter-spacing: -0.03em;
+      margin: 3.5rem 0 1rem;
+      padding-top: 1rem;
+      scroll-margin-top: 80px;
+    }
+    .post-body h2 .section-num {
+      font-family: var(--mono); font-size: 0.72rem;
+      font-weight: 700; color: var(--accent);
+      letter-spacing: 0.1em; display: block;
+      margin-bottom: 0.3rem; text-transform: uppercase;
+    }
+    .post-body h3 {
+      font-size: 1.15rem; font-weight: 700;
+      letter-spacing: -0.02em; margin: 2.5rem 0 0.75rem;
+      color: var(--text);
+    }
+    .post-body h4 {
+      font-size: 0.95rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.08em;
+      color: var(--accent); margin: 2rem 0 0.5rem;
+      font-family: var(--mono);
+    }
+
+    /* Body text */
+    .post-body p {
+      font-size: 1rem; color: var(--text-body);
+      line-height: 1.85; margin-bottom: 1.25rem;
+    }
+    .post-body strong { color: var(--text); font-weight: 600; }
+    .post-body em { font-style: italic; color: var(--text-muted); }
+    .post-body a {
+      color: var(--accent); text-underline-offset: 3px;
+      text-decoration: underline;
+      text-decoration-color: rgba(255,107,107,0.4);
+      transition: text-decoration-color var(--transition);
+    }
+    .post-body a:hover { text-decoration-color: var(--accent); }
+    .post-body a:focus-visible { outline: 2px solid var(--accent); border-radius: 2px; }
+
+    /* Opening story block */
+    .story-block {
+      background: var(--glass); border-left: 3px solid var(--accent);
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      padding: 1.5rem 1.75rem; margin: 0 0 2rem;
+    }
+    .story-block p { margin-bottom: 0.75rem; }
+    .story-block p:last-child { margin-bottom: 0; }
+
+    /* Pull quote */
+    blockquote {
+      border-left: 3px solid var(--accent);
+      margin: 2rem 0; padding: 1rem 1.5rem;
+      background: var(--glass); border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    }
+    blockquote p {
+      font-family: var(--serif); font-size: 1.05rem;
+      font-style: italic; color: var(--text-muted);
+      line-height: 1.75; margin-bottom: 0;
+    }
+    blockquote cite {
+      display: block; font-family: var(--mono);
+      font-size: 0.68rem; color: var(--text-muted);
+      margin-top: 0.5rem; font-style: normal;
+      letter-spacing: 0.06em;
+    }
+
+    /* Callout boxes */
+    .callout {
+      border-radius: var(--radius-sm);
+      padding: 1rem 1.25rem; margin: 1.75rem 0;
+      display: flex; gap: 0.75rem; align-items: flex-start;
+      font-size: 0.9rem; line-height: 1.65;
+    }
+    .callout-icon { flex-shrink: 0; font-size: 1.1rem; margin-top: 0.05rem; }
+    .callout p { margin-bottom: 0; color: var(--text-body); font-size: 0.9rem; }
+    .callout.tip { background: rgba(255,107,107,0.08); border: 1px solid rgba(255,107,107,0.2); }
+    .callout.warning { background: rgba(255,193,7,0.08); border: 1px solid rgba(255,193,7,0.2); }
+    .callout.info { background: rgba(56,189,248,0.08); border: 1px solid rgba(56,189,248,0.2); }
+
+    /* Lists */
+    .post-body ul, .post-body ol {
+      margin: 1rem 0 1.5rem 1.25rem; color: var(--text-body);
+    }
+    .post-body ul { list-style: none; margin-left: 0; }
+    .post-body ul li {
+      padding-left: 1.25rem; position: relative; margin-bottom: 0.4rem;
+      font-size: 1rem; line-height: 1.75;
+    }
+    .post-body ul li::before {
+      content: ''; position: absolute; left: 0; top: 0.72em;
+      width: 5px; height: 5px; border-radius: 50%;
+      background: var(--accent);
+    }
+    .post-body ol li { margin-bottom: 0.4rem; font-size: 1rem; line-height: 1.75; }
+
+    /* Code */
+    .post-body code {
+      font-family: var(--mono); font-size: 0.82rem;
+      background: var(--code-bg); border-radius: 4px;
+      padding: 0.15rem 0.45rem; color: #7dd3fc;
+    }
+    .post-body pre {
+      background: var(--bg3); border: 1px solid var(--border);
+      border-radius: var(--radius-sm); padding: 1.5rem;
+      overflow-x: auto; margin: 1.75rem 0;
+      position: relative;
+    }
+    .post-body pre code {
+      background: none; padding: 0; font-size: 0.82rem;
+      color: #e2e8f0; line-height: 1.7; display: block;
+    }
+    .code-label {
+      font-family: var(--mono); font-size: 0.62rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.12em;
+      color: var(--text-muted); background: var(--bg);
+      border: 1px solid var(--border); border-radius: 4px;
+      padding: 0.15rem 0.5rem; display: inline-block;
+      margin-bottom: 0.5rem;
+    }
+    /* Syntax colours */
+    .k { color: #f472b6; } /* keywords */
+    .s { color: #86efac; } /* strings */
+    .c { color: #6b7280; font-style: italic; } /* comments */
+    .t { color: #7dd3fc; } /* types */
+    .n { color: #fbbf24; } /* numbers/values */
+    .f { color: #a5b4fc; } /* function names */
+
+    /* Tables */
+    .table-wrap {
+      overflow-x: auto; border-radius: var(--radius);
+      border: 1px solid var(--border); margin: 1.75rem 0;
+    }
+    table { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
+    thead { background: rgba(255,107,107,0.08); }
+    thead th {
+      padding: 0.9rem 1.1rem; text-align: left;
+      font-family: var(--mono); font-size: 0.65rem;
+      font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--text-muted);
+      border-bottom: 1px solid var(--border); white-space: nowrap;
+    }
+    tbody tr { border-bottom: 1px solid rgba(255,255,255,0.04); transition: background var(--transition); }
+    tbody tr:hover { background: var(--glass); }
+    tbody tr:last-child { border-bottom: none; }
+    tbody td { padding: 0.85rem 1.1rem; vertical-align: top; color: var(--text-muted); line-height: 1.5; }
+    tbody td:first-child { color: var(--text); font-weight: 500; font-family: var(--mono); font-size: 0.8rem; }
+    .badge {
+      display: inline-block; background: var(--accent-dim);
+      color: var(--accent); border-radius: 4px;
+      padding: 0.1rem 0.4rem; font-family: var(--mono);
+      font-size: 0.65rem; font-weight: 700;
+    }
+    .badge.green { background: rgba(34,197,94,0.12); color: #4ade80; }
+    .badge.yellow { background: rgba(234,179,8,0.12); color: #facc15; }
+    .badge.red { background: rgba(239,68,68,0.12); color: #f87171; }
+
+    /* Checklist */
+    .checklist { list-style: none; margin-left: 0; }
+    .checklist li {
+      display: flex; align-items: flex-start; gap: 0.75rem;
+      padding: 0.5rem 0; border-bottom: 1px solid rgba(255,255,255,0.04);
+      font-size: 0.9rem; color: var(--text-muted); line-height: 1.5;
+    }
+    .checklist li:last-child { border-bottom: none; }
+    .checklist li::before { display: none; }
+    .check-box {
+      width: 18px; height: 18px; border: 1.5px solid rgba(255,255,255,0.15);
+      border-radius: 4px; flex-shrink: 0; margin-top: 1px;
+    }
+    .checklist-section {
+      background: var(--glass); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 1.5rem 1.75rem; margin: 1rem 0;
+    }
+    .checklist-section h4 { margin-top: 0; margin-bottom: 0.75rem; }
+
+    /* Section divider */
+    .section-sep {
+      border: none; border-top: 1px solid var(--border);
+      margin: 3rem 0;
+    }
+
+    /* Resource links */
+    .resource-list { list-style: none; margin-left: 0; }
+    .resource-list li {
+      padding: 0.6rem 0; border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+    .resource-list li:last-child { border-bottom: none; }
+    .resource-list li::before { display: none; }
+    .resource-list a { font-size: 0.9rem; }
+
+    /* CTA card */
+    .cta-card {
+      background: var(--accent-dim); border: 1px solid rgba(255,107,107,0.25);
+      border-radius: var(--radius); padding: 2rem 2.25rem; margin: 3rem 0;
+    }
+    .cta-card h3 { color: var(--text); margin-top: 0; margin-bottom: 0.5rem; font-size: 1.1rem; }
+    .cta-card p { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.25rem; }
+    .cta-contacts { display: flex; flex-direction: column; gap: 0.5rem; }
+    .cta-contact-item { display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; color: var(--text-muted); }
+    .cta-contact-item strong { color: var(--text); }
+
+    /* Share bar */
+    .share-bar {
+      display: flex; align-items: center; gap: 1rem;
+      padding: 1.5rem 0; border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border); margin: 2rem 0;
+      flex-wrap: wrap;
+    }
+    .share-label {
+      font-family: var(--mono); font-size: 0.68rem; font-weight: 700;
+      letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-muted);
+    }
+    .share-tags {
+      display: flex; gap: 0.5rem; flex-wrap: wrap;
+    }
+    .share-tag {
+      font-size: 0.78rem; color: var(--accent); font-weight: 500;
+    }
+
+    /* Footer */
+    footer {
+      background: var(--bg); border-top: 1px solid var(--border);
+      padding: 2.5rem 2rem; position: relative; z-index: 1;
+    }
+    .footer-inner {
+      max-width: 1100px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 1.5rem; flex-wrap: wrap;
+    }
+    .footer-copy { font-size: 0.78rem; color: var(--text-muted); }
+    .footer-wcag {
+      font-family: var(--mono); font-size: 0.65rem; font-weight: 700;
+      color: var(--accent); border: 1px solid rgba(255,107,107,0.2);
+      border-radius: 6px; padding: 0.2rem 0.6rem;
+    }
+    .footer-back a {
+      font-size: 0.78rem; color: var(--text-muted); text-decoration: none;
+      display: flex; align-items: center; gap: 0.4rem;
+      transition: color var(--transition);
+    }
+    .footer-back a:hover { color: var(--accent); }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .header-inner { padding: 0 1.25rem; }
+      .post-hero, .toc-wrap, .post-body, .post-divider { padding-left: 1.25rem; padding-right: 1.25rem; }
+      .post-hero { padding-top: 3rem; }
+      .post-body pre { padding: 1rem; }
+    }
+    @media (max-width: 480px) {
+      .post-title { font-size: 1.7rem; }
+      .post-meta { gap: 1rem; }
+    }
+
+    *:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+  </style>
+</head>
+<body>
+
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- HEADER -->
+  <header role="banner">
+    <div class="header-inner">
+      <a href="sushil-chauhan-portfolio.html" class="logo" aria-label="Sushil Chauhan — back to home">SC<span>.</span></a>
+      <a href="sushil-chauhan-portfolio.html#blog" class="header-back" aria-label="Back to blog listing">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true" focusable="false">
+          <path d="M9 2L4 7l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        All Articles
+      </a>
+    </div>
+  </header>
+
+  <main id="main-content" tabindex="-1">
+
+    <!-- HERO -->
+    <div class="post-hero">
+      <div class="post-category" aria-label="Category: iOS Accessibility">iOS Accessibility</div>
+      <h1 class="post-title">Complete Guide to iOS Mobile App Accessibility Testing with VoiceOver: From WCAG Compliance to VPAT Reporting</h1>
+      <p class="post-excerpt">Everything you need to audit iOS apps for WCAG 2.2 compliance — VoiceOver gestures, UIKit traits, SwiftUI semantic grouping, and how to produce a VPAT report that procurement teams actually accept.</p>
+
+      <div class="post-tags" aria-label="Article tags">
+        <span class="tag primary">WCAG 2.2</span>
+        <span class="tag primary">VoiceOver</span>
+        <span class="tag">SwiftUI</span>
+        <span class="tag">UIKit</span>
+        <span class="tag">VPAT</span>
+        <span class="tag">Mobile Testing</span>
+        <span class="tag">IAAP</span>
+        <span class="tag">2026 Edition</span>
+      </div>
+
+      <div class="post-meta">
+        <div class="post-author">
+          <div class="author-avatar" aria-hidden="true">SC</div>
+          <div>
+            <div class="author-name">Sushil Chauhan</div>
+            <div class="author-cert">IAAP-CPWA &nbsp;·&nbsp; Panvel, Mumbai</div>
+          </div>
+        </div>
+        <div class="post-details" aria-label="Article details">
+          <span aria-label="Published January 2026">📅 January 2026</span>
+          <span aria-label="20 minute read">⏱ 20 min read</span>
+          <span aria-label="2026 Edition">🚀 2026 Edition</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- DIVIDER -->
+    <div class="post-divider"><hr></div>
+
+    <!-- TOC -->
+    <nav class="toc-wrap" aria-labelledby="toc-heading">
+      <div class="toc">
+        <div class="toc-title" id="toc-heading">Table of Contents</div>
+        <ol>
+          <li><a href="#intro">Introduction — Why iOS Accessibility Cannot Be Optional</a></li>
+          <li><a href="#voiceover">VoiceOver Fundamentals — Gestures, Rotor, and the Reading Flow</a></li>
+          <li><a href="#uikit">UIKit Accessibility Deep Dive</a></li>
+          <li><a href="#swiftui">SwiftUI Best Practices</a></li>
+          <li><a href="#testing">Testing and Auditing — Tools, Workflow, and VPAT</a></li>
+          <li><a href="#advanced">Advanced Patterns and Common Pitfalls</a></li>
+          <li><a href="#conclusion">Conclusion, Checklist, and Resources</a></li>
+        </ol>
+      </div>
+    </nav>
+
+    <!-- ARTICLE -->
+    <article class="post-body" aria-labelledby="article-start">
+
+      <!-- Opening story -->
+      <div class="story-block" role="note" aria-label="Opening story">
+        <p>A few years ago, I was auditing a healthcare app for a mid-sized US client. The app let patients book doctor appointments, view prescriptions, and check lab results. Beautiful UI. Fast loading. Great reviews on the App Store.</p>
+        <p>Then I turned on VoiceOver.</p>
+        <p>The "Book Appointment" button announced itself as <em>"button."</em> Just that. Nothing else. The prescription list read out as a jumbled series of numbers with zero context. And the password field had no label at all. A blind user trying to manage their own healthcare had absolutely no idea what was happening on screen.</p>
+        <p><strong>Accessibility is not a feature you add at the end. It is the foundation of a usable product.</strong></p>
+      </div>
+
+      <!-- ── SECTION 1 ── -->
+      <h2 id="intro" tabindex="-1">
+        <span class="section-num">01 &mdash; Introduction</span>
+        Why iOS Accessibility Cannot Be Optional
+      </h2>
+
+      <h3>The Scale of the Problem</h3>
+      <p>According to the World Health Organization, <strong>1.3 billion people — roughly 15% of the global population</strong> — live with some form of disability. In the United States, the CDC estimates 61 million adults are affected. In India, the 2011 Census counted 2.68 crore persons with disability — widely considered an undercount.</p>
+      <p>These are not edge-case users. They are customers, patients, students, and employees who deserve equal access to digital services.</p>
+
+      <h3>The Legal Landscape in 2026</h3>
+      <p><strong>United States:</strong> The ADA applies to mobile apps. Section 508 mandates accessibility for federal technology procurement — making VPAT documentation a hard requirement for government contracts.</p>
+      <p><strong>European Union:</strong> The European Accessibility Act (EAA) came into force in June 2025. Mobile apps in banking, e-commerce, and transport must now meet EN 301 549 standards.</p>
+      <p><strong>India:</strong> The RPWD Act 2016, Section 46, mandates accessible ICT. The legal framework is in place and increasingly cited in procurement requirements.</p>
+
+      <h3>WCAG 2.2 AA → iOS Mapping</h3>
+
+      <div class="table-wrap">
+        <table aria-label="WCAG 2.2 AA success criteria mapped to iOS requirements">
+          <thead>
+            <tr>
+              <th scope="col">WCAG Criterion</th>
+              <th scope="col">Level</th>
+              <th scope="col">iOS Requirement</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>1.1.1 Non-text Content</td><td><span class="badge">A</span></td><td>All images need accessibilityLabel; decorative images must be hidden</td></tr>
+            <tr><td>1.3.1 Info and Relationships</td><td><span class="badge">A</span></td><td>Headings, lists, and groups conveyed via traits and grouping</td></tr>
+            <tr><td>1.4.3 Contrast Ratio</td><td><span class="badge red">AA</span></td><td>Text 4.5:1 minimum; large text 3:1 minimum</td></tr>
+            <tr><td>1.4.10 Reflow</td><td><span class="badge red">AA</span></td><td>Dynamic Type support; no horizontal scrolling at large sizes</td></tr>
+            <tr><td>2.1.1 Keyboard</td><td><span class="badge">A</span></td><td>Full Keyboard Access and Switch Control must work throughout</td></tr>
+            <tr><td>2.4.3 Focus Order</td><td><span class="badge">A</span></td><td>VoiceOver navigation order must be logical and meaningful</td></tr>
+            <tr><td>2.5.3 Label in Name</td><td><span class="badge red">AA</span></td><td>Accessible label must contain the element's visible text</td></tr>
+            <tr><td>3.3.1 Error Identification</td><td><span class="badge">A</span></td><td>Form errors must be announced via VoiceOver, not shown visually only</td></tr>
+            <tr><td>4.1.2 Name, Role, Value</td><td><span class="badge">A</span></td><td>Every interactive element needs a label, trait, and current value</td></tr>
+            <tr><td>4.1.3 Status Messages</td><td><span class="badge red">AA</span></td><td>Success/error messages announced without moving focus</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <hr class="section-sep">
+
+      <!-- ── SECTION 2 ── -->
+      <h2 id="voiceover" tabindex="-1">
+        <span class="section-num">02 &mdash; VoiceOver</span>
+        Fundamentals — Gestures, Rotor, and the Reading Flow
+      </h2>
+
+      <div class="callout tip" role="note">
+        <span class="callout-icon" aria-hidden="true">💡</span>
+        <p><strong>Try this before your next audit:</strong> Turn on VoiceOver, place your phone face-down, and try to complete a task using only what you hear. The discomfort you feel within thirty seconds is what your blind users experience in every session.</p>
+      </div>
+
+      <p>VoiceOver follows a <strong>linear, sequential navigation model</strong>. Users swipe right to advance, swipe left to go back, and double-tap to activate. There is no glancing at the whole screen — every piece of information must be discovered one element at a time.</p>
+
+      <h3>Complete VoiceOver Gesture Reference</h3>
+
+      <div class="table-wrap">
+        <table aria-label="VoiceOver gestures with touch and keyboard equivalents">
+          <thead>
+            <tr>
+              <th scope="col">Gesture (Touch)</th>
+              <th scope="col">Action</th>
+              <th scope="col">Keyboard Equivalent</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>One-finger swipe right</td><td>Move to next element</td><td>VO + Right Arrow</td></tr>
+            <tr><td>One-finger swipe left</td><td>Move to previous element</td><td>VO + Left Arrow</td></tr>
+            <tr><td>Double-tap</td><td>Activate selected element</td><td>VO + Space</td></tr>
+            <tr><td>Double-tap and hold</td><td>Begin drag action</td><td>VO + Shift + M</td></tr>
+            <tr><td>Two-finger swipe down</td><td>Read all from current position</td><td>VO + A</td></tr>
+            <tr><td>Two-finger swipe up</td><td>Read all from top of screen</td><td>VO + B</td></tr>
+            <tr><td>Two-finger tap</td><td>Pause or resume speech</td><td>VO + Control</td></tr>
+            <tr><td>Two-finger rotate</td><td>Open rotor menu</td><td>Up/Down after rotor select</td></tr>
+            <tr><td>Two-finger double-tap</td><td>Magic Tap — app primary action</td><td>VO + Hyphen</td></tr>
+            <tr><td>Two-finger triple-tap</td><td>Open Item Chooser</td><td>VO + I</td></tr>
+            <tr><td>Two-finger scrub (Z)</td><td>Dismiss modal / go back</td><td>Escape</td></tr>
+            <tr><td>Three-finger swipe left/right</td><td>Scroll next/previous page</td><td>Option + Left/Right Arrow</td></tr>
+            <tr><td>Three-finger swipe up/down</td><td>Scroll up/down</td><td>Option + Up/Down Arrow</td></tr>
+            <tr><td>Three-finger double-tap</td><td>Toggle Screen Curtain</td><td>VO + Shift + S</td></tr>
+            <tr><td>Four-finger tap (top)</td><td>Move to first element</td><td>Control + Up Arrow</td></tr>
+            <tr><td>Four-finger tap (bottom)</td><td>Move to last element</td><td>Control + Down Arrow</td></tr>
+            <tr><td>Swipe up on element</td><td>Increment adjustable value</td><td>VO + Up Arrow</td></tr>
+            <tr><td>Swipe down on element</td><td>Decrement adjustable value</td><td>VO + Down Arrow</td></tr>
+            <tr><td>Split-tap</td><td>Hold one finger, tap another to activate</td><td>—</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>The Reading Flow — What VoiceOver Announces</h3>
+      <p>When VoiceOver focuses on an element, it reads information in a fixed sequence:</p>
+      <p style="text-align:center; font-family: var(--mono); font-size: 1rem; color: var(--accent); letter-spacing: 0.1em; margin: 1.5rem 0; font-weight: 700;">Label → Trait → Value → Hint</p>
+
+      <p><strong>Well-implemented "Transfer Funds" button in a banking app:</strong><br>
+      <em>"Transfer funds, button, available balance $3,450.00, double-tap to proceed"</em></p>
+      <p><strong>Poorly implemented button:</strong><br>
+      <em>"button"</em> — no name, no context, no instruction.</p>
+
+      <hr class="section-sep">
+
+      <!-- ── SECTION 3 ── -->
+      <h2 id="uikit" tabindex="-1">
+        <span class="section-num">03 &mdash; UIKit</span>
+        Accessibility Deep Dive
+      </h2>
+
+      <h3>The Four Core Properties</h3>
+
+      <div class="code-label">Swift — UIKit</div>
+      <pre><code><span class="c">// Scenario: "Place Order" button in an e-commerce checkout</span>
+<span class="k">let</span> placeOrderButton = <span class="t">UIButton</span>()
+
+<span class="c">// 1. Label — what VoiceOver announces as the element's name</span>
+placeOrderButton.<span class="f">accessibilityLabel</span> = <span class="s">"Place order"</span>
+
+<span class="c">// 2. Hint — consequence of activation; full sentence with full stop</span>
+placeOrderButton.<span class="f">accessibilityHint</span> = <span class="s">"Confirms and submits your order for delivery."</span>
+
+<span class="c">// 3. Value — current state or relevant context</span>
+placeOrderButton.<span class="f">accessibilityValue</span> = <span class="s">"Total: £89.99, 2 items"</span>
+
+<span class="c">// 4. Traits — defines role and interactive behaviour</span>
+placeOrderButton.<span class="f">accessibilityTraits</span> = [.<span class="f">button</span>]</code></pre>
+
+      <h3>UIKit Accessibility Traits — Complete Reference</h3>
+
+      <div class="table-wrap">
+        <table aria-label="UIKit accessibility traits with effects and usage guidance">
+          <thead>
+            <tr>
+              <th scope="col">Trait</th>
+              <th scope="col">VoiceOver Effect</th>
+              <th scope="col">When to Use</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>.button</td><td>Announces "button"; signals interactivity</td><td>Any tappable element that performs an action</td></tr>
+            <tr><td>.link</td><td>Announces "link"</td><td>Elements that navigate to a destination</td></tr>
+            <tr><td>.header</td><td>Announces "heading"; accessible via rotor</td><td>Screen titles, navigation bar titles, section headers</td></tr>
+            <tr><td>.selected</td><td>Announces "selected"</td><td>Tabs, segmented controls, selected list items</td></tr>
+            <tr><td>.notEnabled</td><td>Announces "dimmed"</td><td>Disabled or inactive interactive elements</td></tr>
+            <tr><td>.adjustable</td><td>Announces "adjustable"; swipe up/down changes value</td><td>Custom sliders, steppers, rating controls</td></tr>
+            <tr><td>.isModal</td><td>Traps VoiceOver focus within container</td><td>Modals, alerts, bottom sheets, custom overlays</td></tr>
+            <tr><td>.allowsDirectInteraction</td><td>Touch events passed directly; gestures bypassed</td><td>Drawing apps, instruments, games</td></tr>
+            <tr><td>.updatesFrequently</td><td>VoiceOver polls for value changes</td><td>Countdowns, live scores, real-time data</td></tr>
+            <tr><td>.summaryElement</td><td>Read automatically on screen load</td><td>Dashboard summaries, weather overview</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>UIAccessibility Notifications</h3>
+
+      <div class="code-label">Swift — UIKit Notifications</div>
+      <pre><code><span class="c">// Scenario: Flight search form fails validation
+// Error label appears — but VoiceOver focus stays on the Search button</span>
+
+<span class="c">// ❌ Broken — user never hears the error</span>
+<span class="k">self</span>.dateErrorLabel.<span class="f">text</span> = <span class="s">"Please select a departure date."</span>
+<span class="k">self</span>.dateErrorLabel.<span class="f">isHidden</span> = <span class="k">false</span>
+
+<span class="c">// ✅ Fixed — focus moves directly to the error</span>
+<span class="k">self</span>.dateErrorLabel.<span class="f">text</span> = <span class="s">"Please select a departure date."</span>
+<span class="k">self</span>.dateErrorLabel.<span class="f">isHidden</span> = <span class="k">false</span>
+<span class="t">UIAccessibility</span>.<span class="f">post</span>(
+    notification: .<span class="f">layoutChanged</span>,
+    argument: <span class="k">self</span>.dateErrorLabel
+)
+
+<span class="c">// Background success — announce without moving focus (WCAG 4.1.3)</span>
+<span class="t">UIAccessibility</span>.<span class="f">post</span>(
+    notification: .<span class="f">announcement</span>,
+    argument: <span class="s">"Booking confirmed. Reference: FL-2094."</span>
+)</code></pre>
+
+      <hr class="section-sep">
+
+      <!-- ── SECTION 4 ── -->
+      <h2 id="swiftui" tabindex="-1">
+        <span class="section-num">04 &mdash; SwiftUI</span>
+        Accessibility Best Practices
+      </h2>
+
+      <h3>Images — Getting Them Right</h3>
+
+      <div class="code-label">Swift — SwiftUI Images</div>
+      <pre><code><span class="c">// Informative image — requires a descriptive label</span>
+<span class="t">Image</span>(<span class="s">"beachfront_villa_goa"</span>)
+    .<span class="f">accessibilityLabel</span>(<span class="t">Text</span>(<span class="s">"Beachfront villa in Goa with private pool and ocean view"</span>))
+
+<span class="c">// Decorative — must be hidden from VoiceOver</span>
+<span class="t">Image</span>(<span class="s">"card_shadow_effect"</span>)
+    .<span class="f">accessibilityHidden</span>(<span class="k">true</span>)
+
+<span class="c">// SwiftUI's built-in decorative initialiser</span>
+<span class="t">Image</span>(decorative: <span class="s">"listing_background_gradient"</span>)
+
+<span class="c">// SF Symbol as standalone action icon — always needs contextual label</span>
+<span class="t">Image</span>(systemName: <span class="s">"location.fill"</span>)
+    .<span class="f">accessibilityLabel</span>(<span class="t">Text</span>(<span class="s">"View property on map"</span>))
+    .<span class="f">accessibilityAddTraits</span>(.<span class="f">isButton</span>)
+    .<span class="f">onTapGesture</span> { <span class="f">openMapView</span>() }
+
+<span class="c">// SF Symbol next to visible text — hide the icon entirely</span>
+<span class="t">HStack</span>(spacing: <span class="n">6</span>) {
+    <span class="t">Image</span>(systemName: <span class="s">"bed.double.fill"</span>)
+        .<span class="f">accessibilityHidden</span>(<span class="k">true</span>)   <span class="c">// "3 Bedrooms" text covers this meaning</span>
+    <span class="t">Text</span>(<span class="s">"3 Bedrooms"</span>)
+}</code></pre>
+
+      <h3>Semantic Grouping — The Most Important Pattern</h3>
+      <p>Without grouping, a hotel search result card with five pieces of information requires five separate swipes. Multiply that across twenty results and a blind user makes over a hundred swipes just to scan the list.</p>
+
+      <div class="code-label">Swift — SwiftUI Semantic Grouping</div>
+      <pre><code><span class="c">// ❌ Without grouping — 5 separate elements, 5 swipes per card</span>
+<span class="t">VStack</span>(alignment: .leading, spacing: <span class="n">4</span>) {
+    <span class="t">Text</span>(<span class="s">"The Taj Mahal Palace"</span>)
+    <span class="t">Text</span>(<span class="s">"5 stars"</span>)
+    <span class="t">Text</span>(<span class="s">"0.3 km from city centre"</span>)
+    <span class="t">Text</span>(<span class="s">"From ₹12,500 per night"</span>)
+    <span class="t">Button</span>(<span class="s">"Book Now"</span>) { <span class="f">selectHotel</span>(hotel) }
+}
+
+<span class="c">// ✅ With semantic grouping — 1 element, 1 swipe, full context</span>
+<span class="t">VStack</span>(alignment: .leading, spacing: <span class="n">4</span>) {
+    <span class="t">Text</span>(<span class="s">"The Taj Mahal Palace"</span>)
+    <span class="t">Text</span>(<span class="s">"5 stars"</span>)
+    <span class="t">Text</span>(<span class="s">"0.3 km from city centre"</span>)
+    <span class="t">Text</span>(<span class="s">"From ₹12,500 per night"</span>)
+    <span class="t">Button</span>(<span class="s">"Book Now"</span>) { <span class="f">selectHotel</span>(hotel) }
+}
+.<span class="f">accessibilityElement</span>(children: .<span class="f">ignore</span>)
+.<span class="f">accessibilityLabel</span>(<span class="t">Text</span>(<span class="s">"The Taj Mahal Palace, 5 stars, 0.3 km from city centre, from 12,500 rupees per night"</span>))
+.<span class="f">accessibilityAddTraits</span>(.<span class="f">isButton</span>)
+.<span class="f">accessibilityHint</span>(<span class="t">Text</span>(<span class="s">"Double-tap to view hotel details and availability."</span>))
+.<span class="f">accessibilityAction</span> { <span class="f">selectHotel</span>(hotel) }</code></pre>
+
+      <h3>Dynamic Type — Non-Negotiable for WCAG 1.4.10</h3>
+
+      <div class="code-label">Swift — Dynamic Type</div>
+      <pre><code><span class="c">// ✅ Correct — system text styles scale with Dynamic Type automatically</span>
+<span class="t">Text</span>(<span class="s">"Account holder"</span>)
+    .font(.<span class="f">subheadline</span>)
+
+<span class="c">// UIKit — these two lines are both required</span>
+referenceLabel.font = <span class="t">UIFont</span>.<span class="f">preferredFont</span>(forTextStyle: .<span class="f">body</span>)
+referenceLabel.<span class="f">adjustsFontForContentSizeCategory</span> = <span class="k">true</span>
+
+<span class="c">// ❌ This fails WCAG 1.4.10 — fixed size never scales</span>
+referenceLabel.font = <span class="t">UIFont</span>.<span class="f">systemFont</span>(ofSize: <span class="n">15</span>)</code></pre>
+
+      <div class="callout warning" role="note">
+        <span class="callout-icon" aria-hidden="true">⚠️</span>
+        <p>Test at maximum Dynamic Type size: <strong>Settings → Accessibility → Display &amp; Text Size → Larger Text → drag to maximum (AX5)</strong>. Your layout must remain readable and must not introduce horizontal scrolling.</p>
+      </div>
+
+      <hr class="section-sep">
+
+      <!-- ── SECTION 5 ── -->
+      <h2 id="testing" tabindex="-1">
+        <span class="section-num">05 &mdash; Testing</span>
+        and Auditing — Tools, Workflow, and VPAT
+      </h2>
+
+      <div class="table-wrap">
+        <table aria-label="iOS accessibility testing tools comparison">
+          <thead>
+            <tr>
+              <th scope="col">Tool</th>
+              <th scope="col">Type</th>
+              <th scope="col">Primary Use</th>
+              <th scope="col">Cost</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>VoiceOver (real device)</td><td>Manual</td><td>Complete user experience audit</td><td><span class="badge green">Free</span></td></tr>
+            <tr><td>Xcode Accessibility Inspector</td><td>Semi-automated</td><td>Live tree inspection, audit scan</td><td><span class="badge green">Free</span></td></tr>
+            <tr><td>Switch Control</td><td>Manual</td><td>Motor disability simulation</td><td><span class="badge green">Free</span></td></tr>
+            <tr><td>Full Keyboard Access</td><td>Manual</td><td>Keyboard-only navigation testing</td><td><span class="badge green">Free</span></td></tr>
+            <tr><td>Colour Contrast Analyser</td><td>Automated</td><td>Contrast ratio measurement</td><td><span class="badge green">Free</span></td></tr>
+            <tr><td>Axe DevTools Mobile</td><td>Automated</td><td>WCAG checks in web/hybrid views</td><td><span class="badge yellow">Free tier</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout info" role="note">
+        <span class="callout-icon" aria-hidden="true">ℹ️</span>
+        <p>Automated tools typically catch <strong>30–40% of real accessibility failures</strong>. The remaining issues — especially usability problems and context-dependent label quality — require manual testing with VoiceOver.</p>
+      </div>
+
+      <h3>Creating a VPAT/ACR Report for an iOS App</h3>
+      <p>A VPAT (Voluntary Product Accessibility Template) is a standardised disclosure document required for US federal government procurement and increasingly requested by enterprise clients in healthcare, finance, and education. Use the <strong>VPAT 2.4REV template</strong> from itic.org.</p>
+
+      <p>For each WCAG criterion, assign one of four conformance levels:</p>
+      <ul>
+        <li><strong>Supports</strong> — fully meets the requirement with no known exceptions</li>
+        <li><strong>Partially Supports</strong> — meets the requirement in some but not all cases; describe precisely what fails</li>
+        <li><strong>Does Not Support</strong> — does not meet the requirement; describe the specific issue</li>
+        <li><strong>Not Applicable</strong> — criterion does not apply to this product; justify clearly</li>
+      </ul>
+
+      <p>The Remarks column is what separates a credible VPAT from a useless one:</p>
+      <blockquote>
+        <p>Inadequate: "Partially Supports — some images may be missing labels."</p>
+      </blockquote>
+      <blockquote>
+        <p>Acceptable: "Partially Supports — product thumbnail images on category listing screens (screens 8–12) are missing descriptive accessibilityLabel values. VoiceOver announces the image file name. Remediation scheduled for version 4.1, targeted Q3 2026."</p>
+      </blockquote>
+
+      <hr class="section-sep">
+
+      <!-- ── SECTION 6 ── -->
+      <h2 id="advanced" tabindex="-1">
+        <span class="section-num">06 &mdash; Advanced</span>
+        Patterns and Common Pitfalls
+      </h2>
+
+      <h3>Modal Focus Trapping</h3>
+
+      <div class="code-label">Swift — Modal Focus Trap</div>
+      <pre><code><span class="c">// UIKit — trap VoiceOver focus inside the modal</span>
+<span class="k">class</span> <span class="t">PaymentConfirmViewController</span>: <span class="t">UIViewController</span> {
+    <span class="k">override func</span> <span class="f">viewDidLoad</span>() {
+        <span class="k">super</span>.<span class="f">viewDidLoad</span>()
+        view.<span class="f">accessibilityViewIsModal</span> = <span class="k">true</span>
+    }
+}
+
+<span class="c">// SwiftUI — applied to the modal's outermost container</span>
+<span class="t">VStack</span> {
+    <span class="t">Text</span>(<span class="s">"Confirm Payment"</span>)
+    <span class="t">Text</span>(<span class="s">"Are you sure you want to pay £149.99?"</span>)
+    <span class="t">HStack</span> {
+        <span class="t">Button</span>(<span class="s">"Cancel"</span>) { <span class="f">dismiss</span>() }
+        <span class="t">Button</span>(<span class="s">"Confirm"</span>) { <span class="f">processPayment</span>() }
+    }
+}
+.<span class="f">accessibilityAddTraits</span>(.<span class="f">isModal</span>)</code></pre>
+
+      <h3>ARIA Support in iOS Safari / WKWebView</h3>
+
+      <div class="table-wrap">
+        <table aria-label="ARIA attribute support in iOS Safari and WKWebView">
+          <thead>
+            <tr>
+              <th scope="col">ARIA Attribute / Role</th>
+              <th scope="col">iOS Support</th>
+              <th scope="col">Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>aria-label</td><td><span class="badge green">✅ Full (iOS 5+)</span></td><td>Most reliable; use consistently</td></tr>
+            <tr><td>aria-labelledby</td><td><span class="badge green">✅ Full (iOS 9+)</span></td><td>Works well for form field associations</td></tr>
+            <tr><td>aria-expanded</td><td><span class="badge green">✅ iOS 9+</span></td><td>Partial in iOS 5–8; reliable from iOS 9</td></tr>
+            <tr><td>aria-live="polite"</td><td><span class="badge green">✅ iOS 10+</span></td><td>Non-interruptive announcements</td></tr>
+            <tr><td>aria-live="assertive"</td><td><span class="badge green">✅ iOS 10+</span></td><td>Interrupts speech; use sparingly</td></tr>
+            <tr><td>aria-checked</td><td><span class="badge green">✅ Full</span></td><td>Checkbox and radio button state</td></tr>
+            <tr><td>aria-invalid</td><td><span class="badge green">✅ Full (iOS 11+)</span></td><td>Error state on form inputs</td></tr>
+            <tr><td>role="dialog"</td><td><span class="badge green">✅ iOS 13+</span></td><td>Focus containment in modals</td></tr>
+            <tr><td>role="alert"</td><td><span class="badge green">✅ iOS 10+</span></td><td>Immediate, interruptive announcement</td></tr>
+            <tr><td>aria-haspopup</td><td><span class="badge yellow">⚠️ Partial</span></td><td>Not reliably announced</td></tr>
+            <tr><td>aria-controls</td><td><span class="badge red">❌ Not supported</span></td><td>No effect on VoiceOver navigation</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Five Pitfalls I Encounter in Nearly Every Audit</h3>
+      <ol>
+        <li><strong>SF Symbol names read verbatim.</strong> <code>Image(systemName: "square.and.arrow.up")</code> announces as "square dot and dot arrow dot up." Always provide contextual labels.</li>
+        <li><strong>Icon and visible text both accessible.</strong> A share button with icon and "Share" text announces "square and arrow up, Share, button." Hide the icon with <code>.accessibilityHidden(true)</code>.</li>
+        <li><strong>No heading structure on any screen.</strong> Users who navigate by headings find nothing in the Headings rotor. Add <code>.accessibilityAddTraits(.header)</code> to each screen's primary title.</li>
+        <li><strong>Form errors shown visually but never announced.</strong> Post a <code>.layoutChanged</code> notification directing focus to the error message immediately after it appears.</li>
+        <li><strong>Segmented control selected state not communicated.</strong> Apply the <code>.selected</code> trait dynamically to the active segment so VoiceOver announces "selected."</li>
+      </ol>
+
+      <hr class="section-sep">
+
+      <!-- ── SECTION 7 ── -->
+      <h2 id="conclusion" tabindex="-1">
+        <span class="section-num">07 &mdash; Conclusion</span>
+        Checklist and Resources
+      </h2>
+
+      <blockquote>
+        <p>Accessibility testing is not a compliance exercise. It is advocacy — for the users who deserve better, and for the products that should serve them well.</p>
+        <cite>— Sushil Chauhan, IAAP-CPWA</cite>
+      </blockquote>
+
+      <h3>Complete iOS Accessibility Audit Checklist</h3>
+
+      <div class="checklist-section">
+        <h4>VoiceOver Navigation</h4>
+        <ul class="checklist">
+          <li><span class="check-box" aria-hidden="true"></span>All interactive elements reachable by swiping in order</li>
+          <li><span class="check-box" aria-hidden="true"></span>Focus order logical and matches reading sequence</li>
+          <li><span class="check-box" aria-hidden="true"></span>Modals and overlays use .isModal / accessibilityViewIsModal</li>
+          <li><span class="check-box" aria-hidden="true"></span>After modal dismissal, focus returns to a logical position</li>
+          <li><span class="check-box" aria-hidden="true"></span>Each screen has at least one .header trait element</li>
+        </ul>
+      </div>
+
+      <div class="checklist-section">
+        <h4>Labels and Descriptions</h4>
+        <ul class="checklist">
+          <li><span class="check-box" aria-hidden="true"></span>Every button and link has a meaningful accessibilityLabel</li>
+          <li><span class="check-box" aria-hidden="true"></span>Decorative images hidden with .accessibilityHidden(true)</li>
+          <li><span class="check-box" aria-hidden="true"></span>SF Symbol icons have explicit, contextual labels</li>
+          <li><span class="check-box" aria-hidden="true"></span>Form fields have persistent programmatic labels</li>
+          <li><span class="check-box" aria-hidden="true"></span>Icon + text combinations hide the icon to avoid duplication</li>
+        </ul>
+      </div>
+
+      <div class="checklist-section">
+        <h4>State and Live Regions</h4>
+        <ul class="checklist">
+          <li><span class="check-box" aria-hidden="true"></span>Selected state communicated for tabs and segmented controls</li>
+          <li><span class="check-box" aria-hidden="true"></span>Error messages announced via layoutChanged with focus moved</li>
+          <li><span class="check-box" aria-hidden="true"></span>Success messages announced via .announcement notification</li>
+          <li><span class="check-box" aria-hidden="true"></span>Loading states communicated to VoiceOver</li>
+        </ul>
+      </div>
+
+      <div class="checklist-section">
+        <h4>Visual and Typography</h4>
+        <ul class="checklist">
+          <li><span class="check-box" aria-hidden="true"></span>All text meets 4.5:1 contrast (3:1 for large text)</li>
+          <li><span class="check-box" aria-hidden="true"></span>App fully usable at maximum Dynamic Type size (AX5)</li>
+          <li><span class="check-box" aria-hidden="true"></span>No horizontal scrolling at large text sizes</li>
+          <li><span class="check-box" aria-hidden="true"></span>Focus indicator visible during Full Keyboard Access</li>
+        </ul>
+      </div>
+
+      <h3>Essential Resources</h3>
+      <ul class="resource-list">
+        <li>🍎 <a href="https://developer.apple.com/accessibility/" rel="noopener" target="_blank">Apple Accessibility Documentation</a></li>
+        <li>🍎 <a href="https://developer.apple.com/design/human-interface-guidelines/accessibility" rel="noopener" target="_blank">Apple HIG — Accessibility</a></li>
+        <li>📋 <a href="https://www.w3.org/TR/WCAG22/" rel="noopener" target="_blank">WCAG 2.2 Full Specification</a></li>
+        <li>📄 <a href="https://www.itic.org/policy-resources/accessibility/vpat" rel="noopener" target="_blank">VPAT 2.4REV Templates (ITIC)</a></li>
+        <li>🎓 <a href="https://dequeuniversity.com/" rel="noopener" target="_blank">Deque University — Free Accessibility Courses</a></li>
+        <li>🏅 <a href="https://www.accessibilityassociation.org/s/cpwa" rel="noopener" target="_blank">IAAP CPWA Certification</a></li>
+      </ul>
+
+      <!-- SHARE BAR -->
+      <div class="share-bar">
+        <span class="share-label">Share</span>
+        <div class="share-tags" aria-label="Share hashtags">
+          <span class="share-tag">#iOSAccessibility</span>
+          <span class="share-tag">#WCAG</span>
+          <span class="share-tag">#VoiceOver</span>
+          <span class="share-tag">#AccessibilityTesting</span>
+          <span class="share-tag">#IAAP</span>
+          <span class="share-tag">#A11y</span>
+          <span class="share-tag">#SwiftUI</span>
+          <span class="share-tag">#MobileAccessibility</span>
+        </div>
+      </div>
+
+      <!-- CTA CARD -->
+      <div class="cta-card" role="complementary" aria-labelledby="cta-heading">
+        <h3 id="cta-heading">Need an iOS Accessibility Audit or VPAT Report?</h3>
+        <p>I work with teams across the US, Europe, and India to audit iOS apps, produce VPAT/ACR reports for procurement, and train QA and development teams on WCAG 2.2 compliance.</p>
+        <div class="cta-contacts">
+          <div class="cta-contact-item">📞 <strong>WhatsApp / Call:</strong> +91 70215 55982</div>
+          <div class="cta-contact-item">📍 <strong>Location:</strong> Panvel, Mumbai — Remote Worldwide</div>
+          <div class="cta-contact-item">🏅 <strong>IAAP-CPWA Certified</strong> &nbsp;·&nbsp; 7+ Years &nbsp;·&nbsp; 500+ Projects</div>
+        </div>
+      </div>
+
+    </article>
+  </main>
+
+  <!-- FOOTER -->
+  <footer role="contentinfo">
+    <div class="footer-inner">
+      <div class="footer-copy">
+        <strong style="color:#fff;">Sushil Chauhan</strong> — IAAP-CPWA Accessibility Specialist<br>
+        <span>© 2026 Sushil Chauhan. Panvel, Maharashtra, India.</span>
+      </div>
+      <div class="footer-back">
+        <a href="sushil-chauhan-portfolio.html">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true" focusable="false">
+            <path d="M9 2L4 7l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Back to Portfolio
+        </a>
+      </div>
+      <span class="footer-wcag" role="note" aria-label="WCAG 2.2 AA compliant page">WCAG 2.2 AA</span>
+    </div>
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,1082 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Complete Guide to Creating Accessible Word Documents (2026) — Sushil Chauhan</title>
+  <meta name="description" content="A practical guide to Microsoft Word accessibility — headings, lists, tables, images, alt text, colour contrast, links, language settings, and accessible PDF export. By Sushil Chauhan, IAAP-CPWA.">
+  <meta name="keywords" content="Word accessibility, Microsoft Word WCAG, accessible documents, alt text Word, heading structure Word, VPAT, PDF export accessibility, IAAP CPWA">
+  <meta name="author" content="Sushil Chauhan">
+  <meta property="og:title" content="Complete Guide to Creating Accessible Word Documents (2026)">
+  <meta property="og:description" content="Headings, lists, tables, images, alt text, colour, links, language, and PDF export — everything you need to make Word documents fully accessible.">
+  <meta property="og:type" content="article">
+  <link rel="canonical" href="https://sushilchauhan.com/blog/word-accessibility-guide-2026">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=Space+Mono:wght@400;700&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0a0a0a;
+      --bg2: #111111;
+      --bg3: #181818;
+      --text: #ffffff;
+      --text-body: rgba(255,255,255,0.82);
+      --text-muted: rgba(255,255,255,0.5);
+      --accent: #ff6b6b;
+      --accent-dim: rgba(255,107,107,0.12);
+      --border: rgba(255,255,255,0.08);
+      --border-hover: rgba(255,107,107,0.35);
+      --glass: rgba(255,255,255,0.04);
+      --code-bg: rgba(255,255,255,0.06);
+      --radius: 16px;
+      --radius-sm: 8px;
+      --mono: 'Space Mono', monospace;
+      --sans: 'DM Sans', sans-serif;
+      --serif: 'Lora', Georgia, serif;
+      --transition: 0.3s cubic-bezier(0.4,0,0.2,1);
+      --content-width: 760px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 16px; }
+    body {
+      font-family: var(--sans);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .skip-link {
+      position: absolute; top: -100px; left: 1rem;
+      background: var(--accent); color: #fff;
+      padding: 0.75rem 1.5rem; border-radius: var(--radius-sm);
+      font-weight: 600; font-size: 0.9rem; z-index: 9999;
+      transition: top var(--transition);
+    }
+    .skip-link:focus { top: 1rem; outline: 3px solid #fff; outline-offset: 2px; }
+
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background: radial-gradient(ellipse 70% 40% at 50% 0%, rgba(255,107,107,0.07) 0%, transparent 60%);
+      pointer-events: none; z-index: 0;
+    }
+
+    header {
+      position: sticky; top: 0; z-index: 100;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      background: rgba(10,10,10,0.85);
+      border-bottom: 1px solid var(--border);
+    }
+    .header-inner {
+      max-width: 1100px; margin: 0 auto;
+      padding: 0 2rem; height: 64px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .logo {
+      font-family: var(--mono); font-size: 0.95rem;
+      font-weight: 700; color: var(--text); letter-spacing: -0.02em;
+      text-decoration: none;
+    }
+    .logo span { color: var(--accent); }
+    .header-back {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      font-size: 0.82rem; font-weight: 500; color: var(--text-muted);
+      text-decoration: none; padding: 0.4rem 0.85rem;
+      border: 1px solid var(--border); border-radius: var(--radius-sm);
+      transition: all var(--transition);
+    }
+    .header-back:hover { color: var(--text); border-color: rgba(255,255,255,0.2); }
+    .header-back:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+    .post-hero {
+      position: relative; z-index: 1;
+      padding: 5rem 2rem 3rem;
+      max-width: var(--content-width);
+      margin: 0 auto;
+    }
+    .post-category {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      font-family: var(--mono); font-size: 0.68rem; font-weight: 700;
+      letter-spacing: 0.16em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 1.25rem;
+    }
+    .post-category::before {
+      content: ''; width: 6px; height: 6px;
+      border-radius: 50%; background: var(--accent);
+    }
+    .post-title {
+      font-size: clamp(1.9rem, 4.5vw, 3rem);
+      font-weight: 700; line-height: 1.15;
+      letter-spacing: -0.035em; margin-bottom: 1.25rem;
+    }
+    .post-excerpt {
+      font-size: 1.1rem; color: var(--text-muted);
+      line-height: 1.7; margin-bottom: 2rem; max-width: 620px;
+    }
+    .post-meta {
+      display: flex; align-items: center; gap: 1.5rem;
+      flex-wrap: wrap; padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+    }
+    .post-author { display: flex; align-items: center; gap: 0.75rem; }
+    .author-avatar {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: var(--accent-dim); border: 1px solid rgba(255,107,107,0.25);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--mono); font-size: 0.75rem; font-weight: 700;
+      color: var(--accent); flex-shrink: 0;
+    }
+    .author-name { font-size: 0.9rem; font-weight: 600; }
+    .author-cert { font-size: 0.72rem; color: var(--text-muted); font-family: var(--mono); letter-spacing: 0.04em; }
+    .post-details {
+      display: flex; gap: 1.25rem; flex-wrap: wrap;
+      font-size: 0.78rem; color: var(--text-muted); font-family: var(--mono);
+    }
+    .post-details span { display: flex; align-items: center; gap: 0.35rem; }
+    .post-tags { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 1.5rem; }
+    .tag {
+      font-size: 0.68rem; font-weight: 600; padding: 0.2rem 0.65rem;
+      border-radius: 100px; background: var(--glass);
+      border: 1px solid var(--border); color: var(--text-muted); letter-spacing: 0.04em;
+    }
+    .tag.primary { background: var(--accent-dim); border-color: rgba(255,107,107,0.25); color: var(--accent); }
+
+    .post-divider { max-width: var(--content-width); margin: 0 auto; padding: 0 2rem; }
+    .post-divider hr { border: none; border-top: 1px solid var(--border); margin-bottom: 3rem; }
+
+    .toc-wrap { max-width: var(--content-width); margin: 0 auto 3rem; padding: 0 2rem; }
+    .toc {
+      background: var(--glass); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 1.75rem 2rem;
+    }
+    .toc-title {
+      font-family: var(--mono); font-size: 0.68rem; font-weight: 700;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 1rem;
+    }
+    .toc ol { list-style: none; counter-reset: toc; }
+    .toc ol li { counter-increment: toc; }
+    .toc ol li a {
+      display: flex; align-items: baseline; gap: 0.75rem;
+      font-size: 0.875rem; color: var(--text-muted); padding: 0.3rem 0;
+      text-decoration: none; transition: color var(--transition);
+    }
+    .toc ol li a::before {
+      content: counter(toc, decimal-leading-zero);
+      font-family: var(--mono); font-size: 0.65rem; color: var(--accent); flex-shrink: 0;
+    }
+    .toc ol li a:hover { color: var(--text); }
+    .toc ol li a:focus-visible { outline: 2px solid var(--accent); border-radius: 2px; }
+
+    .post-body {
+      max-width: var(--content-width); margin: 0 auto;
+      padding: 0 2rem 5rem; position: relative; z-index: 1;
+    }
+    .post-body h2 {
+      font-size: clamp(1.4rem, 3vw, 1.75rem);
+      font-weight: 700; letter-spacing: -0.03em;
+      margin: 3.5rem 0 1rem; padding-top: 1rem; scroll-margin-top: 80px;
+    }
+    .post-body h2 .section-num {
+      font-family: var(--mono); font-size: 0.72rem; font-weight: 700;
+      color: var(--accent); letter-spacing: 0.1em; display: block;
+      margin-bottom: 0.3rem; text-transform: uppercase;
+    }
+    .post-body h3 {
+      font-size: 1.15rem; font-weight: 700; letter-spacing: -0.02em;
+      margin: 2.5rem 0 0.75rem;
+    }
+    .post-body h4 {
+      font-size: 0.9rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--accent); margin: 2rem 0 0.5rem;
+      font-family: var(--mono);
+    }
+    .post-body p {
+      font-size: 1rem; color: var(--text-body); line-height: 1.85; margin-bottom: 1.25rem;
+    }
+    .post-body strong { color: var(--text); font-weight: 600; }
+    .post-body em { font-style: italic; color: var(--text-muted); }
+    .post-body a {
+      color: var(--accent); text-underline-offset: 3px;
+      text-decoration: underline;
+      text-decoration-color: rgba(255,107,107,0.4);
+      transition: text-decoration-color var(--transition);
+    }
+    .post-body a:hover { text-decoration-color: var(--accent); }
+
+    .story-block {
+      background: var(--glass); border-left: 3px solid var(--accent);
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      padding: 1.5rem 1.75rem; margin: 0 0 2rem;
+    }
+    .story-block p { margin-bottom: 0.75rem; }
+    .story-block p:last-child { margin-bottom: 0; }
+
+    blockquote {
+      border-left: 3px solid var(--accent);
+      margin: 2rem 0; padding: 1rem 1.5rem;
+      background: var(--glass); border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    }
+    blockquote p {
+      font-family: var(--serif); font-size: 1.05rem; font-style: italic;
+      color: var(--text-muted); line-height: 1.75; margin-bottom: 0;
+    }
+    blockquote cite {
+      display: block; font-family: var(--mono); font-size: 0.68rem;
+      color: var(--text-muted); margin-top: 0.5rem; font-style: normal; letter-spacing: 0.06em;
+    }
+
+    .callout {
+      border-radius: var(--radius-sm); padding: 1rem 1.25rem; margin: 1.75rem 0;
+      display: flex; gap: 0.75rem; align-items: flex-start; font-size: 0.9rem; line-height: 1.65;
+    }
+    .callout-icon { flex-shrink: 0; font-size: 1.1rem; margin-top: 0.05rem; }
+    .callout p { margin-bottom: 0; color: var(--text-body); font-size: 0.9rem; }
+    .callout.tip { background: rgba(255,107,107,0.08); border: 1px solid rgba(255,107,107,0.2); }
+    .callout.warning { background: rgba(255,193,7,0.08); border: 1px solid rgba(255,193,7,0.2); }
+    .callout.info { background: rgba(56,189,248,0.08); border: 1px solid rgba(56,189,248,0.2); }
+    .callout.good { background: rgba(34,197,94,0.08); border: 1px solid rgba(34,197,94,0.2); }
+
+    .post-body ul, .post-body ol { margin: 1rem 0 1.5rem 1.25rem; color: var(--text-body); }
+    .post-body ul { list-style: none; margin-left: 0; }
+    .post-body ul li {
+      padding-left: 1.25rem; position: relative; margin-bottom: 0.4rem;
+      font-size: 1rem; line-height: 1.75;
+    }
+    .post-body ul li::before {
+      content: ''; position: absolute; left: 0; top: 0.72em;
+      width: 5px; height: 5px; border-radius: 50%; background: var(--accent);
+    }
+    .post-body ol li { margin-bottom: 0.55rem; font-size: 1rem; line-height: 1.75; }
+    .post-body ol li strong { color: var(--text); }
+
+    /* Steps style */
+    .steps {
+      counter-reset: step;
+      list-style: none; margin-left: 0;
+      display: flex; flex-direction: column; gap: 0.75rem;
+    }
+    .steps li {
+      counter-increment: step;
+      display: flex; gap: 1rem; align-items: flex-start;
+      padding: 0.75rem 1rem; background: var(--glass);
+      border: 1px solid var(--border); border-radius: var(--radius-sm);
+    }
+    .steps li::before {
+      content: counter(step);
+      font-family: var(--mono); font-size: 0.7rem; font-weight: 700;
+      color: var(--accent); background: var(--accent-dim);
+      border-radius: 4px; padding: 0.15rem 0.5rem;
+      flex-shrink: 0; margin-top: 0.1rem;
+    }
+    .steps li p { margin-bottom: 0; font-size: 0.9rem; color: var(--text-body); }
+
+    /* Issue/Fix comparison */
+    .issue-fix {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 1rem; margin: 1.5rem 0;
+    }
+    .issue-box, .fix-box {
+      border-radius: var(--radius-sm); padding: 1rem 1.25rem;
+    }
+    .issue-box {
+      background: rgba(239,68,68,0.06); border: 1px solid rgba(239,68,68,0.18);
+    }
+    .fix-box {
+      background: rgba(34,197,94,0.06); border: 1px solid rgba(34,197,94,0.18);
+    }
+    .issue-box .box-label {
+      font-family: var(--mono); font-size: 0.6rem; font-weight: 700;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: #f87171; margin-bottom: 0.5rem;
+    }
+    .fix-box .box-label {
+      font-family: var(--mono); font-size: 0.6rem; font-weight: 700;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: #4ade80; margin-bottom: 0.5rem;
+    }
+    .issue-box p, .fix-box p { font-size: 0.875rem; color: var(--text-muted); margin-bottom: 0; line-height: 1.6; }
+    @media (max-width: 600px) { .issue-fix { grid-template-columns: 1fr; } }
+
+    .table-wrap {
+      overflow-x: auto; border-radius: var(--radius);
+      border: 1px solid var(--border); margin: 1.75rem 0;
+    }
+    table { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
+    thead { background: rgba(255,107,107,0.08); }
+    thead th {
+      padding: 0.9rem 1.1rem; text-align: left;
+      font-family: var(--mono); font-size: 0.65rem; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--text-muted); border-bottom: 1px solid var(--border); white-space: nowrap;
+    }
+    tbody tr { border-bottom: 1px solid rgba(255,255,255,0.04); transition: background var(--transition); }
+    tbody tr:hover { background: var(--glass); }
+    tbody tr:last-child { border-bottom: none; }
+    tbody td { padding: 0.85rem 1.1rem; vertical-align: top; color: var(--text-muted); line-height: 1.55; }
+    tbody td:first-child { color: var(--text); font-weight: 600; }
+    .badge { display: inline-block; border-radius: 4px; padding: 0.1rem 0.45rem; font-family: var(--mono); font-size: 0.65rem; font-weight: 700; }
+    .badge.red { background: rgba(239,68,68,0.12); color: #f87171; }
+    .badge.yellow { background: rgba(234,179,8,0.12); color: #facc15; }
+    .badge.green { background: rgba(34,197,94,0.12); color: #4ade80; }
+    .badge.blue { background: rgba(56,189,248,0.12); color: #7dd3fc; }
+
+    /* Checklist */
+    .checklist-section {
+      background: var(--glass); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 1.5rem 1.75rem; margin: 1rem 0;
+    }
+    .checklist-section h4 { margin-top: 0; margin-bottom: 0.75rem; }
+    .checklist { list-style: none; margin-left: 0; }
+    .checklist li {
+      display: flex; align-items: flex-start; gap: 0.75rem;
+      padding: 0.5rem 0; border-bottom: 1px solid rgba(255,255,255,0.04);
+      font-size: 0.9rem; color: var(--text-muted); line-height: 1.5;
+    }
+    .checklist li:last-child { border-bottom: none; }
+    .checklist li::before { display: none; }
+    .check-box {
+      width: 18px; height: 18px; border: 1.5px solid rgba(255,255,255,0.15);
+      border-radius: 4px; flex-shrink: 0; margin-top: 1px;
+    }
+
+    .section-sep { border: none; border-top: 1px solid var(--border); margin: 3rem 0; }
+
+    .resource-list { list-style: none; margin-left: 0; }
+    .resource-list li { padding: 0.6rem 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
+    .resource-list li:last-child { border-bottom: none; }
+    .resource-list li::before { display: none; }
+    .resource-list a { font-size: 0.9rem; }
+
+    .cta-card {
+      background: var(--accent-dim); border: 1px solid rgba(255,107,107,0.25);
+      border-radius: var(--radius); padding: 2rem 2.25rem; margin: 3rem 0;
+    }
+    .cta-card h3 { color: var(--text); margin-top: 0; margin-bottom: 0.5rem; font-size: 1.1rem; }
+    .cta-card p { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.25rem; }
+    .cta-contacts { display: flex; flex-direction: column; gap: 0.5rem; }
+    .cta-contact-item { display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; color: var(--text-muted); }
+    .cta-contact-item strong { color: var(--text); }
+
+    .share-bar {
+      display: flex; align-items: center; gap: 1rem;
+      padding: 1.5rem 0; border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border); margin: 2rem 0; flex-wrap: wrap;
+    }
+    .share-label { font-family: var(--mono); font-size: 0.68rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-muted); }
+    .share-tags { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    .share-tag { font-size: 0.78rem; color: var(--accent); font-weight: 500; }
+
+    footer {
+      background: var(--bg); border-top: 1px solid var(--border);
+      padding: 2.5rem 2rem; position: relative; z-index: 1;
+    }
+    .footer-inner {
+      max-width: 1100px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 1.5rem; flex-wrap: wrap;
+    }
+    .footer-copy { font-size: 0.78rem; color: var(--text-muted); }
+    .footer-wcag { font-family: var(--mono); font-size: 0.65rem; font-weight: 700; color: var(--accent); border: 1px solid rgba(255,107,107,0.2); border-radius: 6px; padding: 0.2rem 0.6rem; }
+    .footer-back a { font-size: 0.78rem; color: var(--text-muted); text-decoration: none; display: flex; align-items: center; gap: 0.4rem; transition: color var(--transition); }
+    .footer-back a:hover { color: var(--accent); }
+
+    @media (max-width: 768px) {
+      .header-inner { padding: 0 1.25rem; }
+      .post-hero, .toc-wrap, .post-body, .post-divider { padding-left: 1.25rem; padding-right: 1.25rem; }
+      .post-hero { padding-top: 3rem; }
+    }
+    *:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+  </style>
+</head>
+<body>
+
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <header role="banner">
+    <div class="header-inner">
+      <a href="sushil-chauhan-portfolio.html" class="logo" aria-label="Sushil Chauhan — back to home">SC<span>.</span></a>
+      <a href="sushil-chauhan-portfolio.html#blog" class="header-back" aria-label="Back to blog listing">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true" focusable="false">
+          <path d="M9 2L4 7l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        All Articles
+      </a>
+    </div>
+  </header>
+
+  <main id="main-content" tabindex="-1">
+
+    <div class="post-hero">
+      <div class="post-category" aria-label="Category: Document Accessibility">Document Accessibility</div>
+      <h1 class="post-title">Complete Guide to Creating Accessible Microsoft Word Documents</h1>
+      <p class="post-excerpt">From automated checker to manual fixes — headings, lists, tables, images, colour, links, language, and accessible PDF export. Everything your Word documents need to meet WCAG 2.2 standards.</p>
+      <div class="post-tags" aria-label="Article tags">
+        <span class="tag primary">Word Accessibility</span>
+        <span class="tag primary">WCAG 2.2</span>
+        <span class="tag">Headings</span>
+        <span class="tag">Alt Text</span>
+        <span class="tag">PDF Export</span>
+        <span class="tag">Screen Reader</span>
+        <span class="tag">IAAP</span>
+        <span class="tag">2026 Edition</span>
+      </div>
+      <div class="post-meta">
+        <div class="post-author">
+          <div class="author-avatar" aria-hidden="true">SC</div>
+          <div>
+            <div class="author-name">Sushil Chauhan</div>
+            <div class="author-cert">IAAP-CPWA &nbsp;·&nbsp; Panvel, Mumbai</div>
+          </div>
+        </div>
+        <div class="post-details" aria-label="Article details">
+          <span aria-label="Published February 2026">📅 February 2026</span>
+          <span aria-label="18 minute read">⏱ 18 min read</span>
+          <span aria-label="2026 Edition">📄 2026 Edition</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="post-divider"><hr></div>
+
+    <nav class="toc-wrap" aria-labelledby="toc-heading">
+      <div class="toc">
+        <div class="toc-title" id="toc-heading">Table of Contents</div>
+        <ol>
+          <li><a href="#intro">Why Word Document Accessibility Matters</a></li>
+          <li><a href="#automated">Automated Testing — The Built-in Accessibility Checker</a></li>
+          <li><a href="#headings">Heading Structure — The Backbone of Navigation</a></li>
+          <li><a href="#lists">Lists — Ordered, Unordered, and the Problems In Between</a></li>
+          <li><a href="#tables">Tables — Data Structure and Header Association</a></li>
+          <li><a href="#images">Images — Alt Text, Decorative Marking, and Long Descriptions</a></li>
+          <li><a href="#colour">Colour, Spacing, and Font Size</a></li>
+          <li><a href="#links">Links — Descriptive Text and Hyperlink Best Practices</a></li>
+          <li><a href="#language">Language Settings</a></li>
+          <li><a href="#title">Document Title</a></li>
+          <li><a href="#advanced">Advanced: MathML, Flowcharts, Headers and Footers</a></li>
+          <li><a href="#pdf">Accessible PDF Export</a></li>
+          <li><a href="#conclusion">Conclusion and Checklist</a></li>
+        </ol>
+      </div>
+    </nav>
+
+    <article class="post-body" aria-labelledby="article-start">
+
+      <!-- Opening story -->
+      <div class="story-block" role="note" aria-label="Opening note">
+        <p>I have audited hundreds of Word documents over the past seven years — university course packs, corporate reports, government policy papers, healthcare patient forms. The vast majority of them had at least one critical accessibility failure. And in almost every case, the author had no idea.</p>
+        <p>The frustrating part is that Microsoft Word gives you almost everything you need to create an accessible document. The Accessibility Checker, proper heading styles, alt text, list formatting — it is all built in. The knowledge gap is the only real barrier.</p>
+        <p>This guide closes that gap. By the end of it, you will know exactly what to look for, why it matters, and how to fix it — for every major issue category in Word documents.</p>
+      </div>
+
+      <!-- ── SECTION 1 ── -->
+      <h2 id="intro" tabindex="-1">
+        <span class="section-num">01 &mdash; Introduction</span>
+        Why Word Document Accessibility Matters
+      </h2>
+
+      <p>When most people think about digital accessibility, they picture websites and mobile apps. Word documents rarely enter the conversation — and that is a problem. Organisations publish millions of Word files every day: policy documents, training materials, healthcare forms, financial reports, student handbooks. Every one of them can be inaccessible to a significant portion of their intended audience.</p>
+
+      <p>Screen reader users navigate documents using heading structure. They cannot "see" that a block of bold, large text is meant to be a section title — unless it is actually tagged as a heading. A blind employee receiving a company policy document marked up with manually bolded text instead of proper heading styles effectively receives an unusable document.</p>
+
+      <p>The legal requirement is also real. Under <strong>Section 508</strong> in the US, all electronic documents produced by or for federal agencies must be accessible. Under the <strong>European Accessibility Act</strong>, accessible documents are increasingly required in regulated sectors. In India, the <strong>RPWD Act 2016</strong> mandates accessible ICT including documents.</p>
+
+      <div class="table-wrap">
+        <table aria-label="Common Word accessibility issues by WCAG criterion">
+          <thead>
+            <tr>
+              <th scope="col">Issue Type</th>
+              <th scope="col">WCAG Criterion</th>
+              <th scope="col">Severity</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Missing or incorrect heading structure</td><td>1.3.1 Info and Relationships</td><td><span class="badge red">Critical</span></td></tr>
+            <tr><td>Images without alt text</td><td>1.1.1 Non-text Content</td><td><span class="badge red">Critical</span></td></tr>
+            <tr><td>Tables without headers</td><td>1.3.1 Info and Relationships</td><td><span class="badge red">Critical</span></td></tr>
+            <tr><td>Colour as the only means of conveying information</td><td>1.4.1 Use of Colour</td><td><span class="badge red">Critical</span></td></tr>
+            <tr><td>Non-descriptive link text ("click here")</td><td>2.4.4 Link Purpose</td><td><span class="badge yellow">Serious</span></td></tr>
+            <tr><td>Document language not set</td><td>3.1.1 Language of Page</td><td><span class="badge yellow">Serious</span></td></tr>
+            <tr><td>Missing or vague document title</td><td>2.4.2 Page Titled</td><td><span class="badge yellow">Serious</span></td></tr>
+            <tr><td>Insufficient colour contrast</td><td>1.4.3 Contrast (Minimum)</td><td><span class="badge yellow">Serious</span></td></tr>
+            <tr><td>Spacing created with blank lines</td><td>1.3.1 Info and Relationships</td><td><span class="badge blue">Moderate</span></td></tr>
+            <tr><td>Mathematical expressions as plain text</td><td>1.3.1 Info and Relationships</td><td><span class="badge blue">Moderate</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <hr class="section-sep">
+
+      <!-- ── SECTION 2 ── -->
+      <h2 id="automated" tabindex="-1">
+        <span class="section-num">02 &mdash; Automated Testing</span>
+        The Built-in Accessibility Checker
+      </h2>
+
+      <p>Microsoft Word's Accessibility Checker is an excellent starting point. It will not catch everything — no automated tool does — but it surfaces the most common structural issues quickly and suggests fixes in plain English.</p>
+
+      <h3>How to Run the Accessibility Checker</h3>
+
+      <ol class="steps">
+        <li><p><strong>Open your document</strong> in Microsoft Word.</p></li>
+        <li><p>Click the <strong>Review tab</strong> in the ribbon at the top of the window.</p></li>
+        <li><p>Find the <strong>Accessibility section</strong> in the ribbon — it is typically towards the right side, depending on your version of Word.</p></li>
+        <li><p>Click <strong>Check Accessibility</strong>. The Accessibility Checker pane opens on the right side of the screen and automatically scans the document.</p></li>
+        <li><p>Review the results. Issues are grouped into three categories — <strong>Errors</strong> (must fix), <strong>Warnings</strong> (should fix), and <strong>Tips</strong> (consider fixing).</p></li>
+        <li><p>Click any issue in the pane to jump to it in the document and see a suggested fix. Make the change, then recheck.</p></li>
+      </ol>
+
+      <div class="callout info" role="note">
+        <span class="callout-icon" aria-hidden="true">ℹ️</span>
+        <p>The Accessibility Checker catches structural issues reliably — missing alt text, missing table headers, no document title. It does not evaluate whether alt text is <em>meaningful</em>, whether headings are <em>descriptive</em>, or whether colour contrast is <em>sufficient</em>. Manual review is always required after automated checking.</p>
+      </div>
+
+      <hr class="section-sep">
+
+      <!-- ── SECTION 3 ── -->
+      <h2 id="headings" tabindex="-1">
+        <span class="section-num">03 &mdash; Heading Structure</span>
+        The Backbone of Document Navigation
+      </h2>
+
+      <p>For a screen reader user, headings are how documents are navigated. JAWS and NVDA both allow users to press H to jump between headings and navigate the document structure without reading every line. If your headings are missing or incorrect, you have effectively removed the table of contents from the document.</p>
+
+      <p>Proper heading structure follows a strict hierarchy:</p>
+      <ul>
+        <li><strong>H1</strong> — The document title. There should be exactly one H1 per document.</li>
+        <li><strong>H2</strong> — Main sections, each directly related to the H1 topic.</li>
+        <li><strong>H3</strong> — Subsections under an H2.</li>
+        <li><strong>H4–H6</strong> — Further subdivisions, always following the level above.</li>
+      </ul>
+
+      <h3>Issue 1: Inappropriate Heading Structure</h3>
+      <p>This occurs when headings skip levels incorrectly or appear in the wrong order. For example: H1 followed directly by H3, with H2 appearing later as a child of H3. This breaks the logical tree and confuses both screen readers and users navigating by headings.</p>
+
+      <div class="issue-fix">
+        <div class="issue-box">
+          <div class="box-label">❌ Wrong</div>
+          <p>H1: Document Title<br>H3: First Section<br>H2: Subsection of H3</p>
+        </div>
+        <div class="fix-box">
+          <div class="box-label">✅ Correct</div>
+          <p>H1: Document Title<br>H2: First Section<br>H3: Subsection of First Section</p>
+        </div>
+      </div>
+
+      <p><strong>How to apply heading styles in Word:</strong> Select the text → Home tab → Styles section → choose Heading 1, Heading 2, etc. Never manually bold or enlarge text to simulate a heading — the visual appearance means nothing to a screen reader. Only the semantic style matters.</p>
+
+      <h3>Issue 2: Skipped Heading Levels</h3>
+      <p>Jumping from H2 directly to H4 — skipping H3 — is not a WCAG failure, but it is a best practice violation that can disorient screen reader users. The parent-child relationship is technically maintained, but the missing level creates an unexpected gap.</p>
+      <p>Fix: Change the skipped level to the correct one. If you have H2 followed by H4, change the H4 to H3, then adjust all subsequent headings to maintain the correct cascade.</p>
+
+      <h3>Issue 3: Missing Heading Semantics (Bold Text as Headings)</h3>
+      <p>This is the most common heading error I encounter. A section title is large, bold, and visually obvious — but it is styled as "Normal" text, not as a heading. Screen readers read it as a paragraph and never register it as a navigable section marker.</p>
+
+      <div class="callout tip" role="note">
+        <span class="callout-icon" aria-hidden="true">💡</span>
+        <p>Quick check: Open the Navigation Pane (View → Navigation Pane) and click the Headings tab. If your document's structure is not visible there, your headings are not properly tagged — even if they look like headings visually.</p>
+      </div>
+
+      <h3>Issue 4: Unnecessary Use of Heading Semantics</h3>
+      <p>The reverse problem also occurs. Text is styled as a heading for visual effect — to make it large and bold — but it is not actually a section title. This pollutes the heading structure and confuses users navigating by headings, who arrive at a "section" that is not a real section.</p>
+      <p>Fix: Select the text → Home tab → Styles → Normal (or the appropriate non-heading style).</p>
+
+      <h3>Issue 5: Non-Descriptive Headings</h3>
+      <p>A heading that reads "Section 1" or "Introduction" in a document full of similar sections tells a screen reader user nothing useful. Headings need to describe the content beneath them accurately and distinctly from other headings in the same document.</p>
+
+      <div class="issue-fix">
+        <div class="issue-box">
+          <div class="box-label">❌ Vague</div>
+          <p>"Section 1", "Overview", "Details", "More Information" — identical or context-free headings across a multi-section document.</p>
+        </div>
+        <div class="fix-box">
+          <div class="box-label">✅ Descriptive</div>
+          <p>"2024 Q3 Revenue Overview", "Regional Sales Details", "Customer Acquisition Strategy" — specific, self-explaining headings.</p>
+        </div>
+      </div>
+
+      <hr class="section-sep">
+
+      <!-- ── SECTION 4 ── -->
+      <h2 id="lists" tabindex="-1">
+        <span class="section-num">04 &mdash; Lists</span>
+        Ordered, Unordered, and the Problems In Between
+      </h2>
+
+      <p>Lists serve two purposes in accessible documents: they organise related content visually, and they signal structure to screen readers. When JAWS or NVDA encounters a properly marked list, it announces "list of five items" before reading the items. This tells the user how much content to expect and allows them to navigate efficiently.</p>
+
+      <p>There are two types. An <strong>unordered list</strong> is for items where sequence does not matter — a list of features, a collection of examples. An <strong>ordered list</strong> is for items where order is critical — step-by-step instructions, ranked priorities, procedural guidance.</p>
+
+      <h3>Issue 1: List Style Used Unnecessarily</h3>
+      <p>A list markup must contain at least two items. A single bullet point is not a list — it is a piece of information that should be written as a sentence or paragraph.</p>
+      <p><strong>Fix:</strong> Select the single list item → Home tab → Paragraph section → click the list icon (bulleted or numbered) to toggle the list formatting off.</p>
+
+      <h3>Issue 2: Missing List Style (Fake Lists)</h3>
+      <p>This is common in documents where the author typed a dash or asterisk followed by text to create a visual list, but without using Word's actual list formatting. Screen readers read these as plain text paragraphs — no list announcement, no item count, no navigation shortcuts.</p>
+
+      <div class="issue-fix">
+        <div class="issue-box">
+          <div class="box-label">❌ Fake list</div>
+          <p>- Step one: open the file<br>- Step two: select all text<br>- Step three: apply style</p>
+          <p style="margin-top:0.5rem; font-size:0.78rem; color:#f87171;">Typed dashes, not real list markup</p>
+        </div>
+        <div class="fix-box">
+          <div class="box-label">✅ Real list</div>
+          <p>1. Open the file<br>2. Select all text<br>3. Apply style</p>
+          <p style="margin-top:0.5rem; font-size:0.78rem; color:#4ade80;">Home → Paragraph → Numbered list icon</p>
+        </div>
+      </div>
+
+      <p>Also avoid decorative or custom bullet characters. Stick to standard dots, circles, and dashes for unordered lists, and numbers or letters for ordered lists. Custom symbols can be read as their Unicode name by screen readers, which is meaningless to the listener.</p>
+
+      <h3>Issue 3: Wrong List Type Applied</h3>
+      <p>A cake recipe listed as an unordered (bulleted) list is an accessibility error. The steps must be followed in order, so an ordered list is semantically required. Applying unordered formatting to ordered content strips the sequential meaning from the content.</p>
+      <p><strong>Fix:</strong> Select all list items → Home tab → Paragraph section → click the correct icon (bulleted for unordered, numbered for ordered).</p>
+
+      <hr class="section-sep">
+
+      <!-- ── SECTION 5 ── -->
+      <h2 id="tables" tabindex="-1">
+        <span class="section-num">05 &mdash; Tables</span>
+        Data Structure and Header Association
+      </h2>
+
+      <p>Tables in Word are designed for one purpose: presenting tabular data — information that benefits from being read in relation to both its row and column. When a screen reader user navigates a table cell, it should announce both the cell content and its associated headers, so the user understands the context.</p>
+      <p>For example, in a table of employee data, a cell reading "£45,000" is meaningless without the context of its column header ("Salary") and row header ("Priya Sharma").</p>
+
+      <h3>Issue 1: Missing Row or Column Headers</h3>
+      <p>This is the most critical table error. Without defined headers, a screen reader user navigating cell by cell receives raw data values with no context for what those values represent.</p>
+
+      <p><strong>How to set table headers in Word:</strong></p>
+      <ol class="steps">
+        <li><p>Click anywhere inside the table.</p></li>
+        <li><p>The <strong>Table Design</strong> tab appears in the ribbon. Click on it.</p></li>
+        <li><p>In the <strong>Table Style Options</strong> group on the left, check <strong>Header Row</strong> for column headers. Check <strong>First Column</strong> for row headers.</p></li>
+        <li><p>For multi-page tables: right-click the header row → Table Properties → Row tab → check <strong>Repeat as header row at the top of each page</strong>.</p></li>
+        <li><p>Consider also enabling <strong>Banded Rows</strong> or <strong>Banded Columns</strong> for visual differentiation — this helps sighted users scan large tables more easily.</p></li>
+      </ol>
+
+      <h3>Issue 2: Improper Table Style Application</h3>
+      <p>Even when a table is visually styled with a bold header row, the column and row headers may not be programmatically exposed to screen readers unless the Table Style Options checkboxes are correctly set. Visual appearance alone is not sufficient. The accessibility must be configured in the Table Design tab, not just applied visually.</p>
+
+      <h3>Issue 3: Tables Used for Layout</h3>
+      <p>Tables must only be used for tabular data. Using a table to create a two-column page layout, to align images and text, or to create a form-like appearance is a serious accessibility error. Screen readers navigate tables as data structures, announcing row and column counts and reading cells in order. A layout table interrupts this completely.</p>
+      <p>If you need columnar layouts, use Word's Columns feature (Layout tab → Columns). If you need aligned text blocks, use indentation and paragraph spacing. Never use a table for visual layout.</p>
+
+      <h3>Issue 4: Merged Cells and Complex Tables</h3>
+      <p>Merged cells break the regular row-column grid that screen readers rely on to navigate predictably. If your table has merged cells, consider whether it can be split into two separate, simpler tables. Simpler is almost always better from an accessibility standpoint.</p>
+
+      <hr class="section-sep">
+
+      <!-- ── SECTION 6 ── -->
+      <h2 id="images" tabindex="-1">
+        <span class="section-num">06 &mdash; Images</span>
+        Alt Text, Decorative Marking, and Long Descriptions
+      </h2>
+
+      <p>Every image in a Word document is either informative or decorative. Getting this distinction right is the foundation of image accessibility.</p>
+
+      <p><strong>Informative images</strong> contribute meaningful content that is not available elsewhere in the text. This includes: screenshots containing textual information, diagrams illustrating a concept, logos, infographics, charts, and photographs central to the subject matter. All informative images require alternative text.</p>
+
+      <p><strong>Decorative images</strong> add visual interest but convey no information that is not already present in the surrounding text — background patterns, dividers, purely aesthetic illustrations. These must be marked as decorative so screen readers skip them entirely.</p>
+
+      <h3>Adding Alt Text to Informative Images</h3>
+      <ol class="steps">
+        <li><p>Right-click the image.</p></li>
+        <li><p>Select <strong>View Alt Text</strong> from the context menu.</p></li>
+        <li><p>In the Alt Text pane on the right, type your description in the text box.</p></li>
+      </ol>
+
+      <h4>Writing Good Alt Text</h4>
+      <ul>
+        <li>Describe the content and function of the image, not its appearance alone. Ask: what information would be lost if this image were invisible?</li>
+        <li>Keep it concise — typically one to two sentences. For a chart, summarise the key finding rather than listing every data point.</li>
+        <li>Do not start with "Image of" or "Picture of" — screen readers already announce it as an image.</li>
+        <li>For logos: include the organisation's name. Example: "University of Arizona Global Campus logo."</li>
+        <li>For charts: "Bar chart showing Q3 revenue by region. Asia-Pacific leads at $4.2M, followed by North America at $3.8M."</li>
+        <li>Do not use Word's auto-generated alt text as a final answer. It often reads like "a group of people sitting around a table" — technically accurate but rarely meaningful.</li>
+      </ul>
+
+      <h3>Marking Decorative Images</h3>
+      <ol class="steps">
+        <li><p>Right-click the image.</p></li>
+        <li><p>Select <strong>View Alt Text</strong>.</p></li>
+        <li><p>In the Alt Text pane, check the <strong>Mark as Decorative</strong> checkbox. The alt text box will grey out, and the image will be hidden from screen readers.</p></li>
+      </ol>
+
+      <h3>Long Descriptions for Complex Images</h3>
+      <p>Some images — detailed flowcharts, complex data visualisations, multi-variable diagrams — cannot be adequately described in a brief alt text. For these, write a full long description in a paragraph immediately below or near the image, clearly labelled. The alt text can then reference it: "Flowchart illustrating the student enrolment process — full description follows below."</p>
+
+      <div class="callout warning" role="note">
+        <span class="callout-icon" aria-hidden="true">⚠️</span>
+        <p>Shapes and text boxes in Word are typically <strong>not exposed to assistive technologies</strong>. Never place important information inside a shape or text box — it will be invisible to screen reader users. Use real paragraph text instead.</p>
+      </div>
+
+      <hr class="section-sep">
+
+      <!-- ── SECTION 7 ── -->
+      <h2 id="colour" tabindex="-1">
+        <span class="section-num">07 &mdash; Colour, Spacing, and Font Size</span>
+      </h2>
+
+      <h3>Colour Alone Must Never Convey Information</h3>
+      <p>Approximately 8% of men and 0.5% of women have some form of colour blindness. Using colour as the only means of distinguishing information excludes this group entirely.</p>
+
+      <div class="table-wrap">
+        <table aria-label="Common colour-only issues and accessible alternatives">
+          <thead>
+            <tr>
+              <th scope="col">Common Issue</th>
+              <th scope="col">Accessible Alternative</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Links shown only in blue text</td><td>Add underline + blue colour, or bold + colour</td></tr>
+            <tr><td>Bar chart using only colour to differentiate categories</td><td>Add patterns, textures, or direct data labels in addition to colour</td></tr>
+            <tr><td>"Items in red require action"</td><td>Add a symbol (★, !, ▲) or explicit text alongside the red colouring</td></tr>
+            <tr><td>Pass/fail shown by green/red cells in a table</td><td>Add "Pass" / "Fail" text inside the cells in addition to colour</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Colour Contrast</h3>
+      <p>Text must have a contrast ratio of at least <strong>4.5:1</strong> against its background (WCAG 1.4.3 AA). For large text — 18pt or larger, or 14pt bold — the minimum is <strong>3:1</strong>. This applies to text in headers, footers, watermarks, and body content alike.</p>
+      <p>Use the free <strong>Colour Contrast Analyser</strong> tool (from The Paciello Group) to measure the contrast ratio of any colour combination in your document before publishing.</p>
+
+      <h3>Paragraph Spacing — Not Blank Lines</h3>
+      <p>A very common bad habit is pressing Enter twice between paragraphs to create visual space. Every blank line is a separate empty paragraph — and screen readers announce them, either as "blank" or with a brief pause that breaks reading rhythm unnecessarily.</p>
+
+      <ol class="steps">
+        <li><p>Select the paragraph you want to add space around.</p></li>
+        <li><p>Go to <strong>Home tab → Paragraph group</strong> → click the small arrow in the bottom-right corner of the group to open the Paragraph dialog box.</p></li>
+        <li><p>Under <strong>Spacing</strong>, set <strong>Before</strong> and <strong>After</strong> values in points (e.g., 12pt after, 6pt before).</p></li>
+        <li><p>Click OK. Delete any blank lines you previously used for spacing.</p></li>
+      </ol>
+
+      <h3>Font Size</h3>
+      <p>The minimum recommended font size for body text in Word documents is <strong>12pt</strong>. Use clean, simple fonts — Arial, Calibri, Georgia, or Times New Roman. Avoid decorative or script fonts, which are significantly harder to read for people with low vision or dyslexia. Many assistive technology users rely on ZoomText or similar magnification tools; a 12pt minimum ensures the content remains legible when enlarged.</p>
+
+      <hr class="section-sep">
+
+      <!-- ── SECTION 8 ── -->
+      <h2 id="links" tabindex="-1">
+        <span class="section-num">08 &mdash; Links</span>
+        Descriptive Text and Hyperlink Best Practices
+      </h2>
+
+      <p>Screen reader users can navigate a document by jumping between links — similar to navigating by headings. JAWS and NVDA both provide a list of all links in a document. If every link reads "click here" or "read more," this list is completely useless.</p>
+
+      <h3>Issue 1: Raw URLs as Link Text</h3>
+
+      <div class="issue-fix">
+        <div class="issue-box">
+          <div class="box-label">❌ Raw URL</div>
+          <p>For more details, visit: https://www.accessibilityassociation.org/s/cpwa-certification</p>
+        </div>
+        <div class="fix-box">
+          <div class="box-label">✅ Descriptive text</div>
+          <p>For more details, visit the <a href="#" aria-label="example only">IAAP CPWA Certification page</a>.</p>
+        </div>
+      </div>
+
+      <h3>Issue 2: Non-Descriptive Link Text</h3>
+      <p>Phrases like "click here," "read more," "this link," and "here" tell a screen reader user nothing about where the link leads. They are especially harmful when multiple such links appear in the same document, making the links list entirely unhomogeneous.</p>
+
+      <div class="issue-fix">
+        <div class="issue-box">
+          <div class="box-label">❌ Non-descriptive</div>
+          <p>"Click here to download the report."<br>"For guidelines, click here."</p>
+        </div>
+        <div class="fix-box">
+          <div class="box-label">✅ Descriptive</div>
+          <p>"Download the 2026 Accessibility Audit Report."<br>"Read the WCAG 2.2 Guidelines."</p>
+        </div>
+      </div>
+
+      <h3>How to Create or Edit a Hyperlink in Word</h3>
+      <ol class="steps">
+        <li><p>Select the text you want to turn into a link.</p></li>
+        <li><p>Right-click → <strong>Hyperlink</strong>, or go to <strong>Insert tab → Link</strong>.</p></li>
+        <li><p>In the dialog box, enter the URL in the Address field. The <strong>Text to display</strong> field at the top should contain your descriptive link text — edit it if it shows a raw URL.</p></li>
+        <li><p>Click OK. Test the link after creation to confirm it resolves correctly.</p></li>
+      </ol>
+
+      <p>To edit existing link text: right-click the link → <strong>Edit Hyperlink</strong> → modify the Text to display field.</p>
+
+      <div class="callout good" role="note">
+        <span class="callout-icon" aria-hidden="true">✅</span>
+        <p>Identical link text is acceptable <em>when the links point to the same destination</em>. For example, if three sections all link to the same reference document, using "View the Reference Guide" each time is perfectly fine.</p>
+      </div>
+
+      <hr class="section-sep">
+
+      <!-- ── SECTION 9 ── -->
+      <h2 id="language" tabindex="-1">
+        <span class="section-num">09 &mdash; Language Settings</span>
+      </h2>
+
+      <p>When a screen reader encounters a Word document, it uses the document's language setting to determine pronunciation. Set the language to English and the screen reader speaks in an English accent. Set it to French and it switches to French pronunciation — critical for correctly pronouncing words like "résumé," "naïve," or "café."</p>
+      <p>Without a defined language, Word applies default settings that may produce incorrect pronunciation, incorrect spell-check suggestions, and confusing grammar corrections.</p>
+
+      <h3>Setting the Language for the Entire Document</h3>
+      <ol class="steps">
+        <li><p>Press <strong>Ctrl + A</strong> (or Cmd + A on Mac) to select all text.</p></li>
+        <li><p>Go to the <strong>Review tab</strong> → click <strong>Language</strong> → select <strong>Set Proofing Language</strong>.</p></li>
+        <li><p>In the dialog box, select your language (e.g., English (United Kingdom), English (United States), Hindi) and click <strong>OK</strong>.</p></li>
+      </ol>
+
+      <h3>Setting the Language for a Specific Section</h3>
+      <p>If your document contains a quotation, footnote, or section in a different language, select only that text and follow the same steps above, choosing the appropriate language for that section. This ensures screen readers switch to the correct pronunciation model for that portion of text.</p>
+
+      <h3>Three Language Issues to Watch For</h3>
+      <ul>
+        <li><strong>Language Not Defined:</strong> The document shows no language setting. Screen readers apply an unpredictable default. Fix by selecting all and setting the language explicitly.</li>
+        <li><strong>Section Language Not Defined:</strong> A multi-language document where a section in a different language is not separately tagged. Screen readers mispronounce foreign text.</li>
+        <li><strong>Inappropriate Language Defined:</strong> A paragraph accidentally set to French in an English document. Word flags all English words as misspelled. Screen readers switch to French pronunciation for English text.</li>
+      </ul>
+
+      <hr class="section-sep">
+
+      <!-- ── SECTION 10 ── -->
+      <h2 id="title" tabindex="-1">
+        <span class="section-num">10 &mdash; Document Title</span>
+      </h2>
+
+      <p>Every Word document must have a unique, descriptive title set in its document properties — not just in the heading on page one. This title is announced by screen readers when the document is opened, and it appears in operating system file browsers, email previews, and SharePoint libraries.</p>
+
+      <h3>How to Set the Document Title</h3>
+      <ol class="steps">
+        <li><p>Go to <strong>File → Info</strong>.</p></li>
+        <li><p>In the <strong>Properties</strong> panel on the right side, find the <strong>Title</strong> field.</p></li>
+        <li><p>Click the field and type a descriptive, unique title that accurately reflects the document's content.</p></li>
+      </ol>
+
+      <h3>Three Title Issues to Avoid</h3>
+
+      <div class="table-wrap">
+        <table aria-label="Document title issues and solutions">
+          <thead>
+            <tr>
+              <th scope="col">Issue</th>
+              <th scope="col">Example</th>
+              <th scope="col">Fix</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Missing title</td><td>Title field is blank; file is named "Document1.docx"</td><td>Add a descriptive title in File → Info → Properties</td></tr>
+            <tr><td>Non-descriptive title</td><td>"Report" or "Policy Document"</td><td>Use "2026 Annual Accessibility Audit Report" instead</td></tr>
+            <tr><td>Identical titles</td><td>Three files all titled "Project Plan" in the same folder</td><td>Differentiate: "Project Plan - Q1 2026", "Project Plan - Q2 2026"</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <hr class="section-sep">
+
+      <!-- ── SECTION 11 ── -->
+      <h2 id="advanced" tabindex="-1">
+        <span class="section-num">11 &mdash; Advanced Topics</span>
+        MathML, Flowcharts, Headers and Footers
+      </h2>
+
+      <h3>Mathematical Equations — Use Word's Equation Feature</h3>
+      <p>Mathematical expressions typed as plain text — "x^2 + y^2 = z^2" — are ambiguous and inaccessible. Screen readers have no way to interpret the intended meaning of a caret symbol, fraction slash, or subscript written as plain characters.</p>
+      <p>Word's built-in Equation editor produces MathML internally, which screen readers with MathML support can interpret correctly.</p>
+
+      <ol class="steps">
+        <li><p>Go to <strong>Insert tab → Symbols section → Equation</strong>.</p></li>
+        <li><p>Click <strong>Insert New Equation</strong> from the dropdown. An equation box appears.</p></li>
+        <li><p>Use the Equation tools in the ribbon to build your expression using proper mathematical structures — fractions, radicals, superscripts, integrals — rather than typed approximations.</p></li>
+      </ol>
+
+      <h3>Flowcharts and Diagrams</h3>
+      <p>Complex flowcharts must include a long text description below or near the image that explains the process, decision points, and outcomes in full. The alt text can be brief — "Flowchart of the student grievance process" — but the long description must cover all the information a sighted user would extract from the visual.</p>
+      <p>Use standard shapes when building flowcharts in Word: rectangles for processes, diamonds for decisions, ovals for start and end points. Consistent shape use makes the diagram more interpretable — visually and structurally.</p>
+
+      <h3>Headers and Footers</h3>
+      <p>Many screen readers skip over Word document headers and footers by default. This makes them an unreliable location for important content.</p>
+
+      <div class="callout warning" role="note">
+        <span class="callout-icon" aria-hidden="true">⚠️</span>
+        <p>Do not place critical information — contact details, disclaimer text, essential instructions, key identifiers — in a header or footer. Place this content in the document body where screen readers will reliably encounter it. Headers and footers are appropriate only for page numbers, document titles as navigation aids, and purely administrative information.</p>
+      </div>
+
+      <p>If you do use headers and footers, ensure their text meets the same 4.5:1 contrast ratio as body text. Small, low-contrast text in footers is a common failure in accessibility audits.</p>
+
+      <hr class="section-sep">
+
+      <!-- ── SECTION 12 ── -->
+      <h2 id="pdf" tabindex="-1">
+        <span class="section-num">12 &mdash; Accessible PDF Export</span>
+      </h2>
+
+      <p>Creating an accessible Word document is only half the job. When you export to PDF, the accessibility semantics — heading tags, alt text, reading order, list structure, table headers — must be preserved in the resulting PDF. Using the wrong export method strips all of this away, producing a PDF that is visually identical but completely untagged and inaccessible.</p>
+
+      <div class="issue-fix">
+        <div class="issue-box">
+          <div class="box-label">❌ Wrong method</div>
+          <p>"Print to PDF" or "Save As → PDF" via most print drivers. This produces a flat, untagged PDF that loses all accessibility semantics.</p>
+        </div>
+        <div class="fix-box">
+          <div class="box-label">✅ Correct method</div>
+          <p>File → Export → Create PDF/XPS Document → Create PDF/XPS with accessibility options confirmed.</p>
+        </div>
+      </div>
+
+      <h3>The Correct Export Process</h3>
+      <ol class="steps">
+        <li><p>Go to <strong>File → Export</strong> in the left sidebar.</p></li>
+        <li><p>Select <strong>Create PDF/XPS Document</strong>.</p></li>
+        <li><p>Click the <strong>Create PDF/XPS</strong> button. A file save dialog opens.</p></li>
+        <li><p>Before saving, click <strong>Options</strong> in the dialog. Ensure <strong>"Document structure tags for accessibility"</strong> is checked. This is the critical setting that transfers your Word semantics into the PDF tag tree.</p></li>
+        <li><p>Click OK, then <strong>Publish</strong>.</p></li>
+        <li><p>After export, open the PDF in Adobe Acrobat Pro and run <strong>Accessibility → Full Check</strong> to verify that the tags, reading order, and alt text transferred correctly.</p></li>
+      </ol>
+
+      <div class="callout info" role="note">
+        <span class="callout-icon" aria-hidden="true">ℹ️</span>
+        <p>Even a correctly exported PDF may require some additional remediation in Adobe Acrobat Pro — particularly for complex tables, reading order adjustments, and artifact tagging. The Word export is a strong starting point, but it rarely produces a 100% accessible PDF without at least a quick review in Acrobat.</p>
+      </div>
+
+      <hr class="section-sep">
+
+      <!-- ── SECTION 13 ── -->
+      <h2 id="conclusion" tabindex="-1">
+        <span class="section-num">13 &mdash; Conclusion</span>
+        Checklist and Resources
+      </h2>
+
+      <blockquote>
+        <p>An inaccessible Word document is not just a technical failure. It is a barrier placed between a person and information they have a right to access.</p>
+        <cite>— Sushil Chauhan, IAAP-CPWA</cite>
+      </blockquote>
+
+      <h3>Complete Word Accessibility Audit Checklist</h3>
+
+      <div class="checklist-section">
+        <h4>Automated Check</h4>
+        <ul class="checklist">
+          <li><span class="check-box" aria-hidden="true"></span>Run Word's built-in Accessibility Checker (Review → Check Accessibility)</li>
+          <li><span class="check-box" aria-hidden="true"></span>All Errors resolved; Warnings reviewed and addressed</li>
+        </ul>
+      </div>
+
+      <div class="checklist-section">
+        <h4>Headings</h4>
+        <ul class="checklist">
+          <li><span class="check-box" aria-hidden="true"></span>Exactly one H1 that reflects the document's primary topic</li>
+          <li><span class="check-box" aria-hidden="true"></span>Heading levels follow a logical, unbroken hierarchy (H1 → H2 → H3)</li>
+          <li><span class="check-box" aria-hidden="true"></span>No bold/large text used as headings without proper heading styles applied</li>
+          <li><span class="check-box" aria-hidden="true"></span>No headings applied to text that is not actually a section title</li>
+          <li><span class="check-box" aria-hidden="true"></span>All headings are descriptive and unique across the document</li>
+          <li><span class="check-box" aria-hidden="true"></span>Navigation Pane (View → Navigation Pane) shows correct structure</li>
+        </ul>
+      </div>
+
+      <div class="checklist-section">
+        <h4>Lists, Tables, and Images</h4>
+        <ul class="checklist">
+          <li><span class="check-box" aria-hidden="true"></span>All visual lists use proper Word list formatting (not typed dashes or asterisks)</li>
+          <li><span class="check-box" aria-hidden="true"></span>Ordered lists use numbered formatting; unordered lists use bulleted formatting</li>
+          <li><span class="check-box" aria-hidden="true"></span>All tables have Header Row defined (Table Design → Table Style Options)</li>
+          <li><span class="check-box" aria-hidden="true"></span>No tables used for layout purposes</li>
+          <li><span class="check-box" aria-hidden="true"></span>All informative images have meaningful, descriptive alt text</li>
+          <li><span class="check-box" aria-hidden="true"></span>All decorative images marked as decorative in the Alt Text pane</li>
+          <li><span class="check-box" aria-hidden="true"></span>Complex diagrams have long text descriptions in the document body</li>
+          <li><span class="check-box" aria-hidden="true"></span>No important content placed inside shapes or text boxes</li>
+        </ul>
+      </div>
+
+      <div class="checklist-section">
+        <h4>Colour, Spacing, and Typography</h4>
+        <ul class="checklist">
+          <li><span class="check-box" aria-hidden="true"></span>All text meets 4.5:1 contrast ratio against its background (3:1 for large text)</li>
+          <li><span class="check-box" aria-hidden="true"></span>Colour is not the only means of conveying information anywhere in the document</li>
+          <li><span class="check-box" aria-hidden="true"></span>Spacing created with Paragraph Spacing (Before/After), not blank lines</li>
+          <li><span class="check-box" aria-hidden="true"></span>Body text is at least 12pt; clean, readable font used throughout</li>
+        </ul>
+      </div>
+
+      <div class="checklist-section">
+        <h4>Links, Language, and Title</h4>
+        <ul class="checklist">
+          <li><span class="check-box" aria-hidden="true"></span>All hyperlinks have descriptive text — no "click here" or raw URLs</li>
+          <li><span class="check-box" aria-hidden="true"></span>Document proofing language set correctly (Review → Language → Set Proofing Language)</li>
+          <li><span class="check-box" aria-hidden="true"></span>Multi-language sections have their language set separately</li>
+          <li><span class="check-box" aria-hidden="true"></span>Document title is set in File → Info → Properties → Title</li>
+          <li><span class="check-box" aria-hidden="true"></span>Title is unique, descriptive, and reflects the document's content</li>
+        </ul>
+      </div>
+
+      <div class="checklist-section">
+        <h4>PDF Export</h4>
+        <ul class="checklist">
+          <li><span class="check-box" aria-hidden="true"></span>Exported via File → Export → Create PDF/XPS Document (not Print to PDF)</li>
+          <li><span class="check-box" aria-hidden="true"></span>"Document structure tags for accessibility" checkbox enabled in Options</li>
+          <li><span class="check-box" aria-hidden="true"></span>Exported PDF verified in Adobe Acrobat Pro Accessibility Full Check</li>
+        </ul>
+      </div>
+
+      <h3>Essential Resources</h3>
+      <ul class="resource-list">
+        <li>🖥️ <a href="https://support.microsoft.com/en-us/office/improve-accessibility-with-the-accessibility-checker-a16f6de0-2f39-4a2b-8bd8-5ad801426c7f" rel="noopener" target="_blank">Microsoft — Using the Accessibility Checker</a></li>
+        <li>🖥️ <a href="https://support.microsoft.com/en-us/office/make-your-word-documents-accessible-to-people-with-disabilities-d9bf3683-87ac-47ea-b91a-78dcacb3c66d" rel="noopener" target="_blank">Microsoft — Make Word Documents Accessible</a></li>
+        <li>📋 <a href="https://www.w3.org/TR/WCAG22/" rel="noopener" target="_blank">WCAG 2.2 Full Specification</a></li>
+        <li>🎨 <a href="https://www.tpgi.com/color-contrast-checker/" rel="noopener" target="_blank">Colour Contrast Analyser (free tool)</a></li>
+        <li>🎓 <a href="https://dequeuniversity.com/" rel="noopener" target="_blank">Deque University — Free Accessibility Courses</a></li>
+        <li>🏅 <a href="https://www.accessibilityassociation.org/s/cpwa" rel="noopener" target="_blank">IAAP CPWA Certification</a></li>
+        <li>📄 <a href="https://disabilityaffairs.gov.in/content/page/acts-rules.php" rel="noopener" target="_blank">India RPWD Act 2016</a></li>
+      </ul>
+
+      <!-- SHARE BAR -->
+      <div class="share-bar">
+        <span class="share-label">Share</span>
+        <div class="share-tags" aria-label="Share hashtags">
+          <span class="share-tag">#WordAccessibility</span>
+          <span class="share-tag">#WCAG</span>
+          <span class="share-tag">#DocumentAccessibility</span>
+          <span class="share-tag">#AltText</span>
+          <span class="share-tag">#IAAP</span>
+          <span class="share-tag">#A11y</span>
+          <span class="share-tag">#InclusiveDesign</span>
+          <span class="share-tag">#PDFAccessibility</span>
+        </div>
+      </div>
+
+      <!-- CTA -->
+      <div class="cta-card" role="complementary" aria-labelledby="cta-heading">
+        <h3 id="cta-heading">Need a Word Document Accessibility Audit or Remediation?</h3>
+        <p>I audit Word documents, PowerPoint decks, and PDFs for WCAG 2.2 compliance — and remediate them to meet Section 508, EN 301 549, and RPWD Act requirements. VPAT/ACR reports available for US procurement.</p>
+        <div class="cta-contacts">
+          <div class="cta-contact-item">📞 <strong>WhatsApp / Call:</strong> +91 70215 55982</div>
+          <div class="cta-contact-item">📍 <strong>Location:</strong> Panvel, Mumbai — Remote Worldwide</div>
+          <div class="cta-contact-item">🏅 <strong>IAAP-CPWA Certified</strong> &nbsp;·&nbsp; 7+ Years &nbsp;·&nbsp; 500+ Projects</div>
+        </div>
+      </div>
+
+    </article>
+  </main>
+
+  <footer role="contentinfo">
+    <div class="footer-inner">
+      <div class="footer-copy">
+        <strong style="color:#fff;">Sushil Chauhan</strong> — IAAP-CPWA Accessibility Specialist<br>
+        <span>© 2026 Sushil Chauhan. Panvel, Maharashtra, India.</span>
+      </div>
+      <div class="footer-back">
+        <a href="sushil-chauhan-portfolio.html">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true" focusable="false">
+            <path d="M9 2L4 7l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Back to Portfolio
+        </a>
+      </div>
+      <span class="footer-wcag" role="note" aria-label="WCAG 2.2 AA compliant page">WCAG 2.2 AA</span>
+    </div>
+  </footer>
+
+</body>
+</html>
