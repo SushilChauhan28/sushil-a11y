@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="en" data-scheme="system">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Introduction to Web Accessibility — Sushil Chauhan</title>
+<meta name="description" content="Complete introduction to web accessibility — WCAG structure, POUR principles, conformance levels, headings, images, keyboard access, colour contrast, forms, lists, tables, dynamic content, and testing tools.">
+<meta name="author" content="Sushil Chauhan">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Playfair+Display:wght@600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#faf9f6;--bg-card:#ffffff;--bg-alt:#efede6;--text:#1a1a1a;--text-body:#2c2c2c;--text-muted:#3e4a58;--text-subtle:#52606f;--accent:#3730a3;--accent-bg:#eef2ff;--accent-text:#2d2a94;--border:#d4d8e0;--border-strong:#1a1a1a;--badge-bg:#2d2a94;--badge-text:#ffffff;--font-body:'Atkinson Hyperlegible',system-ui,sans-serif;--font-display:'Playfair Display',Georgia,serif;--font-mono:'JetBrains Mono','Courier New',monospace;--ease:0.14s ease}
+@media(prefers-color-scheme:dark){:root:not([data-scheme="light"]){--bg:#111111;--bg-card:#1d1d1d;--bg-alt:#191919;--text:#edeae4;--text-body:#c6c0b6;--text-muted:#9da6b2;--text-subtle:#848f9c;--accent:#818cf8;--accent-bg:#1e1b4b;--accent-text:#a5b4fc;--border:rgba(255,255,255,.12);--border-strong:rgba(255,255,255,.72);--badge-bg:#312e81;--badge-text:#e0e7ff}}
+[data-scheme="dark"]{--bg:#111111;--bg-card:#1d1d1d;--bg-alt:#191919;--text:#edeae4;--text-body:#c6c0b6;--text-muted:#9da6b2;--text-subtle:#848f9c;--accent:#818cf8;--accent-bg:#1e1b4b;--accent-text:#a5b4fc;--border:rgba(255,255,255,.12);--border-strong:rgba(255,255,255,.72);--badge-bg:#312e81;--badge-text:#e0e7ff}
+[data-scheme="light"]{--bg:#faf9f6;--bg-card:#ffffff;--bg-alt:#efede6;--text:#1a1a1a;--text-body:#2c2c2c;--text-muted:#3e4a58;--text-subtle:#52606f;--accent:#3730a3;--accent-bg:#eef2ff;--accent-text:#2d2a94;--border:#d4d8e0;--border-strong:#1a1a1a;--badge-bg:#2d2a94;--badge-text:#ffffff}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth;font-size:16px}
+body{font-family:var(--font-body);background:var(--bg);color:var(--text);line-height:1.7;-webkit-font-smoothing:antialiased;transition:background var(--ease),color var(--ease);overflow-x:hidden}
+a{color:inherit}ul,ol{list-style:none}
+.skip-link{position:absolute;top:-100px;left:1rem;background:var(--accent);color:#fff;padding:.75rem 1.5rem;border-radius:4px;font-weight:700;font-size:.9rem;z-index:9999;text-decoration:none;transition:top .2s ease}.skip-link:focus{top:1rem;outline:3px solid var(--text);outline-offset:2px}
+.site-header{border-bottom:1px solid var(--border);padding:1.1rem 0}
+.header-inner{max-width:820px;margin:0 auto;padding:0 1.5rem;display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.site-identity{display:flex;flex-direction:column;gap:.12rem}
+.site-name-link{display:inline-flex;align-items:center;gap:.35rem;text-decoration:none;color:var(--text)}
+.site-marker{color:var(--accent);font-size:.75rem;flex-shrink:0;line-height:1}
+.site-name{font-size:1rem;font-weight:700;letter-spacing:-.01em}
+.site-tagline{font-size:.72rem;color:var(--text-muted);padding-left:1.1rem}
+.header-nav{display:flex;align-items:center;gap:.45rem}
+.nav-link{font-size:.78rem;font-weight:500;color:var(--text-muted);text-decoration:none;padding:.38rem .72rem;border:1px solid var(--border);border-radius:3px;transition:all var(--ease);white-space:nowrap}
+.nav-link:hover{border-color:var(--border-strong);color:var(--text)}.nav-link:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.nav-link[aria-current]{color:var(--accent-text);border-color:var(--accent-bg);background:var(--accent-bg)}
+.header-cta{display:inline-block;padding:.46rem 1.1rem;border:2px solid var(--border-strong);background:transparent;color:var(--text);text-decoration:none;font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;border-radius:3px;transition:background var(--ease),color var(--ease);white-space:nowrap}
+.header-cta:hover{background:var(--text);color:var(--bg)}.header-cta:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+main{padding:0 0 5rem}.content-wrap{max-width:780px;margin:0 auto;padding:0 1.5rem}
+.post-hero{padding:2.5rem 0 2rem;border-bottom:1.5px solid var(--border-strong)}
+.post-category{display:inline-flex;align-items:center;gap:.4rem;font-family:var(--font-mono);font-size:.65rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--accent-text);margin-bottom:1rem}
+.post-category::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--accent)}
+.post-title{font-family:var(--font-display);font-size:clamp(1.75rem,4vw,2.5rem);font-weight:700;line-height:1.2;letter-spacing:-.02em;margin-bottom:1rem;color:var(--text)}
+.post-excerpt{font-size:1.05rem;font-style:italic;color:var(--text-muted);line-height:1.75;margin-bottom:1.5rem;max-width:660px}
+.post-tags-row{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:1.5rem}
+.post-tag{font-size:.65rem;font-weight:600;padding:.22rem .6rem;border-radius:100px;background:var(--bg-alt);border:1px solid var(--border);color:var(--text-muted)}
+.post-meta-row{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+.post-author{display:flex;align-items:center;gap:.75rem}
+.author-av{width:38px;height:38px;border-radius:50%;background:var(--accent-bg);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:.68rem;font-weight:700;color:var(--accent-text);flex-shrink:0}
+.author-name{font-size:.85rem;font-weight:700}.author-cert{font-size:.7rem;color:var(--text-muted)}
+.post-details{display:flex;flex-wrap:wrap;gap:.85rem;font-family:var(--font-mono);font-size:.7rem;color:var(--text-muted)}
+.toc-block{background:var(--bg-alt);border:1px solid var(--border);border-radius:6px;padding:1.5rem 1.75rem;margin:2rem 0}
+.toc-title{font-family:var(--font-mono);font-size:.65rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--text-subtle);margin-bottom:1rem}
+.toc-list{display:flex;flex-direction:column;gap:.28rem;counter-reset:toc}
+.toc-list li{counter-increment:toc;display:flex;align-items:baseline;gap:.5rem}
+.toc-list li::before{content:counter(toc,decimal-leading-zero);font-family:var(--font-mono);font-size:.6rem;color:var(--text-subtle);flex-shrink:0}
+.toc-list a{font-size:.84rem;font-weight:500;color:var(--text-muted);text-decoration:none;padding:.15rem 0}
+.toc-list a:hover,.toc-list a:focus-visible{color:var(--accent-text)}
+.toc-list a:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:2px}
+/* ARTICLE BODY */
+.post-body{padding:2.5rem 0 4rem}
+.post-body h2{font-family:var(--font-display);font-size:clamp(1.3rem,3vw,1.7rem);font-weight:700;line-height:1.25;letter-spacing:-.02em;margin:3.5rem 0 1rem;scroll-margin-top:2rem;color:var(--text)}
+.post-body h3{font-size:1.05rem;font-weight:700;letter-spacing:-.01em;margin:2.25rem 0 .7rem;color:var(--text)}
+.post-body p{font-size:.96rem;color:var(--text-body);line-height:1.85;margin-bottom:1rem}
+.post-body ul,.post-body ol{margin:.5rem 0 1.1rem 1.25rem;display:flex;flex-direction:column;gap:.38rem}
+.post-body li{font-size:.935rem;color:var(--text-body);line-height:1.68}
+.post-body ul{list-style:disc}.post-body ol{list-style:decimal}
+.post-body strong{font-weight:700;color:var(--text)}
+.post-body a{color:var(--accent-text);text-underline-offset:3px;text-decoration:underline;text-decoration-thickness:1px}
+.post-body a:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:2px}
+.post-body code{font-family:var(--font-mono);font-size:.82em;background:var(--bg-alt);border:1px solid var(--border);border-radius:4px;padding:.1em .4em;color:var(--accent-text)}
+.post-body pre{background:var(--bg-alt);border:1px solid var(--border);border-radius:6px;padding:1.5rem;overflow-x:auto;margin:1.5rem 0;tab-size:2}
+.post-body pre code{background:none;border:none;padding:0;font-size:.82rem;color:var(--text-body);line-height:1.75;display:block}
+.post-body kbd{display:inline-block;font-family:var(--font-mono);font-size:.8em;background:var(--bg-card);border:1px solid var(--border);border-bottom-width:2px;border-radius:3px;padding:.1em .4em;color:var(--text-body)}
+.post-body blockquote{border-left:3px solid var(--border-strong);padding:1rem 1.5rem;margin:2rem 0;background:var(--bg-alt);border-radius:0 4px 4px 0}
+.post-body blockquote p{font-family:var(--font-display);font-size:1rem;font-style:italic;color:var(--text-muted);line-height:1.8;margin-bottom:0}
+.post-body hr{border:none;border-top:1px solid var(--border);margin:2.5rem 0}
+/* CALLOUTS */
+.callout{border-radius:4px;padding:1rem 1.25rem;margin:1.5rem 0;display:flex;gap:.75rem;align-items:flex-start;border-left:3px solid;font-size:.9rem;line-height:1.65}
+.callout-icon{flex-shrink:0;font-size:1rem}.callout p{margin-bottom:0;font-size:.9rem;color:var(--text-body)}
+.callout.info{background:#eff6ff;border-color:#3b82f6}.callout.tip{background:#fffbeb;border-color:#f59e0b}.callout.warn{background:#fef2f2;border-color:#ef4444}.callout.ok{background:#f0fdf4;border-color:#22c55e}
+[data-scheme="dark"] .callout.info{background:rgba(59,130,246,.08);border-color:#60a5fa}[data-scheme="dark"] .callout.tip{background:rgba(245,158,11,.08);border-color:#d97706}[data-scheme="dark"] .callout.warn{background:rgba(239,68,68,.08);border-color:#ef4444}[data-scheme="dark"] .callout.ok{background:rgba(34,197,94,.08);border-color:#4ade80}
+@media(prefers-color-scheme:dark){:root:not([data-scheme="light"]) .callout.info{background:rgba(59,130,246,.08);border-color:#60a5fa}:root:not([data-scheme="light"]) .callout.tip{background:rgba(245,158,11,.08);border-color:#d97706}:root:not([data-scheme="light"]) .callout.warn{background:rgba(239,68,68,.08);border-color:#ef4444}:root:not([data-scheme="light"]) .callout.ok{background:rgba(34,197,94,.08);border-color:#4ade80}}
+/* TABLES */
+.table-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:6px;margin:1.5rem 0}
+.post-body table{width:100%;border-collapse:collapse;font-size:.875rem}
+.post-body thead{background:var(--bg-alt)}.post-body thead th{padding:.85rem 1rem;text-align:left;font-family:var(--font-mono);font-size:.63rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);border-bottom:1px solid var(--border);white-space:nowrap}
+.post-body tbody tr{border-bottom:1px solid var(--border)}.post-body tbody tr:hover{background:var(--bg-alt)}.post-body tbody tr:last-child{border-bottom:none}
+.post-body tbody td{padding:.8rem 1rem;vertical-align:top;color:var(--text-muted);line-height:1.5;font-size:.875rem}.post-body tbody td:first-child{color:var(--text);font-weight:500}
+/* POUR GRID */
+.pour-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1.25rem 0}
+@media(max-width:600px){.pour-grid{grid-template-columns:1fr}}
+.pour-card{background:var(--bg-alt);border:1px solid var(--border);border-radius:6px;padding:1.25rem 1.5rem}
+.pour-icon{font-size:1.5rem;margin-bottom:.5rem}
+.pour-num{font-family:var(--font-mono);font-size:.6rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--text-subtle);margin-bottom:.2rem}
+.pour-title{font-size:1.05rem;font-weight:700;color:var(--text);margin-bottom:.4rem}
+.pour-desc{font-size:.855rem;color:var(--text-muted);line-height:1.6;margin-bottom:.5rem}
+.pour-card ul{margin:.4rem 0 0 1rem;list-style:disc;display:flex;flex-direction:column;gap:.2rem}
+.pour-card li{font-size:.78rem;color:var(--text-subtle)}
+/* WCAG LEVEL BADGES */
+.level-badge{display:inline-block;font-family:var(--font-mono);font-size:.65rem;font-weight:700;padding:.18rem .5rem;border-radius:3px;border:1px solid}
+.badge-a{background:#eff6ff;color:#1d4ed8;border-color:#93c5fd}.badge-aa{background:#fef2f2;color:#b91c1c;border-color:#fca5a5}.badge-aaa{background:#f0fdf4;color:#15803d;border-color:#86efac}
+[data-scheme="dark"] .badge-a{background:rgba(59,130,246,.15);color:#93c5fd;border-color:rgba(59,130,246,.3)}[data-scheme="dark"] .badge-aa{background:rgba(239,68,68,.15);color:#f87171;border-color:rgba(239,68,68,.3)}[data-scheme="dark"] .badge-aaa{background:rgba(34,197,94,.15);color:#4ade80;border-color:rgba(34,197,94,.3)}
+@media(prefers-color-scheme:dark){:root:not([data-scheme="light"]) .badge-a{background:rgba(59,130,246,.15);color:#93c5fd;border-color:rgba(59,130,246,.3)}:root:not([data-scheme="light"]) .badge-aa{background:rgba(239,68,68,.15);color:#f87171;border-color:rgba(239,68,68,.3)}:root:not([data-scheme="light"]) .badge-aaa{background:rgba(34,197,94,.15);color:#4ade80;border-color:rgba(34,197,94,.3)}}
+/* FOOTER */
+.site-footer{border-top:1px solid var(--border);padding:1.5rem 0}
+.footer-inner{max-width:820px;margin:0 auto;padding:0 1.5rem;display:flex;flex-direction:column;gap:1rem}
+.footer-top{display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:1.25rem}
+.footer-nav{display:flex;align-items:center;flex-wrap:wrap}
+.footer-nav a{font-size:.8rem;color:var(--accent-text);text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px}
+.footer-nav a:hover{text-decoration-thickness:2px}.footer-nav a:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:2px}
+.footer-sep{color:var(--text-subtle);font-size:.55rem;padding:0 .5rem;user-select:none}
+.footer-copy{font-size:.73rem;color:var(--text-muted)}
+.scheme-fieldset{border:none;padding:0;margin:0}.scheme-legend{font-size:.78rem;font-weight:600;color:var(--text);display:block;margin-bottom:.5rem}.scheme-options{display:flex}
+.scheme-label{display:inline-flex;align-items:center;gap:.32rem;padding:.38rem .85rem;background:var(--bg-card);border:1.5px solid var(--border-strong);color:var(--text);font-family:var(--font-body);font-size:.75rem;font-weight:600;cursor:pointer;transition:background var(--ease),color var(--ease);margin-right:-1.5px;position:relative;z-index:0;user-select:none}
+.scheme-label:first-of-type{border-radius:4px 0 0 4px}.scheme-label:last-of-type{border-radius:0 4px 4px 0;margin-right:0}
+.scheme-radio{appearance:none;-webkit-appearance:none;width:0;height:0;margin:0;padding:0;position:absolute;opacity:0;pointer-events:none}
+.scheme-label:focus-within{outline:3px solid var(--accent);outline-offset:2px;z-index:2;border-radius:4px}.scheme-label:hover{background:var(--bg-alt);z-index:1}
+.scheme-label.is-selected,.scheme-label:has(.scheme-radio:checked){background:var(--text);color:var(--bg);border-color:var(--text);font-weight:700;z-index:1}
+.scheme-dot{display:inline-block;width:10px;height:10px;border-radius:50%;border:1.5px solid currentColor;flex-shrink:0;transition:background var(--ease)}
+.scheme-label.is-selected .scheme-dot,.scheme-label:has(.scheme-radio:checked) .scheme-dot{background:currentColor;box-shadow:inset 0 0 0 2px var(--bg-card)}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{transition-duration:.01ms!important}html{scroll-behavior:auto}}
+@media(max-width:640px){.header-inner,.footer-inner,.content-wrap{padding:0 1rem}.header-cta{font-size:.68rem;padding:.42rem .85rem}.nav-link{padding:.35rem .55rem;font-size:.73rem}.footer-top{flex-direction:column;align-items:flex-start}.scheme-label{padding:.36rem .65rem;font-size:.72rem}.site-tagline{font-size:.67rem}.pour-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+<header class="site-header">
+  <div class="header-inner">
+    <div class="site-identity">
+      <a href="index.html" class="site-name-link" aria-label="Sushil Chauhan — homepage">
+        <span class="site-marker" aria-hidden="true">■</span>
+        <span class="site-name">Sushil Chauhan</span>
+      </a>
+      <p class="site-tagline">QA Lead · Senior Accessibility Engineer · IAAP-CPWA | CPACC | WAS</p>
+    </div>
+    <nav class="header-nav" aria-label="Site navigation">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="writing.html" class="nav-link" aria-current="page">Writing</a>
+      <a href="was-practice-quiz.html" class="nav-link">WAS Quiz</a>
+      <a href="mailto:csgn2806@gmail.com" class="header-cta">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main-content">
+  <div class="content-wrap">
+
+    <header class="post-hero" aria-labelledby="post-title">
+      <div class="post-category">Web Accessibility Fundamentals</div>
+      <h1 class="post-title" id="post-title">Introduction to Web Accessibility</h1>
+      <p class="post-excerpt">From WCAG principles and conformance levels to HTML elements, keyboard access, colour contrast, forms, dynamic content, and testing tools. A complete foundation for accessibility testers and developers.</p>
+      <div class="post-tags-row">
+        <span class="post-tag">WCAG 2.1</span><span class="post-tag">POUR Principles</span><span class="post-tag">Keyboard Access</span><span class="post-tag">Screen Readers</span><span class="post-tag">Colour Contrast</span><span class="post-tag">ARIA</span><span class="post-tag">Forms</span>
+      </div>
+      <div class="post-meta-row">
+        <div class="post-author">
+          <div class="author-av" aria-hidden="true">SC</div>
+          <div><div class="author-name">Sushil Chauhan</div><div class="author-cert">IAAP-CPWA | CPACC | WAS · Mumbai</div></div>
+        </div>
+        <div class="post-details">
+          <time datetime="2026-03">March 2026</time>
+          <span>35 min read</span>
+          <span>WCAG 2.1 Edition</span>
+        </div>
+      </div>
+    </header>
+
+    <nav class="toc-block" aria-labelledby="toc-heading">
+      <div class="toc-title" id="toc-heading">Table of Contents</div>
+      <ol class="toc-list">
+        <li><a href="#intro">What is Web Accessibility?</a></li>
+        <li><a href="#wcag">WCAG — Structure &amp; Overview</a></li>
+        <li><a href="#levels">Conformance Levels (A / AA / AAA)</a></li>
+        <li><a href="#pour">The Four POUR Principles</a></li>
+        <li><a href="#users">Who Benefits &amp; Why It Matters</a></li>
+        <li><a href="#tools">Testing Tools &amp; Screen Readers</a></li>
+        <li><a href="#headings">Headings</a></li>
+        <li><a href="#images">Images &amp; Alt Text</a></li>
+        <li><a href="#keyboard">Keyboard Accessibility</a></li>
+        <li><a href="#colour">Colour &amp; Contrast</a></li>
+        <li><a href="#forms">Forms</a></li>
+        <li><a href="#lists">Lists</a></li>
+        <li><a href="#titles">Page Titles</a></li>
+        <li><a href="#iframes">Frames &amp; Iframes</a></li>
+        <li><a href="#tables">Tables</a></li>
+        <li><a href="#css">CSS &amp; Stylesheets</a></li>
+        <li><a href="#zoom">Zoom, Reflow &amp; Viewport</a></li>
+        <li><a href="#flash">Blinking, Moving &amp; Flashing</a></li>
+        <li><a href="#multimedia">Multimedia</a></li>
+        <li><a href="#dynamic">Dynamic Content &amp; ARIA</a></li>
+        <li><a href="#dialogs">Dialogs, Overlays &amp; Lightboxes</a></li>
+        <li><a href="#accordions">Accordions</a></li>
+      </ol>
+    </nav>
+
+    <article class="post-body" aria-labelledby="post-title">
+
+      <h2 id="intro" tabindex="-1">What is Web Accessibility?</h2>
+      <p>Web accessibility means building websites, applications, and mobile apps so that <strong>everyone can use them</strong> — including people with disabilities. It is not a nice-to-have. It is a fundamental quality requirement, and in many regions it is also a legal obligation.</p>
+      <p>A person who cannot see the screen might use a screen reader to have content read aloud. Someone who cannot use a mouse relies entirely on the keyboard. A person with hearing difficulties needs captions in videos. A user with cognitive difficulties benefits from plain language and predictable navigation.</p>
+      <div class="callout info" role="note">
+        <span class="callout-icon" aria-hidden="true">💡</span>
+        <p><strong>Key Insight:</strong> Accessibility improvements benefit everyone — not just users with permanent disabilities. Someone using a phone in bright sunlight, typing with one hand, or watching a video in a quiet library all benefit from accessible design.</p>
+      </div>
+      <p>The <strong>World Wide Web Consortium (W3C)</strong> is the international standards body for the web. Within W3C, the <strong>Web Accessibility Initiative (WAI)</strong> develops accessibility guidelines. Two core standards come from WAI:</p>
+      <ul>
+        <li><strong>WCAG (Web Content Accessibility Guidelines)</strong> — the primary standard for web content accessibility, currently at version 2.1 and 2.2</li>
+        <li><strong>WAI-ARIA (Accessible Rich Internet Applications)</strong> — a technical specification for making dynamic web content and custom UI components accessible to assistive technologies</li>
+      </ul>
+
+      <hr>
+
+      <h2 id="wcag" tabindex="-1">WCAG — Structure &amp; Overview</h2>
+      <p>WCAG is organised into a clear hierarchy that makes it practical to apply:</p>
+      <div class="table-wrap">
+        <table aria-label="WCAG structure overview">
+          <thead><tr><th scope="col">Component</th><th scope="col">Count</th><th scope="col">Description</th></tr></thead>
+          <tbody>
+            <tr><td>Principles</td><td>4</td><td>Perceivable, Operable, Understandable, Robust (POUR)</td></tr>
+            <tr><td>Guidelines</td><td>13</td><td>The broad goals under each principle</td></tr>
+            <tr><td>Success Criteria</td><td>78</td><td>Specific, testable requirements</td></tr>
+            <tr><td>Conformance Levels</td><td>3</td><td>A, AA, AAA — indicating priority and effort</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Each <strong>Success Criterion (SC)</strong> is a testable statement that either passes or fails. For example, SC 1.1.1 requires that all non-text content has a text alternative. Either it does or it doesn't — it is unambiguous.</p>
+
+      <hr>
+
+      <h2 id="levels" tabindex="-1">Conformance Levels (A / AA / AAA)</h2>
+      <p>Every WCAG success criterion is assigned one of three conformance levels.</p>
+      <div class="table-wrap">
+        <table aria-label="Conformance levels comparison">
+          <thead><tr><th scope="col">Level</th><th scope="col">Meaning</th><th scope="col">Real Example</th><th scope="col">Who requires it</th></tr></thead>
+          <tbody>
+            <tr><td><span class="level-badge badge-a">A</span></td><td><strong>Must be done.</strong> Minimum accessibility. Without this, many users simply cannot access content.</td><td>Images need alt text (SC 1.1.1)</td><td>Every accessibility standard globally</td></tr>
+            <tr><td><span class="level-badge badge-aa">AA</span></td><td><strong>Should be done.</strong> The most commonly required level. Most accessibility laws target Level AA.</td><td>Text must meet 4.5:1 contrast ratio (SC 1.4.3)</td><td>ADA, Section 508, AODA, EAA, most enterprise procurement</td></tr>
+            <tr><td><span class="level-badge badge-aaa">AAA</span></td><td><strong>Can be done.</strong> Enhanced accessibility. Not required for every page.</td><td>Text contrast enhanced to 7:1 (SC 1.4.6)</td><td>Specialised services (e.g. services for blind or deaf users)</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="callout warn" role="note">
+        <span class="callout-icon" aria-hidden="true">⚠️</span>
+        <p><strong>Important:</strong> Conformance must be declared for a specific level. To claim WCAG 2.1 AA conformance, a page must pass <em>all</em> Level A and Level AA criteria — not just a selection of them.</p>
+      </div>
+
+      <hr>
+
+      <h2 id="pour" tabindex="-1">The Four POUR Principles</h2>
+      <p>WCAG's 13 guidelines are organised under four foundational principles, known as <strong>POUR</strong>. Every success criterion maps back to one of these four principles.</p>
+      <div class="pour-grid" role="list" aria-label="POUR principles">
+        <div class="pour-card" role="listitem">
+          <div class="pour-icon" aria-hidden="true">👁️</div>
+          <div class="pour-num">Principle 1</div>
+          <div class="pour-title">Perceivable</div>
+          <p class="pour-desc">Information and UI components must be presentable to users in ways they can perceive — through sight, sound, or assistive technology.</p>
+          <ul><li>1.1 Text alternatives for non-text content</li><li>1.2 Captions and alternatives for multimedia</li><li>1.3 Adaptable content structure</li><li>1.4 Distinguishable content (contrast, resize)</li></ul>
+        </div>
+        <div class="pour-card" role="listitem">
+          <div class="pour-icon" aria-hidden="true">⌨️</div>
+          <div class="pour-num">Principle 2</div>
+          <div class="pour-title">Operable</div>
+          <p class="pour-desc">UI components and navigation must be operable — users must be able to interact with and navigate the interface.</p>
+          <ul><li>2.1 Keyboard accessible</li><li>2.2 Enough time</li><li>2.3 Seizures and physical reactions</li><li>2.4 Navigable (skip links, headings)</li><li>2.5 Input modalities (touch, voice)</li></ul>
+        </div>
+        <div class="pour-card" role="listitem">
+          <div class="pour-icon" aria-hidden="true">💬</div>
+          <div class="pour-num">Principle 3</div>
+          <div class="pour-title">Understandable</div>
+          <p class="pour-desc">Content and the operation of the UI must be understandable — users must be able to comprehend information and predict how the interface behaves.</p>
+          <ul><li>3.1 Readable text</li><li>3.2 Predictable behaviour</li><li>3.3 Input assistance and error recovery</li></ul>
+        </div>
+        <div class="pour-card" role="listitem">
+          <div class="pour-icon" aria-hidden="true">🔩</div>
+          <div class="pour-num">Principle 4</div>
+          <div class="pour-title">Robust</div>
+          <p class="pour-desc">Content must be robust enough to be reliably interpreted by a wide variety of user agents, including assistive technologies — current and future.</p>
+          <ul><li>4.1 Compatible with current and future tools</li></ul>
+        </div>
+      </div>
+
+      <hr>
+
+      <h2 id="users" tabindex="-1">Who Benefits &amp; Why It Matters</h2>
+      <p>Accessibility is often associated only with screen reader users, but the reality is much wider. Disability exists on a spectrum — and many conditions are invisible, situational, or temporary.</p>
+      <ul>
+        <li><strong>Visual impairment</strong> — blindness, low vision, colour blindness. Use screen readers, magnifiers, high contrast modes.</li>
+        <li><strong>Hearing impairment</strong> — deaf or hard of hearing. Depend on captions, transcripts, and visual alternatives to audio.</li>
+        <li><strong>Mobility impairment</strong> — limited hand or arm movement. May use keyboard only, switch devices, eye tracking, or voice control.</li>
+        <li><strong>Cognitive impairment</strong> — dyslexia, attention difficulties, memory conditions. Benefit from clear language, consistent layouts, and error recovery.</li>
+        <li><strong>Elderly users</strong> — often experience multiple mild impairments simultaneously.</li>
+        <li><strong>Situational disabilities</strong> — bright sunlight on a phone screen, one hand occupied, noisy environment, slow connection.</li>
+      </ul>
+      <p>Globally, around 1 in 7 people live with some form of disability. That figure does not include the many more affected by situational or temporary limitations. Accessibility is simply good engineering.</p>
+
+      <hr>
+
+      <h2 id="tools" tabindex="-1">Testing Tools &amp; Screen Readers</h2>
+      <p>Automated tools can identify around 30–40% of WCAG issues. The rest require manual testing — particularly with real assistive technologies. A comprehensive test uses both.</p>
+      <h3>Automated &amp; Semi-automated Tools</h3>
+      <ul>
+        <li>ANDI (Chrome &amp; Firefox)</li>
+        <li>ARC Toolkit</li>
+        <li>Colour Contrast Analyser (TPGi)</li>
+        <li>WAVE (WebAIM)</li>
+        <li>Axe DevTools</li>
+        <li>Browser Inspect / DevTools</li>
+        <li>W3C Markup Validator</li>
+      </ul>
+      <h3>Screen Readers</h3>
+      <div class="table-wrap">
+        <table aria-label="Screen reader comparison">
+          <thead><tr><th scope="col">Screen Reader</th><th scope="col">Platform</th><th scope="col">Common Pairing</th><th scope="col">Cost</th></tr></thead>
+          <tbody>
+            <tr><td>NVDA</td><td>Windows</td><td>Chrome / Firefox</td><td>Free</td></tr>
+            <tr><td>JAWS</td><td>Windows</td><td>Chrome / IE</td><td>Commercial</td></tr>
+            <tr><td>VoiceOver</td><td>macOS / iOS</td><td>Safari</td><td>Built-in (free)</td></tr>
+            <tr><td>TalkBack</td><td>Android</td><td>Chrome</td><td>Built-in (free)</td></tr>
+            <tr><td>Narrator</td><td>Windows</td><td>Edge</td><td>Built-in (free)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <hr>
+
+      <h2 id="headings" tabindex="-1">Headings</h2>
+      <p>Headings are how screen reader users navigate a page. JAWS and NVDA allow pressing <kbd>H</kbd> to jump between headings and <kbd>1</kbd>–<kbd>6</kbd> to jump to specific heading levels. Without a correct heading structure, screen reader users cannot efficiently navigate long pages.</p>
+      <p>Heading rules:</p>
+      <ul>
+        <li>One <code>&lt;h1&gt;</code> per page — the primary topic of the page</li>
+        <li>Heading levels must not skip — <code>h1 → h2 → h3</code>, never <code>h1 → h3</code></li>
+        <li>Headings must be applied via HTML elements — bold or large text styled with CSS is <strong>not</strong> a heading</li>
+        <li>Headings must be descriptive — "Section 1" tells users nothing</li>
+      </ul>
+      <pre><code>&lt;!-- ❌ Wrong: heading levels skipped --&gt;
+&lt;h1&gt;Dashboard&lt;/h1&gt;
+&lt;h3&gt;Recent Activity&lt;/h3&gt;  &lt;!-- h2 skipped --&gt;
+
+&lt;!-- ✓ Correct: logical hierarchy --&gt;
+&lt;h1&gt;Dashboard&lt;/h1&gt;
+&lt;h2&gt;Recent Activity&lt;/h2&gt;
+  &lt;h3&gt;Today's Transactions&lt;/h3&gt;
+  &lt;h3&gt;Pending Approvals&lt;/h3&gt;
+&lt;h2&gt;Account Summary&lt;/h2&gt;</code></pre>
+
+      <hr>
+
+      <h2 id="images" tabindex="-1">Images &amp; Alt Text</h2>
+      <p>Every image is either <strong>informative</strong> or <strong>decorative</strong>. Getting this distinction right is foundational to image accessibility.</p>
+      <ul>
+        <li><strong>Informative images</strong> — contribute meaningful content not available in surrounding text. Require descriptive alt text.</li>
+        <li><strong>Decorative images</strong> — add visual interest only. Must have <code>alt=""</code> (empty string, not missing) so screen readers skip them.</li>
+      </ul>
+      <pre><code>&lt;!-- Informative image --&gt;
+&lt;img src="quarterly-chart.png"
+     alt="Bar chart showing Q3 revenue by region.
+          Asia-Pacific leads at $4.2M, North America at $3.8M."&gt;
+
+&lt;!-- Decorative image --&gt;
+&lt;img src="decorative-wave.svg" alt=""&gt;
+
+&lt;!-- SVG decorative icon --&gt;
+&lt;svg aria-hidden="true" focusable="false"&gt;...&lt;/svg&gt;
+
+&lt;!-- SVG with meaning --&gt;
+&lt;svg role="img" aria-label="Warning: payment failed"&gt;...&lt;/svg&gt;</code></pre>
+      <p><strong>Writing good alt text:</strong></p>
+      <ul>
+        <li>Describe the content and function — not just the appearance</li>
+        <li>Keep it concise — one to two sentences for most images</li>
+        <li>Do not start with "Image of" or "Picture of"</li>
+        <li>For charts: summarise the key finding, not every data point</li>
+        <li>Never use the filename as alt text</li>
+      </ul>
+
+      <hr>
+
+      <h2 id="keyboard" tabindex="-1">Keyboard Accessibility</h2>
+      <p>Keyboard accessibility is a prerequisite for almost all other forms of assistive technology. Screen readers, switch devices, voice control, and head pointers all rely on the keyboard interaction model.</p>
+      <h3>Core Keyboard Requirements</h3>
+      <div class="table-wrap">
+        <table aria-label="Keyboard accessibility requirements">
+          <thead><tr><th scope="col">Key</th><th scope="col">Expected Behaviour</th></tr></thead>
+          <tbody>
+            <tr><td><kbd>Tab</kbd></td><td>Move focus forward through all interactive elements</td></tr>
+            <tr><td><kbd>Shift</kbd> + <kbd>Tab</kbd></td><td>Move focus backward</td></tr>
+            <tr><td><kbd>Enter</kbd></td><td>Activate links and buttons</td></tr>
+            <tr><td><kbd>Space</kbd></td><td>Activate buttons, checkboxes, and toggle controls</td></tr>
+            <tr><td><kbd>Escape</kbd></td><td>Close modals, dismiss dropdowns, cancel actions</td></tr>
+            <tr><td>Arrow keys</td><td>Navigate within components (tabs, menus, radio groups)</td></tr>
+            <tr><td><kbd>Home</kbd> / <kbd>End</kbd></td><td>Jump to first/last item in a widget</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <h3>Skip Link</h3>
+      <p>A skip link is the first focusable element on every page. It allows keyboard users to bypass the navigation and jump directly to the main content — avoiding having to Tab through every link on every page load.</p>
+      <pre><code>&lt;!-- First element in body --&gt;
+&lt;a href="#main-content" class="skip-link"&gt;
+  Skip to main content
+&lt;/a&gt;
+
+&lt;main id="main-content" tabindex="-1"&gt;
+  &lt;!-- Page content --&gt;
+&lt;/main&gt;</code></pre>
+      <pre><code>/* Visually hidden by default, visible on focus */
+.skip-link {
+  position: absolute;
+  top: -100px;
+  left: 1rem;
+  background: #3730a3;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  font-weight: 700;
+  z-index: 9999;
+  text-decoration: none;
+  transition: top 0.2s ease;
+}
+.skip-link:focus {
+  top: 1rem;
+}</code></pre>
+      <h3>Focus Indicators</h3>
+      <p>Every focusable element must have a visible focus indicator. Removing focus rings with <code>outline: none</code> without providing an alternative is a WCAG failure. In WCAG 2.2, SC 2.4.11 (Focus Appearance) requires that focus indicators have a minimum area, contrast, and change from unfocused state.</p>
+
+      <hr>
+
+      <h2 id="colour" tabindex="-1">Colour &amp; Contrast</h2>
+      <p>Two separate colour requirements exist in WCAG — one about using colour as the <em>only</em> way to convey information, and one about the actual contrast between foreground and background.</p>
+      <h3>Contrast Requirements</h3>
+      <div class="table-wrap">
+        <table aria-label="Contrast ratio requirements">
+          <thead><tr><th scope="col">Content Type</th><th scope="col">Level AA</th><th scope="col">Level AAA</th></tr></thead>
+          <tbody>
+            <tr><td>Normal text (below 18pt or 14pt bold)</td><td><span class="level-badge badge-aa">4.5:1</span></td><td>7:1</td></tr>
+            <tr><td>Large text (18pt+ or 14pt bold+)</td><td><span class="level-badge badge-aa">3:1</span></td><td>4.5:1</td></tr>
+            <tr><td>UI components &amp; graphical objects (WCAG 2.1+)</td><td><span class="level-badge badge-aa">3:1</span></td><td>—</td></tr>
+            <tr><td>Decorative text, logos, inactive UI</td><td colspan="2">No requirement</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <h3>Colour as the Only Indicator</h3>
+      <p>If a form shows errors only by turning the border red, a user with red-green colour blindness may not notice. Always supplement colour with a secondary indicator:</p>
+      <ul>
+        <li>Error state: red border + error icon + descriptive error message text</li>
+        <li>Required fields: asterisk + "required" text in the label, not just a colour change</li>
+        <li>Chart data: different patterns or shapes, not just different colours</li>
+      </ul>
+
+      <hr>
+
+      <h2 id="forms" tabindex="-1">Forms</h2>
+      <p>Forms are among the most interaction-heavy components on any website. An inaccessible form means a user cannot register, log in, complete a purchase, or submit a request.</p>
+      <pre><code>&lt;form aria-labelledby="form-title"&gt;
+  &lt;h2 id="form-title"&gt;Create Account&lt;/h2&gt;
+  &lt;p id="form-note"&gt;Fields marked * are required.&lt;/p&gt;
+
+  &lt;label for="full-name"&gt;Full name *&lt;/label&gt;
+  &lt;input type="text" id="full-name"
+         aria-required="true"
+         aria-describedby="name-error"&gt;
+  &lt;span id="name-error" role="alert" aria-live="polite"&gt;
+    &lt;!-- Error message injected here when validation fires --&gt;
+  &lt;/span&gt;
+
+  &lt;!-- Group related controls with fieldset --&gt;
+  &lt;fieldset&gt;
+    &lt;legend&gt;Preferred contact method&lt;/legend&gt;
+    &lt;label&gt;&lt;input type="radio" name="contact" value="email"&gt; Email&lt;/label&gt;
+    &lt;label&gt;&lt;input type="radio" name="contact" value="phone"&gt; Phone&lt;/label&gt;
+  &lt;/fieldset&gt;
+&lt;/form&gt;</code></pre>
+      <h3>Common Form Issues</h3>
+      <ul>
+        <li>No <code>&lt;label&gt;</code> element associated with input fields</li>
+        <li>Placeholder used as the only label — disappears on input</li>
+        <li>Radio buttons and checkboxes not grouped with <code>&lt;fieldset&gt;</code> and <code>&lt;legend&gt;</code></li>
+        <li>Error messages not programmatically associated via <code>aria-describedby</code></li>
+        <li>Generic error messages ("Invalid input") with no guidance on how to fix</li>
+        <li>Required fields indicated only by colour change</li>
+      </ul>
+
+      <hr>
+
+      <h2 id="lists" tabindex="-1">Lists</h2>
+      <p>Screen readers announce list type and item count before reading content — "list of 5 items" — which helps users understand structure. Visual lists must be coded as actual HTML list elements.</p>
+      <pre><code>&lt;!-- Unordered list — order doesn't matter --&gt;
+&lt;ul&gt;
+  &lt;li&gt;Accessibility audit&lt;/li&gt;
+  &lt;li&gt;Mobile testing&lt;/li&gt;
+  &lt;li&gt;Remediation support&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;!-- Ordered list — sequence matters --&gt;
+&lt;ol&gt;
+  &lt;li&gt;Run automated scan&lt;/li&gt;
+  &lt;li&gt;Manual testing with screen reader&lt;/li&gt;
+  &lt;li&gt;Document findings&lt;/li&gt;
+&lt;/ol&gt;</code></pre>
+      <h3>Common Issues</h3>
+      <ul>
+        <li>Visual list styled with CSS but using <code>&lt;div&gt;</code> or <code>&lt;p&gt;</code> instead of list elements</li>
+        <li>Definition list (<code>&lt;dl&gt;</code>) used for non-definition content</li>
+        <li>List markup used purely to achieve visual indentation</li>
+      </ul>
+
+      <hr>
+
+      <h2 id="titles" tabindex="-1">Page Titles</h2>
+      <p>The page <code>&lt;title&gt;</code> is the first thing a screen reader announces when a page loads. It is also what appears in browser tabs and bookmarks. Without a unique, descriptive title, users cannot determine where they are or quickly switch between tabs.</p>
+      <pre><code>&lt;!-- ❌ Bad: generic, same on every page --&gt;
+&lt;title&gt;Home&lt;/title&gt;
+
+&lt;!-- ✓ Good: unique content first, then site name --&gt;
+&lt;title&gt;Dashboard — ACME Banking Portal&lt;/title&gt;
+&lt;title&gt;Shopping Cart (3 items) — MySite&lt;/title&gt;
+&lt;title&gt;Step 2 of 4: Shipping Details — Checkout&lt;/title&gt;</code></pre>
+      <h3>Common Issues</h3>
+      <ul>
+        <li>Missing page title</li>
+        <li>Inaccurate page title</li>
+        <li>Identical page titles across multiple pages</li>
+        <li>Incomplete page title</li>
+      </ul>
+
+      <hr>
+
+      <h2 id="iframes" tabindex="-1">Frames &amp; Iframes</h2>
+      <p>Iframes embed external content — maps, videos, payment widgets, social feeds. Screen readers encounter them and announce them as frames. Without a descriptive <code>title</code>, the user has no idea what the iframe contains.</p>
+      <pre><code>&lt;!-- ❌ Bad: no title, screen reader reads the URL --&gt;
+&lt;iframe src="map-widget.html"&gt;&lt;/iframe&gt;
+
+&lt;!-- ✓ Good: descriptive title --&gt;
+&lt;iframe src="map-widget.html"
+        title="Office location map — Panvel, Mumbai"
+        width="600" height="400"&gt;
+&lt;/iframe&gt;
+
+&lt;!-- SEO-only iframe: hide from AT entirely --&gt;
+&lt;iframe src="seo-content.html"
+        role="presentation"
+        aria-hidden="true"&gt;
+&lt;/iframe&gt;</code></pre>
+      <div class="callout info" role="note">
+        <span class="callout-icon" aria-hidden="true">📌</span>
+        <p>Do not include the word "frame" in the title — screen readers already announce it as a frame. Write <code>title="Product demo video"</code>, not <code>title="Video frame"</code>.</p>
+      </div>
+
+      <hr>
+
+      <h2 id="tables" tabindex="-1">Tables</h2>
+      <p>Data tables present relational information in rows and columns. Screen readers navigate tables by announcing header information as cells are read — but only when the table markup is correct. Layout tables should never be used.</p>
+      <pre><code>&lt;table&gt;
+  &lt;caption&gt;Quarterly sales by region — FY 2025&lt;/caption&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th scope="col"&gt;Region&lt;/th&gt;
+      &lt;th scope="col"&gt;Q1&lt;/th&gt;
+      &lt;th scope="col"&gt;Q2&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;th scope="row"&gt;Asia-Pacific&lt;/th&gt;
+      &lt;td&gt;$3.8M&lt;/td&gt;
+      &lt;td&gt;$4.2M&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;</code></pre>
+      <h3>Common Issues</h3>
+      <ul>
+        <li>Table used for page layout — only data tables should use <code>&lt;table&gt;</code></li>
+        <li>Missing <code>&lt;caption&gt;</code> or <code>aria-label</code> to describe the table</li>
+        <li>Header cells not marked with <code>&lt;th&gt;</code> and <code>scope</code></li>
+        <li>Complex tables with merged cells — breaks the regular row-column grid</li>
+      </ul>
+
+      <hr>
+
+      <h2 id="css" tabindex="-1">CSS &amp; Stylesheets — SR-Only, Hidden Content</h2>
+      <p>CSS controls what users see visually, but screen readers follow the DOM — not the visual presentation. Hidden content, invisible text, and focus indicators are all affected by CSS decisions.</p>
+      <pre><code>/* Screen-reader-only text — visible to AT, hidden visually */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Hide content from both sighted users AND AT */
+.hidden-all {
+  display: none;           /* removed from layout AND accessibility tree */
+  /* OR: */
+  visibility: hidden;      /* removed from layout AND accessibility tree */
+}
+
+/* ❌ Never do this — removes focus ring without replacement */
+*:focus { outline: none; }
+
+/* ✓ Replace with custom focus indicator */
+*:focus-visible {
+  outline: 3px solid #3730a3;
+  outline-offset: 2px;
+  border-radius: 2px;
+}</code></pre>
+      <h3>Common Issues</h3>
+      <ul>
+        <li>Informative image defined via CSS <code>background-image</code> — invisible in High Contrast Mode and to AT</li>
+        <li>Focus indicator removed with <code>outline: none</code> without any replacement</li>
+        <li>Hidden content incorrectly still reachable by keyboard</li>
+      </ul>
+
+      <hr>
+
+      <h2 id="zoom" tabindex="-1">Zoom, Reflow &amp; Viewport</h2>
+      <p>WCAG 1.4.4 requires text to resize to 200% without losing content. WCAG 1.4.10 (Reflow, added in WCAG 2.1) requires content to reflow into a single column at 320 CSS pixels — the equivalent of 400% zoom on a 1280px screen — without requiring horizontal scrolling.</p>
+      <pre><code>&lt;!-- ❌ Bad: prevents user zoom on mobile --&gt;
+&lt;meta name="viewport"
+      content="width=device-width, initial-scale=1, user-scalable=no"&gt;
+
+&lt;!-- ✓ Correct: allow user scaling freely --&gt;
+&lt;meta name="viewport"
+      content="width=device-width, initial-scale=1"&gt;</code></pre>
+      <pre><code>/* Use relative units — never fixed px widths on content containers */
+.container {
+  max-width: 100%;
+  width: min(860px, 100%);
+  padding-inline: 1rem;
+}
+
+/* Use CSS Grid with auto-fit for responsive layout */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+/* Font sizes: use rem — respects user's browser font settings */
+body { font-size: 1rem; }
+h1   { font-size: clamp(1.75rem, 4vw, 3rem); }
+h2   { font-size: clamp(1.25rem, 3vw, 2rem); }</code></pre>
+      <div class="callout warn" role="note">
+        <span class="callout-icon" aria-hidden="true">⚠️</span>
+        <p>Using <code>user-scalable=no</code> or <code>maximum-scale=1</code> in the viewport meta tag directly fails <strong>SC 1.4.4 Resize Text (AA)</strong>. Many users with low vision rely on pinch-to-zoom — never block it.</p>
+      </div>
+
+      <hr>
+
+      <h2 id="flash" tabindex="-1">Blinking, Moving &amp; Flashing Elements</h2>
+      <p>Flashing content can trigger photosensitive epileptic seizures. Moving content is disorienting for users with attention difficulties.</p>
+      <h3>The Rules</h3>
+      <ul>
+        <li>Flashing content must flash <strong>fewer than 3 times per second</strong></li>
+        <li>Scrolling or auto-updating content must have a mechanism to pause, stop, or hide it</li>
+        <li>Moving content that starts automatically and lasts more than 5 seconds must be pausable</li>
+        <li>Audio that starts automatically and lasts more than 3 seconds must have a stop/pause control</li>
+      </ul>
+      <p>Use the <strong>PEAT tool</strong> (Photosensitive Epilepsy Analysis Tool) to test flash rates. Always respect <code>prefers-reduced-motion</code>:</p>
+      <pre><code>@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}</code></pre>
+
+      <hr>
+
+      <h2 id="multimedia" tabindex="-1">Multimedia</h2>
+      <p>Audio and video content creates barriers for deaf users, blind users, and users in silent environments. Three techniques address these barriers.</p>
+      <div class="table-wrap">
+        <table aria-label="Multimedia accessibility techniques">
+          <thead><tr><th scope="col">Technique</th><th scope="col">Who Benefits</th><th scope="col">Description</th></tr></thead>
+          <tbody>
+            <tr><td>Captions</td><td>Deaf, hard of hearing, noisy environments</td><td>Synchronised text version of all spoken audio and relevant sounds</td></tr>
+            <tr><td>Audio Description</td><td>Blind, low vision users</td><td>Narration describing visual-only information in video content</td></tr>
+            <tr><td>Transcript</td><td>Deaf-blind, cognitive disabilities</td><td>Full text version of audio/video content, can be read with braille display</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <pre><code>&lt;video controls&gt;
+  &lt;source src="product-demo.mp4" type="video/mp4"&gt;
+
+  &lt;!-- Captions (required for Level AA) --&gt;
+  &lt;track kind="captions"
+         src="demo-captions-en.vtt"
+         srclang="en"
+         label="English captions"
+         default&gt;
+
+  &lt;!-- Audio description (required for Level AA if visual-only info) --&gt;
+  &lt;track kind="descriptions"
+         src="demo-audiodesc-en.vtt"
+         srclang="en"
+         label="Audio description"&gt;
+&lt;/video&gt;</code></pre>
+
+      <hr>
+
+      <h2 id="dynamic" tabindex="-1">Dynamic Content &amp; ARIA</h2>
+      <p>Single-page applications and dynamic content updates present unique accessibility challenges. When content changes without a page reload, screen readers do not automatically announce the change. ARIA live regions and focus management solve this.</p>
+      <pre><code>&lt;!-- Polite live region: announces after current speech finishes --&gt;
+&lt;div aria-live="polite" aria-atomic="true"&gt;
+  &lt;!-- Content injected dynamically by JavaScript --&gt;
+&lt;/div&gt;
+
+&lt;!-- Assertive live region: interrupts speech immediately (use sparingly) --&gt;
+&lt;div aria-live="assertive" role="alert"&gt;
+  Error: Your session has expired. Please log in again.
+&lt;/div&gt;
+
+&lt;!-- Status message (non-urgent update) --&gt;
+&lt;div role="status" aria-live="polite"&gt;
+  24 results found.
+&lt;/div&gt;</code></pre>
+      <p>After a page section updates dynamically, move focus to the new content so keyboard and screen reader users discover it:</p>
+      <pre><code>// Move focus to the newly loaded section heading
+const heading = document.getElementById('search-results-heading');
+heading.setAttribute('tabindex', '-1');
+heading.focus();</code></pre>
+
+      <hr>
+
+      <h2 id="dialogs" tabindex="-1">Dialogs, Overlays &amp; Lightboxes</h2>
+      <p>Modals are one of the most commonly misimplemented components. The core requirements are: use <code>role="dialog"</code>, trap focus inside the modal, announce the modal title on open, return focus to the trigger on close, and allow Escape to dismiss.</p>
+      <pre><code>&lt;div role="dialog"
+     aria-modal="true"
+     aria-labelledby="dialog-title"&gt;
+
+  &lt;h2 id="dialog-title" tabindex="-1"&gt;Confirm Deletion&lt;/h2&gt;
+  &lt;p&gt;This action cannot be undone.&lt;/p&gt;
+
+  &lt;button&gt;Cancel&lt;/button&gt;
+  &lt;button&gt;Delete&lt;/button&gt;
+  &lt;button aria-label="Close dialog"&gt;✕&lt;/button&gt;
+&lt;/div&gt;</code></pre>
+      <p>Focus trap JavaScript: when the modal opens, capture Tab and Shift+Tab events. If focus would move outside the modal, redirect it to the first or last focusable element inside the modal.</p>
+
+      <hr>
+
+      <h2 id="accordions" tabindex="-1">Accordions</h2>
+      <p>Accordions must follow the disclosure pattern: heading → button → panel. The button handles expand/collapse state via <code>aria-expanded</code>. The panel uses <code>role="region"</code> and <code>aria-labelledby</code>.</p>
+      <pre><code>&lt;h3&gt;
+  &lt;button aria-expanded="false"
+          aria-controls="section-1"
+          id="btn-1"&gt;
+    What is WCAG?
+    &lt;svg aria-hidden="true" focusable="false"&gt;...&lt;/svg&gt;
+  &lt;/button&gt;
+&lt;/h3&gt;
+&lt;div id="section-1"
+     role="region"
+     aria-labelledby="btn-1"
+     hidden&gt;
+  WCAG stands for Web Content Accessibility Guidelines...
+&lt;/div&gt;</code></pre>
+      <div class="callout tip" role="note">
+        <span class="callout-icon" aria-hidden="true">💡</span>
+        <p>Always put the <code>&lt;button&gt;</code> inside the heading element — not the heading inside the button. <code>&lt;h3&gt;&lt;button&gt;</code> preserves heading semantics for screen reader heading navigation.</p>
+      </div>
+
+    </article>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-top">
+      <nav class="footer-nav" aria-label="Footer navigation">
+        <a href="index.html">Home</a>
+        <span class="footer-sep" aria-hidden="true">■</span>
+        <a href="writing.html">Writing</a>
+        <span class="footer-sep" aria-hidden="true">■</span>
+        <a href="was-practice-quiz.html">WAS Quiz</a>
+        <span class="footer-sep" aria-hidden="true">■</span>
+        <a href="accessibility-statement.html">Accessibility</a>
+      </nav>
+      <fieldset class="scheme-fieldset">
+        <legend class="scheme-legend">Color scheme:</legend>
+        <div class="scheme-options">
+          <label class="scheme-label is-selected"><input class="scheme-radio" type="radio" name="color-scheme" value="system" checked><span class="scheme-dot" aria-hidden="true"></span>System</label>
+          <label class="scheme-label"><input class="scheme-radio" type="radio" name="color-scheme" value="light"><span class="scheme-dot" aria-hidden="true"></span>Light</label>
+          <label class="scheme-label"><input class="scheme-radio" type="radio" name="color-scheme" value="dark"><span class="scheme-dot" aria-hidden="true"></span>Dark</label>
+        </div>
+      </fieldset>
+    </div>
+    <p class="footer-copy">© 2026 Sushil Chauhan · IAAP-CPWA | CPACC | WAS</p>
+  </div>
+</footer>
+<script>
+(function(){var html=document.documentElement,radios=document.querySelectorAll(".scheme-radio"),KEY="sc-scheme";function apply(s){html.setAttribute("data-scheme",s);try{localStorage.setItem(KEY,s)}catch(e){}radios.forEach(function(r){var c=r.value===s;r.checked=c;var l=r.closest(".scheme-label");if(l)l.classList.toggle("is-selected",c)})}var saved;try{saved=localStorage.getItem(KEY)}catch(e){}apply(saved||"system");radios.forEach(function(r){r.addEventListener("change",function(){if(r.checked)apply(r.value)})})})();
+</script>
+</body>
+</html>

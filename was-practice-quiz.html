@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en" data-scheme="system">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WAS Practice Quiz — 84 Questions · Sushil Chauhan IAAP-CPWA</title>
+<meta name="description" content="84 practice questions for the IAAP WAS exam. WCAG, ARIA, screen readers, keyboard navigation, forms, media — interactive quiz with instant explanations by Sushil Chauhan IAAP-CPWA | CPACC | WAS.">
+<meta name="author" content="Sushil Chauhan">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Playfair+Display:wght@600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#faf9f6;--bg-card:#ffffff;--bg-alt:#efede6;--text:#1a1a1a;--text-body:#2c2c2c;--text-muted:#3e4a58;--text-subtle:#52606f;--accent:#3730a3;--accent-bg:#eef2ff;--accent-text:#2d2a94;--border:#d4d8e0;--border-strong:#1a1a1a;--font-body:'Atkinson Hyperlegible',system-ui,sans-serif;--font-display:'Playfair Display',Georgia,serif;--font-mono:'JetBrains Mono','Courier New',monospace;--ease:0.14s ease}
+@media(prefers-color-scheme:dark){:root:not([data-scheme="light"]){--bg:#111111;--bg-card:#1d1d1d;--bg-alt:#191919;--text:#edeae4;--text-body:#c6c0b6;--text-muted:#9da6b2;--text-subtle:#848f9c;--accent:#818cf8;--accent-bg:#1e1b4b;--accent-text:#a5b4fc;--border:rgba(255,255,255,.12);--border-strong:rgba(255,255,255,.72)}}
+[data-scheme="dark"]{--bg:#111111;--bg-card:#1d1d1d;--bg-alt:#191919;--text:#edeae4;--text-body:#c6c0b6;--text-muted:#9da6b2;--text-subtle:#848f9c;--accent:#818cf8;--accent-bg:#1e1b4b;--accent-text:#a5b4fc;--border:rgba(255,255,255,.12);--border-strong:rgba(255,255,255,.72)}
+[data-scheme="light"]{--bg:#faf9f6;--bg-card:#ffffff;--bg-alt:#efede6;--text:#1a1a1a;--text-body:#2c2c2c;--text-muted:#3e4a58;--text-subtle:#52606f;--accent:#3730a3;--accent-bg:#eef2ff;--accent-text:#2d2a94;--border:#d4d8e0;--border-strong:#1a1a1a}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;font-size:16px}
+body{font-family:var(--font-body);background:var(--bg);color:var(--text);line-height:1.7;-webkit-font-smoothing:antialiased;transition:background var(--ease),color var(--ease);overflow-x:hidden}
+a{color:inherit}ul,ol{list-style:none}
+.skip-link{position:absolute;top:-100px;left:1rem;background:var(--accent);color:#fff;padding:.75rem 1.5rem;border-radius:4px;font-weight:700;font-size:.9rem;z-index:9999;text-decoration:none;transition:top .2s ease}.skip-link:focus{top:1rem;outline:3px solid var(--text);outline-offset:2px}
+/* HEADER */
+.site-header{border-bottom:1px solid var(--border);padding:1.1rem 0}
+.header-inner{max-width:880px;margin:0 auto;padding:0 1.5rem;display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.site-identity{display:flex;flex-direction:column;gap:.12rem}
+.site-name-link{display:inline-flex;align-items:center;gap:.35rem;text-decoration:none;color:var(--text)}
+.site-marker{color:var(--accent);font-size:.75rem;flex-shrink:0;line-height:1}
+.site-name{font-size:1rem;font-weight:700;letter-spacing:-.01em}
+.site-tagline{font-size:.72rem;color:var(--text-muted);padding-left:1.1rem}
+.header-nav{display:flex;align-items:center;gap:.45rem}
+.nav-link{font-size:.78rem;font-weight:500;color:var(--text-muted);text-decoration:none;padding:.38rem .72rem;border:1px solid var(--border);border-radius:3px;transition:all var(--ease);white-space:nowrap}
+.nav-link:hover{border-color:var(--border-strong);color:var(--text)}.nav-link:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.nav-link[aria-current]{color:var(--accent-text);border-color:var(--accent-bg);background:var(--accent-bg)}
+.header-cta{display:inline-block;padding:.46rem 1.1rem;border:2px solid var(--border-strong);background:transparent;color:var(--text);text-decoration:none;font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;border-radius:3px;transition:background var(--ease),color var(--ease);white-space:nowrap}
+.header-cta:hover{background:var(--text);color:var(--bg)}.header-cta:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+/* LAYOUT */
+main{padding:0 0 5rem}.wrap{max-width:880px;margin:0 auto;padding:0 1.5rem}
+/* HERO */
+.quiz-hero{padding:2.5rem 0 2rem;border-bottom:1.5px solid var(--border-strong)}
+.eyebrow{display:inline-flex;align-items:center;gap:.4rem;font-family:var(--font-mono);font-size:.65rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--accent-text);margin-bottom:1rem}
+.eyebrow::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--accent)}
+.quiz-hero h1{font-family:var(--font-display);font-size:clamp(1.75rem,4vw,2.4rem);font-weight:700;line-height:1.2;letter-spacing:-.02em;margin-bottom:.75rem}
+.quiz-hero p{font-size:.96rem;color:var(--text-muted);line-height:1.8;max-width:660px;margin-bottom:1.5rem}
+/* STATS */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:.6rem;margin:1.5rem 0}
+.stat-card{background:var(--bg-alt);border:1px solid var(--border);border-radius:4px;padding:.85rem 1rem;text-align:center}
+.stat-num{font-family:var(--font-mono);font-size:1.25rem;font-weight:700;display:block;color:var(--text);line-height:1}
+.stat-lbl{font-size:.63rem;color:var(--text-muted);margin-top:.25rem;display:block}
+/* FILTER */
+.filter-wrap{margin:2rem 0 1.25rem}
+.filter-lbl{font-family:var(--font-mono);font-size:.63rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--text-subtle);display:block;margin-bottom:.65rem}
+.filter-btns{display:flex;flex-wrap:wrap;gap:.38rem}
+.f-btn{font-size:.75rem;font-weight:500;padding:.28rem .78rem;border:1px solid var(--border);border-radius:100px;background:var(--bg-card);color:var(--text-muted);cursor:pointer;transition:all var(--ease);font-family:var(--font-body)}
+.f-btn:hover{border-color:var(--border-strong);color:var(--text)}.f-btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.f-btn.active{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:700}
+/* PROGRESS */
+.progress-bar-wrap{display:flex;align-items:center;justify-content:space-between;gap:1rem;margin-bottom:1.5rem;padding:1rem 1.25rem;background:var(--bg-alt);border:1px solid var(--border);border-radius:4px;flex-wrap:wrap}
+.prog-text{font-family:var(--font-mono);font-size:.72rem;color:var(--text-muted)}
+.prog-track{flex:1;min-width:120px;height:7px;background:var(--border);border-radius:100px;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:100px;transition:width .3s ease;width:0%}
+.reset-btn{font-size:.75rem;font-weight:600;padding:.35rem .9rem;background:transparent;border:1px solid var(--border);border-radius:4px;color:var(--text-muted);cursor:pointer;font-family:var(--font-body);transition:all var(--ease)}
+.reset-btn:hover{border-color:var(--border-strong);color:var(--text)}.reset-btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+/* QUESTION CARDS */
+.q-list{display:flex;flex-direction:column;gap:.9rem}
+.q-card{background:var(--bg-card);border:1px solid var(--border);border-radius:6px;overflow:hidden}
+.q-card.correct{border-color:#22c55e}.q-card.wrong{border-color:#ef4444}
+.q-hdr{padding:1.25rem 1.5rem .75rem;display:flex;align-items:flex-start;justify-content:space-between;gap:.75rem}
+.q-meta{display:flex;flex-direction:column;gap:.3rem;flex:1}
+.q-num-line{display:flex;align-items:center;gap:.5rem}
+.q-num{font-family:var(--font-mono);font-size:.62rem;color:var(--text-subtle)}
+.q-cat{display:inline-block;font-family:var(--font-mono);font-size:.58rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:.15rem .5rem;border-radius:3px;border:1px solid var(--border);background:var(--bg-alt);color:var(--text-subtle)}
+.q-text{font-size:.96rem;font-weight:600;color:var(--text);line-height:1.6;margin-top:.4rem}
+.q-badge{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700;flex-shrink:0;visibility:hidden}
+.q-badge.show{visibility:visible}
+.q-badge.ok{background:#f0fdf4;color:#15803d;border:1px solid #86efac}
+.q-badge.no{background:#fef2f2;color:#b91c1c;border:1px solid #fca5a5}
+[data-scheme="dark"] .q-badge.ok{background:rgba(34,197,94,.15);color:#4ade80;border-color:rgba(34,197,94,.3)}
+[data-scheme="dark"] .q-badge.no{background:rgba(239,68,68,.15);color:#f87171;border-color:rgba(239,68,68,.3)}
+@media(prefers-color-scheme:dark){:root:not([data-scheme="light"]) .q-badge.ok{background:rgba(34,197,94,.15);color:#4ade80;border-color:rgba(34,197,94,.3)}:root:not([data-scheme="light"]) .q-badge.no{background:rgba(239,68,68,.15);color:#f87171;border-color:rgba(239,68,68,.3)}}
+/* OPTIONS */
+.q-opts{padding:0 1.5rem 1.25rem;display:flex;flex-direction:column;gap:.4rem}
+.opt{width:100%;text-align:left;padding:.62rem 1rem;background:var(--bg-alt);border:1px solid var(--border);border-radius:4px;cursor:pointer;font-family:var(--font-body);font-size:.875rem;color:var(--text-body);line-height:1.5;transition:all var(--ease)}
+.opt:hover:not(:disabled){background:var(--accent-bg);border-color:var(--accent-text);color:var(--text)}
+.opt:focus-visible{outline:2px solid var(--accent);outline-offset:2px}.opt:disabled{cursor:default}
+.opt.opt-c{background:#f0fdf4;border-color:#22c55e;color:#15803d;font-weight:600}
+.opt.opt-w{background:#fef2f2;border-color:#ef4444;color:#b91c1c}
+.opt.opt-d{opacity:.45}
+[data-scheme="dark"] .opt.opt-c{background:rgba(34,197,94,.12);border-color:#4ade80;color:#4ade80}
+[data-scheme="dark"] .opt.opt-w{background:rgba(239,68,68,.12);border-color:#f87171;color:#f87171}
+@media(prefers-color-scheme:dark){:root:not([data-scheme="light"]) .opt.opt-c{background:rgba(34,197,94,.12);border-color:#4ade80;color:#4ade80}:root:not([data-scheme="light"]) .opt.opt-w{background:rgba(239,68,68,.12);border-color:#f87171;color:#f87171}}
+/* EXPLANATION */
+.expl{padding:0 1.5rem 1.25rem;display:none}.expl.show{display:block}
+.expl-inner{background:var(--bg-alt);border-left:3px solid var(--accent);border-radius:0 4px 4px 0;padding:.9rem 1.15rem}
+.expl-lbl{font-family:var(--font-mono);font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent-text);margin-bottom:.4rem}
+.expl-text{font-size:.875rem;color:var(--text-muted);line-height:1.7}
+.expl-text code{font-family:var(--font-mono);font-size:.8em;background:var(--bg-card);border:1px solid var(--border);border-radius:3px;padding:.08rem .35rem;color:var(--accent-text)}
+/* EMPTY */
+.empty{text-align:center;padding:2.5rem 1rem;color:var(--text-muted);font-size:.9rem}
+/* FOOTER */
+.site-footer{border-top:1px solid var(--border);padding:1.5rem 0}
+.footer-inner{max-width:880px;margin:0 auto;padding:0 1.5rem;display:flex;flex-direction:column;gap:1rem}
+.footer-top{display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:1.25rem}
+.footer-nav{display:flex;align-items:center;flex-wrap:wrap}
+.footer-nav a{font-size:.8rem;color:var(--accent-text);text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px}
+.footer-nav a:hover{text-decoration-thickness:2px}.footer-nav a:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:2px}
+.footer-sep{color:var(--text-subtle);font-size:.55rem;padding:0 .5rem;user-select:none}
+.footer-copy{font-size:.73rem;color:var(--text-muted)}
+.scheme-fieldset{border:none;padding:0;margin:0}.scheme-legend{font-size:.78rem;font-weight:600;color:var(--text);display:block;margin-bottom:.5rem}
+.scheme-options{display:flex}
+.scheme-label{display:inline-flex;align-items:center;gap:.32rem;padding:.38rem .85rem;background:var(--bg-card);border:1.5px solid var(--border-strong);color:var(--text);font-family:var(--font-body);font-size:.75rem;font-weight:600;cursor:pointer;transition:background var(--ease),color var(--ease);margin-right:-1.5px;position:relative;z-index:0;user-select:none}
+.scheme-label:first-of-type{border-radius:4px 0 0 4px}.scheme-label:last-of-type{border-radius:0 4px 4px 0;margin-right:0}
+.scheme-radio{appearance:none;-webkit-appearance:none;width:0;height:0;margin:0;padding:0;position:absolute;opacity:0;pointer-events:none}
+.scheme-label:focus-within{outline:3px solid var(--accent);outline-offset:2px;z-index:2;border-radius:4px}
+.scheme-label:hover{background:var(--bg-alt);z-index:1}
+.scheme-label.is-selected,.scheme-label:has(.scheme-radio:checked){background:var(--text);color:var(--bg);border-color:var(--text);font-weight:700;z-index:1}
+.scheme-dot{display:inline-block;width:10px;height:10px;border-radius:50%;border:1.5px solid currentColor;flex-shrink:0;transition:background var(--ease)}
+.scheme-label.is-selected .scheme-dot,.scheme-label:has(.scheme-radio:checked) .scheme-dot{background:currentColor;box-shadow:inset 0 0 0 2px var(--bg-card)}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{transition-duration:.01ms!important;animation-duration:.01ms!important}html{scroll-behavior:auto}}
+@media(max-width:640px){.header-inner,.footer-inner,.wrap{padding:0 1rem}.header-cta{padding:.42rem .85rem;font-size:.68rem}.nav-link{padding:.35rem .55rem;font-size:.73rem}.footer-top{flex-direction:column;align-items:flex-start}.scheme-label{padding:.36rem .65rem;font-size:.72rem}.site-tagline{font-size:.67rem}.stats-row{grid-template-columns:1fr 1fr}.q-hdr{padding:1rem 1.1rem .65rem}.q-opts{padding:0 1.1rem 1rem}.expl{padding:0 1.1rem 1rem}}
+</style>
+</head>
+<body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<header class="site-header">
+  <div class="header-inner">
+    <div class="site-identity">
+      <a href="index.html" class="site-name-link" aria-label="Sushil Chauhan — homepage">
+        <span class="site-marker" aria-hidden="true">■</span>
+        <span class="site-name">Sushil Chauhan</span>
+      </a>
+      <p class="site-tagline">QA Lead · Senior Accessibility Engineer · IAAP-CPWA | CPACC | WAS</p>
+    </div>
+    <nav class="header-nav" aria-label="Site navigation">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="writing.html" class="nav-link">Writing</a>
+      <a href="was-practice-quiz.html" class="nav-link" aria-current="page">WAS Quiz</a>
+      <a href="mailto:csgn2806@gmail.com" class="header-cta">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main-content">
+  <div class="wrap">
+
+    <header class="quiz-hero" aria-labelledby="quiz-title">
+      <div class="eyebrow">WAS Exam Preparation</div>
+      <h1 id="quiz-title">WAS Certification Practice Quiz</h1>
+      <p>84 scenario-based practice questions across 10 topics — WCAG criteria, ARIA, screen readers, keyboard navigation, forms, colour contrast, images, and more. Select an answer to see instantly whether it is correct and read a full explanation.</p>
+      <div class="stats-row" aria-label="Quiz overview">
+        <div class="stat-card"><span class="stat-num" id="sn-total">84</span><span class="stat-lbl">Total questions</span></div>
+        <div class="stat-card"><span class="stat-num" id="sn-done">0</span><span class="stat-lbl">Answered</span></div>
+        <div class="stat-card"><span class="stat-num" id="sn-right">0</span><span class="stat-lbl">Correct</span></div>
+        <div class="stat-card"><span class="stat-num" id="sn-pct">0%</span><span class="stat-lbl">Score</span></div>
+      </div>
+    </header>
+
+    <section aria-label="Quiz questions">
+      <div class="filter-wrap">
+        <span class="filter-lbl" id="filter-group-lbl">Filter by topic</span>
+        <div class="filter-btns" role="group" aria-labelledby="filter-group-lbl">
+          <button class="f-btn active" data-cat="all">All (84)</button>
+          <button class="f-btn" data-cat="WCAG Criteria">WCAG Criteria</button>
+          <button class="f-btn" data-cat="Screen Readers">Screen Readers</button>
+          <button class="f-btn" data-cat="ARIA &amp; Roles">ARIA &amp; Roles</button>
+          <button class="f-btn" data-cat="Keyboard &amp; Focus">Keyboard &amp; Focus</button>
+          <button class="f-btn" data-cat="Forms &amp; Inputs">Forms &amp; Inputs</button>
+          <button class="f-btn" data-cat="Colour &amp; Contrast">Colour &amp; Contrast</button>
+          <button class="f-btn" data-cat="Images &amp; Alt Text">Images &amp; Alt Text</button>
+          <button class="f-btn" data-cat="Media &amp; Animation">Media &amp; Animation</button>
+          <button class="f-btn" data-cat="General Accessibility">General</button>
+        </div>
+      </div>
+
+      <div class="progress-bar-wrap" aria-label="Progress">
+        <span class="prog-text" id="prog-label">0 of 84 answered</span>
+        <div class="prog-track" aria-hidden="true"><div class="prog-fill" id="prog-fill"></div></div>
+        <button class="reset-btn" id="reset-btn">Reset all</button>
+      </div>
+
+      <div id="q-list" class="q-list" role="list" aria-label="Practice questions"></div>
+    </section>
+
+  </div>
+</main>
+
+<div class="sr-only" id="live-region" aria-live="assertive" aria-atomic="true"></div>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-top">
+      <nav class="footer-nav" aria-label="Footer navigation">
+        <a href="index.html">Home</a>
+        <span class="footer-sep" aria-hidden="true">■</span>
+        <a href="writing.html">Writing</a>
+        <span class="footer-sep" aria-hidden="true">■</span>
+        <a href="accessibility-statement.html">Accessibility</a>
+      </nav>
+      <fieldset class="scheme-fieldset">
+        <legend class="scheme-legend">Color scheme:</legend>
+        <div class="scheme-options">
+          <label class="scheme-label is-selected"><input class="scheme-radio" type="radio" name="cs" value="system" checked><span class="scheme-dot" aria-hidden="true"></span>System</label>
+          <label class="scheme-label"><input class="scheme-radio" type="radio" name="cs" value="light"><span class="scheme-dot" aria-hidden="true"></span>Light</label>
+          <label class="scheme-label"><input class="scheme-radio" type="radio" name="cs" value="dark"><span class="scheme-dot" aria-hidden="true"></span>Dark</label>
+        </div>
+      </fieldset>
+    </div>
+    <p class="footer-copy">© 2026 Sushil Chauhan · IAAP-CPWA | CPACC | WAS</p>
+  </div>
+</footer>
+
+<script>
+// ── COLOR SCHEME ─────────────────────────────────────────────────────────────
+(function(){var h=document.documentElement,r=document.querySelectorAll('.scheme-radio'),K='sc-scheme';function a(s){h.setAttribute('data-scheme',s);try{localStorage.setItem(K,s)}catch(e){}r.forEach(function(b){var c=b.value===s;b.checked=c;var l=b.closest('.scheme-label');if(l)l.classList.toggle('is-selected',c)})}var s;try{s=localStorage.getItem(K)}catch(e){}a(s||'system');r.forEach(function(b){b.addEventListener('change',function(){if(b.checked)a(b.value)})})})();
+
+// ── QUIZ DATA ─────────────────────────────────────────────────────────────────
+var QS=[
+{q:"What contrast ratio is required for normal text per WCAG 1.4.3?",o:["a) 3:1","b) 4.5:1","c) 7:1","d) 2:1"],a:1,cat:"Colour & Contrast",e:"WCAG 1.4.3 Contrast Minimum (AA) requires 4.5:1 for normal text and 3:1 for large text (18pt+ or 14pt bold+). WCAG 1.4.6 (AAA) raises these to 7:1 and 4.5:1 respectively."},
+{q:"In which screen reader is the Rotor used to navigate between page elements?",o:["a) NVDA","b) VoiceOver","c) JAWS","d) TalkBack"],a:1,cat:"Screen Readers",e:"The Rotor is VoiceOver-specific. On iPhone: twist two fingers. On Mac: rotate two fingers on trackpad, or Control+Option+U. It lets you quickly jump between headings, links, form controls, and other element types."},
+{q:"SC 1.3.4 Orientation (AA) requires content to:",o:["A) Work in both portrait and landscape orientations","B) Provide clear headings and labels for form fields","C) Allow users to resize text without assistive technology","D) Provide captions for audio content"],a:0,cat:"WCAG Criteria",e:"SC 1.3.4 Orientation (AA) requires content to work in both portrait and landscape orientations. Never lock orientation unless essential (e.g. a piano keyboard app). Users with mounted devices cannot rotate their screen."},
+{q:"What is the purpose of alt=\"\" (empty alt) for decorative images?",o:["a) Describe image content for visually impaired users","b) Hide the image from screen readers","c) Provide a text alternative for non-essential images","d) Display a caption below the image"],a:1,cat:"Images & Alt Text",e:"Empty alt (alt=\"\") signals screen readers to skip the image entirely. Using alt=\"\" is different from omitting the alt attribute — which causes AT to announce the filename or src path."},
+{q:"Which technique creates accessible form validation error messages?",o:["a) Display validation messages as pop-up alerts","b) Use color alone to indicate validation errors","c) Provide both visual and text-based error messages linked via aria-describedby","d) Hide validation messages until requested by the user"],a:2,cat:"Forms & Inputs",e:"Accessible validation requires: text error messages (not colour alone), linked via aria-describedby to the input, with role='alert' or aria-live so they are announced automatically. Pop-up alerts interrupt screen reader users."},
+{q:"An accordion doesn't announce expand/collapse to screen readers. Which ARIA property should you investigate?",o:["a) aria-expanded","b) aria-level","c) aria-hidden","d) aria-activedescendant"],a:0,cat:"ARIA & Roles",e:"aria-expanded communicates the open/closed state of disclosures, accordions, menus, and submenus to AT. Toggle it between 'true' and 'false' on the trigger button when the panel opens or closes."},
+{q:"What ARIA attribute should be added to an alert modal to ensure screen readers announce it as an alert dialog?",o:["a) aria-live='off'","b) role='alertdialog'","c) aria-label='Alert Dialog'","d) aria-hidden='true'"],a:1,cat:"ARIA & Roles",e:"role='alertdialog' combines dialog semantics (focus trap) with alert urgency (immediate announcement). Use role='dialog' for non-urgent modals. The dialog must have aria-labelledby pointing to its heading."},
+{q:"Which technique announces dynamic form field updates to screen reader users?",o:["a) Providing a separate audio description for each change","b) Using ARIA live regions to announce the changes","c) Using different colors for updated fields","d) Displaying a pop-up notification for each change"],a:1,cat:"Forms & Inputs",e:"aria-live='polite' announces dynamic changes after the user finishes their current action. aria-live='assertive' interrupts speech immediately — use sparingly for truly urgent updates like error messages."},
+{q:"What does WCAG SC 1.4.10 Reflow (AA) require?",o:["a) All text and images must have sufficient contrast","b) Content must reflow without horizontal scrolling at 320px viewport width","c) Users can resize text up to 200% without horizontal scrolling","d) Content uses proper headings and labels"],a:1,cat:"WCAG Criteria",e:"SC 1.4.10 Reflow (AA) requires content to reflow at 320px equivalent (400% zoom on 1280px screen) without horizontal scrolling. Exception: content requiring 2D layout (maps, data tables, video). Test by zooming your browser to 400%."},
+{q:"How do you make complex data tables accessible to screen reader users?",o:["a) Use <th> elements with scope attributes for column and row headers","b) Convert the table into nested divs for flexibility","c) Provide an audio description of the table structure","d) Hide the table from screen reader users for cleaner navigation"],a:0,cat:"Screen Readers",e:"Accessible tables: <caption> for title, <th scope='col'> for column headers, <th scope='row'> for row headers, <thead>/<tbody> for structure. Never use tables for layout — they imply data relationships."},
+{q:"Which accessibility feature is most beneficial for users with motor impairments?",o:["a) Voice recognition for hands-free navigation","b) Captions for video content","c) Text-to-speech functionality","d) High contrast color schemes"],a:0,cat:"General Accessibility",e:"Voice recognition software (Dragon NaturallySpeaking, Windows Voice Access) is most beneficial for motor-impaired users who cannot use keyboard or mouse. It allows full hands-free control of the computer interface."},
+{q:"An e-learning platform uses only color to differentiate concepts. What is the correct remediation?",o:["a) Remove all color from the content","b) Implement color-blind simulation testing during design","c) Use additional visual cues (icons, patterns) alongside color","d) Provide audio description for color-vision deficient users"],a:2,cat:"Colour & Contrast",e:"SC 1.4.1 Use of Color (A) prohibits colour as the only means of conveying information. Pair colour with icons, patterns, underlines, text labels, or shapes so users who cannot distinguish colours still receive the information."},
+{q:"Which WCAG conformance level is achieved by meeting all Level A and Level AA success criteria?",o:["a) Level A","b) Level AA","c) Level AAA","d) Level AAAA"],a:1,cat:"WCAG Criteria",e:"WCAG has three levels: A (minimum), AA (standard legal target — what most regulations require), AAA (enhanced, not required for all content). Claiming AA conformance requires passing every A and AA criterion."},
+{q:"On macOS, which keyboard shortcut opens the VoiceOver Rotor?",o:["a) Control + Option + U","b) Control + Option + H","c) Control + Option + Shift + R","d) Control + Option + Shift + Down"],a:0,cat:"Screen Readers",e:"Control+Option+U opens the VoiceOver Rotor on macOS. On iPhone, twist two fingers on the screen. The Rotor lets you navigate between headings, links, landmarks, form controls, and other element types."},
+{q:"A cooking site shows hover details. How can motor-impaired users access those details via keyboard?",o:["A) Use long tooltips that appear automatically on hover","B) Display the details as a separate popup triggered by mouse only","C) Provide a visible focus indicator and ensure details are accessible via keyboard focus","D) Provide voice narration that explains details when user hovers"],a:2,cat:"Keyboard & Focus",e:"SC 1.4.13 Content on Hover or Focus (AA) requires that content which appears on hover also appears on keyboard focus. The content must be dismissible, hoverable, and persistent."},
+{q:"Which technique ensures video content is accessible for deaf or hard-of-hearing users?",o:["a) Providing a separate transcript file","b) Automatically generating captions via speech recognition","c) Using a video player that supports closed captions","d) Describing visual content through audio narration"],a:2,cat:"Media & Animation",e:"WCAG 1.2.2 Captions Prerecorded (AA) requires captions for all pre-recorded synchronised media. Captions must be synchronised, equivalent to audio, and include speaker identification and non-speech audio cues."},
+{q:"How do you make a form field accessible upon validation error?",o:["a) Set the required attribute on the form field","b) Apply tabindex='0' to the form field","c) Implement a click event listener on the form field","d) Call focus() on the error message or input after validation fails"],a:3,cat:"Keyboard & Focus",e:"After validation failure: display error text, link it to the input via aria-describedby, use role='alert' for auto-announcement, and programmatically call focus() on the error element or the failed input so AT users discover it."},
+{q:"What is the purpose of WCAG SC 2.4.4 Link Purpose (In Context)?",o:["a) Ensure interactive elements have proper focus states","b) Provide consistent navigation and keyboard focus order","c) Allow users to bypass repetitive content via skip links","d) Provide link text that is meaningful when read out of context"],a:3,cat:"WCAG Criteria",e:"SC 2.4.4 Link Purpose A requires each link's purpose to be determinable from link text alone, or from link text + programmatically determinable context. Avoid 'Click here', 'Read more', 'Learn more' without additional context."},
+{q:"Which WCAG SC requires captions for all prerecorded audio in synchronised media?",o:["a) SC 1.2.1 Audio-only and Video-only","b) SC 1.2.2 Captions (Prerecorded)","c) SC 1.3.1 Info and Relationships","d) SC 1.4.3 Contrast (Minimum)"],a:1,cat:"WCAG Criteria",e:"SC 1.2.2 Captions Prerecorded (AA) requires captions for all pre-recorded synchronised media. They must be synchronised, equivalent, and include non-speech audio cues like [laughter] or [door slams]."},
+{q:"Which WCAG SC requires clear, understandable error messages for form input validation?",o:["a) SC 2.1.1 Keyboard","b) SC 2.2.2 Pause, Stop, Hide","c) SC 3.3.1 Error Identification","d) SC 3.3.2 Labels or Instructions"],a:2,cat:"WCAG Criteria",e:"SC 3.3.1 Error Identification (A) requires that when an input error is detected, the item in error is identified AND the error is described in text. SC 3.3.3 (AA) requires suggestions for correction where possible."},
+{q:"How should a layout table be hidden from screen reader users?",o:["a) Apply aria-hidden='true' to the table","b) Set CSS display:none on the table","c) Place the table in a div with visibility:hidden","d) Use role='presentation' on the table element"],a:3,cat:"Screen Readers",e:"role='presentation' removes the table's semantic meaning from the accessibility tree while keeping it visually rendered. For new projects, use CSS Grid or Flexbox for layout — never tables."},
+{q:"Which CSS pseudo-class addresses a missing visible focus indicator?",o:["a) :focus","b) :hover","c) :active","d) :visited"],a:0,cat:"Keyboard & Focus",e:":focus styles elements currently receiving keyboard focus. :focus-visible (preferred modern approach) styles only keyboard-focused elements, avoiding the ring on mouse clicks while preserving it for keyboard navigation. Never use outline:none without a replacement."},
+{q:"How does ARIA improve web accessibility?",o:["a) By automatically translating content into multiple languages","b) By providing descriptive labels and roles for interactive elements to assistive technologies","c) By optimizing website performance","d) By offering secure encryption for transactions"],a:1,cat:"ARIA & Roles",e:"ARIA (Accessible Rich Internet Applications) provides roles, states, and properties that enable custom interactive widgets to be understood by AT. First rule: use native HTML when possible. ARIA is a supplement, not a replacement."},
+{q:"In NVDA, which command opens the Elements List for quick navigation?",o:["a) NVDA + E","b) NVDA + F7","c) NVDA + D","d) NVDA + 1"],a:1,cat:"Screen Readers",e:"NVDA + F7 opens the Elements List — headings, links, form fields, and landmarks. JAWS uses Insert+F6 (headings), Insert+F7 (links), Insert+F5 (form controls). VoiceOver uses the Rotor (Control+Option+U on Mac)."},
+{q:"Which ARIA attribute explicitly provides an accessible name by referencing an existing visible element?",o:["a) aria-role","b) aria-value","c) aria-label","d) aria-labelledby"],a:3,cat:"ARIA & Roles",e:"aria-labelledby references the id of an existing visible element whose text becomes the accessible name. It has higher specificity than aria-label. Prefer it when visible text already describes the element — avoids maintaining two separate labels."},
+{q:"How should an article ensure users understand when a different language is used in a section?",o:["A) Mix multiple languages within the same paragraph","B) Use the lang attribute on the HTML element or specific sections","C) Use complex vocabulary to indicate language change","D) Omit any language indication to maintain simplicity"],a:1,cat:"WCAG Criteria",e:"SC 3.1.2 Language of Parts (AA) requires that the language of each section differing from the page language is programmatically determinable. Use lang='fr' on the French section, lang='hi' on the Hindi section, etc."},
+{q:"What defines a 'keyboard trap' in web accessibility?",o:["a) An element that cannot be accessed by keyboard","b) An element with incorrect keyboard focus","c) An element that prevents keyboard users from moving focus away","d) An element lacking keyboard event handling"],a:2,cat:"Keyboard & Focus",e:"SC 2.1.2 No Keyboard Trap (A) requires that focus can always be moved away using standard keys (Tab, arrow keys, Escape). The only acceptable exception is deliberate modal dialog focus trapping, where Escape must dismiss the modal."},
+{q:"Which principle of universal design is most relevant to web accessibility?",o:["a) Browser compatibility","b) Mobile responsiveness","c) Consistent color schemes","d) Universal design for all users"],a:3,cat:"General Accessibility",e:"Universal design means creating products usable by all people to the greatest extent possible without adaptation. In web accessibility: build inclusively from the start, not as a retrofit. WCAG success criteria operationalise universal design principles."},
+{q:"What is the recommended approach for providing alternative text for an SVG graphic?",o:["a) Using a <title> element as the first child of <svg>","b) Using the alt attribute on the SVG element","c) Using aria-describedby to link to a separate description","d) Providing a separate HTML paragraph below the SVG"],a:0,cat:"Images & Alt Text",e:"For informative SVGs: add <title id='svg-title'>Description</title> as the SVG's first child, then role='img' and aria-labelledby='svg-title' on the <svg> element. For decorative SVGs: aria-hidden='true'."},
+{q:"What category does WAVE primarily evaluate in web accessibility testing?",o:["a) Color contrast and text legibility","b) Keyboard navigation and focus management","c) Structure and semantics of web content","d) Audio and video media accessibility"],a:2,cat:"General Accessibility",e:"WAVE (WebAIM) evaluates and highlights structural and semantic issues directly on the page: heading hierarchy, landmark regions, list usage, form labels, and alt text. The Colour Contrast Analyser is better for contrast-specific testing."},
+{q:"A custom tooltip component is not announced by screen readers. What is the most appropriate solution?",o:["a) Use role='tooltip' and aria-describedby to associate trigger with tooltip","b) Use role='dialog' and aria-live='assertive'","c) Remove tooltips and include information directly in the page","d) Provide a separate alert box notification"],a:0,cat:"Screen Readers",e:"Tooltip pattern: role='tooltip' on the tooltip element, aria-describedby='tooltip-id' on the trigger. Tooltip must appear on keyboard focus (not hover only), be dismissible with Escape, and not disappear when the user hovers over the tooltip itself."},
+{q:"What is the primary objective of SC 1.3.5 Identify Input Purpose (AA)?",o:["a) Ensure that all input fields have visible labels","b) Provide machine-readable identification of form field purposes","c) Enforce specific validation rules for user input","d) Restrict user input to specific formats"],a:1,cat:"WCAG Criteria",e:"SC 1.3.5 Identify Input Purpose (AA) requires form inputs collecting personal data to use HTML autocomplete attributes (autocomplete='email', autocomplete='given-name'). This helps password managers and AT users who benefit from autofill."},
+{q:"In a form with three inputs and submit button — which is the HIGHEST priority issue?",o:["a) Missing input label; Low: button contrast at 2.9:1","b) Submit button is a <div> without role/keyboard handler; Low: button contrast at 2.9:1","c) Button contrast at 2.9:1; Low: missing labels","d) Missing labels; Low: button is a <div>"],a:1,cat:"Forms & Inputs",e:"A <div> acting as a button without role='button', tabindex='0', and keyboard handlers is completely inaccessible to keyboard and AT users — a critical SC 4.1.2 failure. Missing labels are serious but the button is higher severity."},
+{q:"What does SC 2.5.2 Pointer Cancellation (A) ensure?",o:["A) Users can cancel any pointer-driven interface actions","B) All content is accessible through keyboard navigation","C) Users can adjust text size and spacing","D) Time limits are not too strict"],a:0,cat:"WCAG Criteria",e:"SC 2.5.2 Pointer Cancellation (A) requires that single-pointer actions avoid activation on the down-event, and provide either abort/undo mechanism, up-reversal, or are essential. This prevents accidental activation."},
+{q:"Which WCAG SC addresses a missing visible keyboard focus indicator?",o:["a) SC 1.4.3 Contrast Minimum","b) SC 2.1.1 Keyboard","c) SC 2.4.7 Focus Visible","d) SC 2.4.3 Focus Order"],a:2,cat:"Keyboard & Focus",e:"SC 2.4.7 Focus Visible (AA) requires a visible focus indicator for any keyboard-operable interface. WCAG 2.2 adds SC 2.4.11 Focus Appearance (AA) with requirements for minimum focus indicator area and contrast ratio."},
+{q:"Which JAWS keyboard shortcut lists all frames and iframes on a page?",o:["a) Ctrl + Insert + F","b) Insert + F5","c) Ctrl + Alt + I","d) Insert + F9"],a:3,cat:"Screen Readers",e:"JAWS Insert+F9 lists all frames and iframes. Insert+F5 lists form controls, Insert+F6 lists headings, Insert+F7 lists links, Insert+F8 lists buttons. These are virtual buffer navigation shortcuts in virtual cursor mode."},
+{q:"What does SC 1.3.2 Meaningful Sequence (A) require?",o:["a) Content available in multiple languages","b) Clear and consistent headings and labels","c) Content in a logical order that preserves its meaning","d) Prevention of distracting animations"],a:2,cat:"WCAG Criteria",e:"SC 1.3.2 Meaningful Sequence (A) requires that when content order affects meaning, the correct reading sequence is programmatically determinable. Screen readers follow DOM order — CSS visual reordering (flexbox order, grid placement) does not affect DOM order."},
+{q:"Which users are most negatively impacted by autoplay video without pause control?",o:["a) Users with high-speed internet connections","b) Users who appreciate multimedia content","c) Users with cognitive disabilities who find autoplay overwhelming","d) Government policymakers"],a:2,cat:"Media & Animation",e:"SC 1.4.2 Audio Control (A) requires a pause/stop/mute mechanism for audio playing automatically for more than 3 seconds. For screen reader users, autoplay audio clashes with TTS speech output, making the page unusable."},
+{q:"What does SC 2.5.4 Motion Actuation (A) require?",o:["A) Audio descriptions for all video content","B) Content relying on device motion can also be operated without motion","C) Links are clearly labeled with destination context","D) Content can be navigated sequentially with keyboard shortcuts"],a:1,cat:"WCAG Criteria",e:"SC 2.5.4 Motion Actuation (A) requires that functionality triggered by device motion (shaking, tilting) can also be achieved through standard UI components, and users can disable the motion trigger to prevent accidental activation."},
+{q:"Which labelling approach should you avoid when there is no visible label for an input?",o:["a) aria-label","b) aria-labelledby","c) <label> with sr-only class","d) placeholder as label"],a:3,cat:"Forms & Inputs",e:"Placeholder as the only label fails SC 1.3.1 and 2.4.6. It disappears when the user starts typing, has low contrast, and is not reliably announced by all AT. Always provide a persistent visible <label> or at minimum aria-label."},
+{q:"What is the primary purpose of providing alternative text for images?",o:["a) To improve the aesthetic appeal of the web page","b) To optimize the image for search engines","c) To make content accessible to users who cannot see images","d) To reduce page loading time"],a:2,cat:"Images & Alt Text",e:"Alt text provides an equivalent text alternative for users who cannot see images — screen reader users, users with images disabled, and users on slow connections. Good alt text conveys the same information the image provides to a sighted user."},
+{q:"What is the purpose of the lang attribute in HTML?",o:["a) Specifying the font style for a web page","b) Defining the programming language used in script tags","c) Indicating the language of the web page's content","d) Determining the page layout and structure"],a:2,cat:"WCAG Criteria",e:"The lang attribute (SC 3.1.1 Language of Page, A) tells screen readers which pronunciation rules, language voice, and linguistic conventions to apply. Without it, screen readers may use incorrect pronunciation making content hard to understand."},
+{q:"Which WCAG guideline focuses on making web content understandable?",o:["a) Perceivable (Guideline 1.x)","b) Operable (Guideline 2.x)","c) Understandable (Guideline 3.x)","d) Robust (Guideline 4.x)"],a:2,cat:"WCAG Criteria",e:"The Understandable principle (Principle 3) covers: 3.1 Readable, 3.2 Predictable, 3.3 Input Assistance. It requires content to be readable, pages to behave predictably, and users to be helped in avoiding and correcting mistakes."},
+{q:"What is the purpose of the for attribute in an HTML label element?",o:["a) Specifying the CSS class for the label","b) Defining the JavaScript function associated with the label","c) Associating the label with a specific form input element","d) Determining the position of the label in the form"],a:2,cat:"Forms & Inputs",e:"The for attribute value must match the id of its associated input, creating a programmatic association. This means: clicking the label focuses the input, and screen readers announce the label when the input receives focus."},
+{q:"Which testing activity is automated rather than manual?",o:["a) Keyboard-only navigation testing","b) Screen reader testing with NVDA","c) Running an automated accessibility scanner","d) Zoom testing to 400%"],a:2,cat:"General Accessibility",e:"Automated scanners (Axe, WAVE, ANDI) run without human interaction. Keyboard-only testing, screen reader testing, and zoom testing all require a human tester to interact with the page and evaluate the experience."},
+{q:"WAVE tool is primarily used for:",o:["a) Evaluating audio descriptions and transcripts","b) Checking accessibility of mobile applications","c) Identifying and reporting accessibility issues in web content","d) Testing browser compatibility"],a:2,cat:"General Accessibility",e:"WAVE (WebAIM) identifies and visually reports accessibility issues directly on the page — errors (missing alt text, missing labels), alerts (suspicious patterns), structural elements (headings, landmarks), and ARIA usage."},
+{q:"What HTML element is used to create individual items within a list?",o:["a) <ol>","b) <ul>","c) <li>","d) <dl>"],a:2,cat:"General Accessibility",e:"<li> creates individual list items inside <ul> (unordered) or <ol> (ordered). Screen readers announce the list type and item count ('list of 5 items') before reading items — only when proper list markup is used."},
+{q:"What does VPAT stand for in the context of accessibility?",o:["a) Visual Perception Accessibility Testing","b) Voluntary Product Accessibility Template","c) Verified Product Accessibility Testing","d) Virtual Platform Accessibility Tool"],a:1,cat:"General Accessibility",e:"VPAT (Voluntary Product Accessibility Template) is an ITIC document template vendors use to describe how their product meets accessibility standards. A completed VPAT is called an ACR (Accessibility Conformance Report). Required for US federal procurement."},
+{q:"What is the primary purpose of ARIA roles?",o:["a) To define the visual style of HTML elements","b) To enhance the performance of web applications","c) To communicate the type and purpose of elements to assistive technologies","d) To prevent elements from being accessed by screen readers"],a:2,cat:"ARIA & Roles",e:"ARIA roles (button, dialog, tablist, combobox, etc.) communicate semantic type to AT when HTML alone cannot. The first rule of ARIA: if you can use native HTML to achieve the same result, do not use ARIA."},
+{q:"What is the purpose of 'Skip Navigation' links?",o:["a) To bypass repetitive navigation blocks and jump to main content","b) To open external links in a new tab","c) To navigate directly to the accessibility statement","d) To skip specific paragraphs within main content"],a:0,cat:"Keyboard & Focus",e:"SC 2.4.1 Bypass Blocks (A) requires skip links for keyboard users to bypass repeated navigation. The skip link must be the first focusable element, become visible when focused, and point to the main content area's id."},
+{q:"Which of the following must be avoided in accessible web design?",o:["a) Providing captions for video content","b) Using color as the only means to convey information","c) Using semantic HTML elements","d) Adding alt text to images"],a:1,cat:"Colour & Contrast",e:"SC 1.4.1 Use of Color (A) prohibits colour as the only means of conveying information. Always pair colour with text, pattern, shape, or another indicator. This affects: error states, required fields, chart data, status indicators."},
+{q:"What is the most appropriate markup for a button that opens a modal dialog?",o:["a) <div onclick='openModal()'>Open Dialog</div>","b) <button onclick='openModal()' aria-haspopup='dialog'>Open Dialog</button>","c) <a href='#modal' onclick='openModal()'>Open Dialog</a>","d) <input type='button' onclick='openModal()' value='Open Dialog'>"],a:1,cat:"ARIA & Roles",e:"<button> with aria-haspopup='dialog' tells AT that activation will open a dialog. After opening, move focus to the dialog heading. On close, return focus to this button. Never use <div> or <a> for action triggers."},
+{q:"Which technique ensures keyboard shortcuts don't conflict with assistive technology keys?",o:["a) Using single-letter keyboard shortcuts exclusively","b) Providing keyboard shortcuts through JavaScript event listeners only","c) Ensuring keyboard shortcuts do not conflict with AT shortcut keys","d) Using complex keyboard combinations unlikely to conflict"],a:2,cat:"Keyboard & Focus",e:"SC 2.1.4 Character Key Shortcuts (A) in WCAG 2.1 requires that single-character shortcuts can be turned off, remapped, or only activate when a component has focus. This prevents conflicts with JAWS/NVDA single-letter navigation shortcuts."},
+{q:"What role does the <nav> element play in accessible web development?",o:["a) Creates navigation links","b) Defines a section containing navigation links as a landmark","c) Applies CSS styles to navigation elements","d) Prevents automatic focus on navigation elements"],a:1,cat:"ARIA & Roles",e:"<nav> is an HTML5 semantic landmark that defines a navigation region. Screen readers expose it as a landmark, allowing users to jump directly to it. Multiple <nav> elements on a page should be differentiated with aria-label."},
+{q:"Which statement about WCAG Guideline 1.4 is most accurate?",o:["a) It provides text alternatives for non-text content","b) It makes content easier to see and hear (Distinguishable)","c) It focuses on content orientation","d) It addresses keyboard navigation"],a:1,cat:"WCAG Criteria",e:"Guideline 1.4 Distinguishable (under Perceivable) makes it easier for users to see and hear content — covering contrast minimums, text resize, non-text contrast, reflow, text spacing, and content on hover or focus."},
+{q:"Which approach best ensures form submissions are accessible to all users?",o:["a) Use JavaScript to validate and submit without user interaction","b) Provide clear labels, instructions, and error messages for all form fields","c) Automatically correct errors without notifying the user","d) Require users to complete forms within a specific time limit"],a:1,cat:"Forms & Inputs",e:"Accessible forms: visible labels for every input, instructions provided before or inline, descriptive error messages explaining what failed and how to fix it, and all interactions keyboard-operable. Time limits fail SC 2.2.1."},
+{q:"What is the role of assistive technology in web accessibility?",o:["a) To automate accessibility testing","b) To help users with disabilities interact with digital content","c) To optimize visual design for all users","d) To generate performance reports"],a:1,cat:"General Accessibility",e:"Assistive technology (AT) includes screen readers, screen magnifiers, voice control software, switch devices, Braille displays, and eye tracking. AT translates digital content into formats people with disabilities can perceive and interact with."},
+{q:"Which WCAG principle requires that all users can operate and navigate the interface?",o:["a) Perceivable","b) Operable","c) Understandable","d) Robust"],a:1,cat:"WCAG Criteria",e:"Principle 2: Operable covers: keyboard accessibility (2.1), enough time (2.2), seizures and physical reactions (2.3), navigable content (2.4), and input modalities (2.5). All users must be able to operate the interface."},
+{q:"Which WCAG SC requires that the purpose of each link can be determined from the link text alone?",o:["a) SC 1.4.3 Contrast Minimum","b) SC 2.4.4 Link Purpose In Context","c) SC 3.3.1 Error Identification","d) SC 1.3.1 Info and Relationships"],a:1,cat:"WCAG Criteria",e:"SC 2.4.4 Link Purpose In Context (A) requires link purpose to be determinable from link text alone or from link text + context. SC 2.4.9 (AAA) requires purpose from link text alone — no context needed."},
+{q:"What is the primary difference between aria-label and aria-labelledby?",o:["a) aria-label is for images only; aria-labelledby is for form controls","b) aria-label provides a text string directly; aria-labelledby references another element by id","c) aria-label can only be used on buttons","d) aria-label is read-only; aria-labelledby can be modified"],a:1,cat:"ARIA & Roles",e:"aria-label provides the accessible name as a direct string value in the attribute. aria-labelledby references the id of another element whose text content becomes the accessible name. aria-labelledby takes precedence in the accessibility name computation."},
+{q:"What is the most appropriate technique for providing an accessible name for an icon-only button?",o:["a) Using the CSS content property to add a label","b) Adding a tooltip that appears on hover","c) Providing an aria-label attribute with a descriptive name","d) Using the title attribute to add a name"],a:2,cat:"ARIA & Roles",e:"Icon-only buttons need aria-label='Close dialog' (or similar descriptive text). The title attribute is not reliably announced by all AT. Tooltip-only labelling misses keyboard users. Visually hidden text inside the button (<span class='sr-only'>) is also acceptable."},
+{q:"Which landmark role identifies the main content area of a page?",o:["a) role='banner'","b) role='contentinfo'","c) role='main'","d) role='navigation'"],a:2,cat:"ARIA & Roles",e:"role='main' (native: <main>) identifies the primary content area. banner is for the site-wide header (<header>), contentinfo is for the site-wide footer (<footer>), navigation is for nav sections (<nav>). Only one <main> per page."},
+{q:"What is the best technique for making a custom dropdown menu accessible?",o:["a) Using JavaScript to control visibility without ARIA","b) Using aria-expanded, aria-haspopup, and keyboard event handling","c) Adding title attributes to all dropdown options","d) Making all dropdown options keyboard focusable via Tab simultaneously"],a:1,cat:"ARIA & Roles",e:"Custom dropdowns: aria-expanded (true/false on trigger), aria-haspopup='listbox' or 'menu', arrow keys to navigate options, Enter/Space to select, Escape to close. Native <select> is always preferred — use custom only when design requires it."},
+{q:"What does the aria-describedby attribute do?",o:["a) Provides the accessible name of an element","b) Associates additional descriptive text with an element","c) Hides an element from screen readers","d) Defines the ARIA role of an element"],a:1,cat:"ARIA & Roles",e:"aria-describedby associates supplementary descriptive text (error messages, hints, instructions) with an element. Unlike aria-labelledby (primary name), aria-describedby provides secondary information read after the label by screen readers."},
+{q:"Which WCAG SC addresses the requirement for keyboard access to all functionality?",o:["a) SC 1.4.3 Contrast Minimum","b) SC 2.1.1 Keyboard","c) SC 2.4.7 Focus Visible","d) SC 3.3.1 Error Identification"],a:1,cat:"Keyboard & Focus",e:"SC 2.1.1 Keyboard (A) requires all functionality to be operable through a keyboard interface without requiring specific timing for keystrokes. This is foundational — all other AT (screen readers, switch control, voice control) build on keyboard access."},
+{q:"What is the correct practice for making table headers accessible?",o:["a) Using bold text for headers without specific HTML tags","b) Using the <th> element with the scope attribute","c) Adding aria-label to each header cell","d) Using CSS classes to visually distinguish header cells"],a:1,cat:"Screen Readers",e:"<th scope='col'> for column headers, <th scope='row'> for row headers. The scope attribute maps headers to their data cells. For complex tables, use id on headers and headers='id1 id2' on data cells."},
+{q:"What is the correct practice for accessible skip links?",o:["a) Make skip links visible at all times","b) Position skip links off-screen by default, reveal on keyboard focus","c) Use JavaScript to add skip links dynamically","d) Add skip links only for screen reader users using aria-hidden='false'"],a:1,cat:"Keyboard & Focus",e:"Skip links are visually hidden by default (position:absolute; top:-100px) and become visible when they receive keyboard focus. They must be the first focusable element on the page. Never use display:none — that removes them from keyboard tab order."},
+{q:"Which WCAG SC requires that images of text are avoided unless essential?",o:["a) SC 1.4.4 Resize Text","b) SC 1.4.5 Images of Text","c) SC 1.1.1 Non-text Content","d) SC 1.4.3 Contrast Minimum"],a:1,cat:"WCAG Criteria",e:"SC 1.4.5 Images of Text (AA) requires that text is presented as actual text rather than images of text, unless the particular presentation is essential or can be visually customised. Logos with text are exempt."},
+{q:"What does SC 4.1.2 Name, Role, Value require?",o:["a) All pages must have a unique page title","b) All UI components must have a name, role, and programmable state values","c) All images must have text alternatives","d) All pages must have language declared"],a:1,cat:"ARIA & Roles",e:"SC 4.1.2 Name, Role, Value (A) requires: every UI component has an accessible name, role is programmatically determinable, and states/properties/values can be set and changed by AT. This is the foundation of custom widget accessibility."},
+{q:"How should a website handle auto-playing carousels?",o:["a) Use fast animation speeds to minimize distraction","b) Provide pause, stop, or hide controls for moving content","c) Disable carousels for keyboard users only","d) Use carousels only for decorative content"],a:1,cat:"Media & Animation",e:"SC 2.2.2 Pause, Stop, Hide (A) requires that moving content starting automatically and lasting more than 5 seconds has a mechanism to pause, stop, or hide it. Also apply @media(prefers-reduced-motion:reduce) to respect user OS preferences."},
+{q:"What is the primary purpose of the HTML <main> element?",o:["a) Define the header of the page","b) Mark the primary content area of the document","c) Create the main navigation of the page","d) Wrap all page content including header and footer"],a:1,cat:"ARIA & Roles",e:"<main> marks the primary content area — the central topic of the page excluding repeated header, footer, and navigation. Screen readers expose it as a landmark. Only one <main> per page. It is the target of skip links."},
+{q:"Which property controls whether text resizes with user's browser font settings?",o:["a) Font size in pixels (e.g., 14px)","b) Font size in rem (e.g., 0.875rem)","c) Font size in em relative to fixed parent","d) Font size in viewport units (vw)"],a:1,cat:"WCAG Criteria",e:"rem (root em) scales with the browser's root font size, which users can set in preferences. px is absolute and ignores user font size settings, failing SC 1.4.4. rem honours user preferences. clamp() with rem is the modern best practice."},
+{q:"Which JAWS shortcut navigates to the next heading on a page?",o:["a) H","b) Tab","c) Insert + F6","d) Both A and C"],a:3,cat:"Screen Readers",e:"JAWS uses H to jump to the next heading in virtual cursor mode, and Insert+F6 to open the headings list (all headings, navigate by level). NVDA also uses H. VoiceOver uses VO+Command+H on Mac, and the Headings rotor item on iOS."},
+{q:"What does SC 2.4.3 Focus Order (A) require?",o:["a) All focusable elements have a visible focus indicator","b) Focus order must be logical and meaningful","c) Skip links are provided on every page","d) Tab key is the only key for navigation"],a:1,cat:"Keyboard & Focus",e:"SC 2.4.3 Focus Order (A) requires that if a page can be navigated sequentially, the focus order preserves meaning and operability. DOM order determines tab order — CSS visual reordering does not change focus order."},
+{q:"When should you use aria-live='assertive' vs 'polite'?",o:["a) assertive for all dynamic updates; polite for static content","b) assertive for urgent interruptions (errors); polite for non-urgent updates","c) polite for all dynamic updates to avoid interruption","d) assertive and polite have no practical difference"],a:1,cat:"ARIA & Roles",e:"aria-live='assertive' interrupts current speech immediately — use for errors and critical alerts only. aria-live='polite' waits until the user finishes their current action before announcing — use for status messages, search results, save confirmations."},
+{q:"What is the POUR acronym in WCAG?",o:["a) Perceivable, Usable, Operable, Readable","b) Perceivable, Operable, Understandable, Robust","c) Portable, Operable, Universal, Responsive","d) Practical, Operable, Usable, Reachable"],a:1,cat:"WCAG Criteria",e:"POUR: Perceivable (information presentable in ways users can perceive), Operable (UI components operable by all), Understandable (content and operation understandable), Robust (content interpretable by current and future AT)."},
+{q:"What is the minimum touch target size recommended per WCAG 2.2?",o:["a) 24x24 CSS pixels","b) 44x44 CSS pixels","c) 32x32 CSS pixels","d) 48x48 CSS pixels"],a:1,cat:"Keyboard & Focus",e:"SC 2.5.5 Target Size (AAA) in WCAG 2.1 recommends 44x44px. SC 2.5.8 Target Size Minimum (AA) in WCAG 2.2 requires at least 24x24 CSS pixels for most targets. iOS HIG and Android Material both recommend 44x44px minimum tap targets."},
+{q:"What role does <fieldset> play in accessible forms?",o:["a) It adds visual borders around form sections","b) It groups related form controls and gives them a shared label via <legend>","c) It creates keyboard shortcuts for form navigation","d) It hides form controls from screen readers"],a:1,cat:"Forms & Inputs",e:"<fieldset> groups related form controls (radio buttons, checkboxes, related inputs). <legend> provides the group name that screen readers announce before each control in the group — e.g. 'Preferred contact method: Email, radio button'."},
+{q:"Which tool is most appropriate for testing colour contrast ratios?",o:["a) NVDA screen reader","b) Colour Contrast Analyser (CCA) by TPGi","c) JAWS virtual cursor","d) Axe browser extension"],a:1,cat:"Colour & Contrast",e:"The Colour Contrast Analyser (CCA) by TPGi is a free dedicated tool for measuring contrast ratios. It includes eyedroppers to sample foreground and background colours from anywhere on screen. Available for Windows and macOS."},
+{q:"Which WCAG SC covers providing error suggestions when a user makes an input error?",o:["a) SC 3.3.1 Error Identification","b) SC 3.3.2 Labels or Instructions","c) SC 3.3.3 Error Suggestion","d) SC 3.3.4 Error Prevention"],a:2,cat:"WCAG Criteria",e:"SC 3.3.3 Error Suggestion (AA) requires that if an input error is detected and suggestions for correction are known, the suggestion is provided — unless it would jeopardise security or purpose. e.g., 'Please enter a date in DD/MM/YYYY format.'"},
+{q:"What is the correct heading hierarchy for an accessible web page?",o:["a) Multiple <h1> elements for each main section","b) One <h1> per page, followed by <h2>, <h3> in logical order without skipping levels","c) Start with <h2> to avoid conflicts with the page title","d) Use heading levels based on visual size, not document structure"],a:1,cat:"General Accessibility",e:"One <h1> per page (the primary topic). Heading levels must be nested correctly: h1→h2→h3, never h1→h3 (skipping h2). Headings communicate document outline to screen readers. Never choose heading level for visual size — use CSS for styling."},
+{q:"Which ARIA attribute communicates that a panel or section is currently expanded?",o:["a) aria-selected='true'","b) aria-pressed='true'","c) aria-expanded='true'","d) aria-checked='true'"],a:2,cat:"ARIA & Roles",e:"aria-expanded='true/false' communicates expand/collapse state for disclosures, accordions, menus, and submenus. aria-selected is for tabs and options. aria-pressed is for toggle buttons. aria-checked is for checkboxes and radio buttons."},
+{q:"What makes a good accessible error message?",o:["a) Display an error icon in red color only","b) Identify the specific field, describe what went wrong, and explain how to fix it","c) Display a generic 'Form error' message at the top of the page","d) Automatically correct the error without telling the user"],a:1,cat:"Forms & Inputs",e:"Good error messages: identify the specific field ('Email address: Enter a valid email'), describe what went wrong ('The email you entered is not in a valid format'), and explain how to fix it ('Use format: name@example.com'). SC 3.3.1 and 3.3.3."}
+];
+
+// ── STATE ─────────────────────────────────────────────────────────────────────
+var answered={},curCat='all';
+
+// ── UTILS ─────────────────────────────────────────────────────────────────────
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/`([^`]+)`/g,'<code>$1</code>')}
+function announce(msg){var el=document.getElementById('live-region');el.textContent='';requestAnimationFrame(function(){el.textContent=msg})}
+function getFiltered(){return curCat==='all'?QS:QS.filter(function(q){return q.cat===curCat})}
+
+// ── STATS UPDATE ──────────────────────────────────────────────────────────────
+function updateStats(){
+  var filtered=getFiltered();
+  var total=filtered.length;
+  var done=0,right=0;
+  filtered.forEach(function(q,i){
+    var gi=QS.indexOf(q);
+    if(answered[gi]!==undefined){done++;if(answered[gi])right++}
+  });
+  document.getElementById('sn-total').textContent=total;
+  document.getElementById('sn-done').textContent=done;
+  document.getElementById('sn-right').textContent=right;
+  var pct=done>0?Math.round((right/done)*100):0;
+  document.getElementById('sn-pct').textContent=pct+'%';
+  document.getElementById('prog-label').textContent=done+' of '+total+' answered';
+  var fillPct=total>0?Math.round((done/total)*100):0;
+  document.getElementById('prog-fill').style.width=fillPct+'%';
+}
+
+// ── RENDER QUESTIONS ──────────────────────────────────────────────────────────
+function render(){
+  var list=document.getElementById('q-list');
+  list.innerHTML='';
+  var filtered=getFiltered();
+  if(!filtered.length){
+    list.innerHTML='<p class="empty">No questions in this category.</p>';
+    updateStats();return;
+  }
+  filtered.forEach(function(q,di){
+    var gi=QS.indexOf(q);
+    var ans=answered[gi];
+    var card=document.createElement('div');
+    card.className='q-card'+(ans===true?' correct':ans===false?' wrong':'');
+    card.setAttribute('role','listitem');
+    card.id='qcard-'+gi;
+
+    // Badge
+    var badgeClass='q-badge'+(ans!==undefined?' show '+(ans?'ok':'no'):'');
+    var badgeTxt=ans!==undefined?(ans?'✓':'✗'):'';
+
+    card.innerHTML=
+      '<div class="q-hdr">'+
+        '<div class="q-meta">'+
+          '<div class="q-num-line">'+
+            '<span class="q-num">Q'+(di+1)+'</span>'+
+            '<span class="q-cat">'+esc(q.cat)+'</span>'+
+          '</div>'+
+          '<div class="q-text">'+esc(q.q)+'</div>'+
+        '</div>'+
+        '<div class="'+badgeClass+'" aria-hidden="true">'+badgeTxt+'</div>'+
+      '</div>'+
+      '<div class="q-opts" role="group" aria-label="Answer options for question '+(di+1)+'"></div>'+
+      '<div class="expl'+(ans!==undefined?' show':'')+'" id="expl-'+gi+'"></div>';
+
+    // Options
+    var optsEl=card.querySelector('.q-opts');
+    q.o.forEach(function(opt,oi){
+      var btn=document.createElement('button');
+      btn.className='opt';
+      btn.setAttribute('type','button');
+      btn.innerHTML=esc(opt);
+      if(ans!==undefined){
+        btn.disabled=true;
+        btn.className='opt '+(oi===q.a?'opt-c':oi===answeredIdx(gi)?'opt-w':'opt-d');
+      }
+      btn.addEventListener('click',function(){pick(gi,oi,q.a,q.e,card)});
+      optsEl.appendChild(btn);
+    });
+
+    // Explanation if already answered
+    if(ans!==undefined){
+      showExpl(card.querySelector('#expl-'+gi),ans,q.o[q.a],q.e);
+    }
+    list.appendChild(card);
+  });
+  updateStats();
+}
+
+// Store chosen index separately
+var chosenMap={};
+function answeredIdx(gi){return chosenMap[gi]!==undefined?chosenMap[gi]:-1}
+
+function pick(gi,chosen,correct,expl,card){
+  var isRight=chosen===correct;
+  answered[gi]=isRight;
+  chosenMap[gi]=chosen;
+
+  // Update card class
+  card.className='q-card '+(isRight?'correct':'wrong');
+
+  // Update badge
+  var badge=card.querySelector('.q-badge');
+  badge.className='q-badge show '+(isRight?'ok':'no');
+  badge.setAttribute('aria-hidden','true');
+  badge.textContent=isRight?'✓':'✗';
+
+  // Update buttons
+  card.querySelectorAll('.opt').forEach(function(btn,oi){
+    btn.disabled=true;
+    btn.className='opt '+(oi===correct?'opt-c':oi===chosen?'opt-w':'opt-d');
+  });
+
+  // Show explanation
+  var explEl=card.querySelector('[id^="expl-"]');
+  explEl.className='expl show';
+  showExpl(explEl,isRight,QS[gi].o[correct],expl);
+
+  announce(isRight?'Correct!':'Incorrect. See the explanation below.');
+  updateStats();
+}
+
+function showExpl(el,isRight,correctAns,explText){
+  el.innerHTML=
+    '<div class="expl-inner">'+
+      '<div class="expl-lbl">'+(isRight?'✓ Correct':'✗ Incorrect — correct answer: '+esc(correctAns))+'</div>'+
+      '<div class="expl-text">'+esc(explText)+'</div>'+
+    '</div>';
+}
+
+// ── FILTER BUTTONS ────────────────────────────────────────────────────────────
+document.querySelectorAll('.f-btn').forEach(function(btn){
+  btn.addEventListener('click',function(){
+    document.querySelectorAll('.f-btn').forEach(function(b){b.classList.remove('active')});
+    btn.classList.add('active');
+    curCat=btn.dataset.cat;
+    render();
+  });
+});
+
+// ── RESET ─────────────────────────────────────────────────────────────────────
+document.getElementById('reset-btn').addEventListener('click',function(){
+  answered={};chosenMap={};render();
+  announce('All answers reset. Quiz restarted.');
+});
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+render();
+</script>
+</body>
+</html>
