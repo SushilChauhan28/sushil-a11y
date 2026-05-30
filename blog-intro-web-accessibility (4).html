@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="en" data-scheme="system">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Web Accessibility: Complete Guide & Element-wise Testing Manual — Sushil Chauhan</title>
+<meta name="description" content="Complete web accessibility guide — WCAG 2.1/2.2, POUR principles, conformance levels, and practical element-wise testing manual covering 31 elements with NVDA, JAWS, VoiceOver, keyboard and DevTools steps. By Sushil Chauhan, IAAP-CPWA | CPACC | WAS.">
+<meta name="author" content="Sushil Chauhan">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Playfair+Display:wght@600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+/* Page-specific extras not in shared CSS */
+.elem-card{border:1px solid var(--border);border-radius:6px;overflow:hidden;margin:2.5rem 0;scroll-margin-top:5rem}
+.elem-hdr{display:flex;align-items:center;gap:1rem;padding:1rem 1.5rem;background:var(--bg-alt);border-bottom:1px solid var(--border)}
+.elem-num{font-family:var(--font-mono);font-size:.68rem;font-weight:700;color:var(--text-subtle);flex-shrink:0;min-width:28px}
+.elem-name{font-size:1rem;font-weight:700;letter-spacing:-.01em;color:var(--text)}
+.elem-body{padding:1.5rem}
+.elem-sub{font-family:var(--font-mono);font-size:.6rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--text-subtle);display:block;margin:1.25rem 0 .6rem;padding-top:1.25rem;border-top:1px solid var(--border)}
+.elem-sub:first-child{margin-top:0;padding-top:0;border-top:none}
+.check-row{display:flex;align-items:flex-start;gap:.6rem;padding:.38rem 0;font-size:.88rem;color:var(--text-body);line-height:1.55}
+.check-icon{color:var(--accent-text);flex-shrink:0;margin-top:.05rem;font-size:.8rem}
+.wcag-ref{display:flex;align-items:baseline;gap:.5rem;padding:.35rem 0;font-size:.875rem;color:var(--text-muted);line-height:1.5;border-bottom:1px solid var(--border)}
+.wcag-ref:last-child{border-bottom:none}
+.wcag-sc{font-family:var(--font-mono);font-size:.65rem;font-weight:700;color:var(--accent-text);flex-shrink:0}
+.issue-chip{display:flex;align-items:flex-start;gap:.6rem;padding:.5rem .75rem;background:#fef2f2;border:1px solid rgba(239,68,68,.2);border-radius:4px;font-size:.85rem;color:var(--text-muted);margin:.35rem 0;line-height:1.55}
+.issue-chip::before{content:'✕';color:#ef4444;flex-shrink:0;font-weight:700;font-size:.75rem;margin-top:.15rem}
+[data-scheme="dark"] .issue-chip{background:rgba(239,68,68,.07);border-color:rgba(239,68,68,.2)}
+@media(prefers-color-scheme:dark){:root:not([data-scheme="light"]) .issue-chip{background:rgba(239,68,68,.07);border-color:rgba(239,68,68,.2)}}
+.test-table{width:100%;border-collapse:collapse;font-size:.84rem;margin:.75rem 0}
+.test-table thead tr{background:var(--bg-alt)}
+.test-table th{padding:.65rem .9rem;text-align:left;font-family:var(--font-mono);font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);border-bottom:1px solid var(--border);white-space:nowrap}
+.test-table tbody tr{border-bottom:1px solid var(--border)}
+.test-table tbody tr:hover{background:var(--bg-alt)}
+.test-table tbody tr:last-child{border-bottom:none}
+.test-table td{padding:.65rem .9rem;vertical-align:top;line-height:1.55;color:var(--text-muted)}
+.test-table td:first-child{font-family:var(--font-mono);font-size:.65rem;font-weight:700;color:var(--accent-text);white-space:nowrap}
+.test-table td:nth-child(2){font-weight:600;color:var(--text);white-space:nowrap}
+.pour-cards{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1.25rem 0}
+@media(max-width:600px){.pour-cards{grid-template-columns:1fr}}
+.contrast-table{width:100%;border-collapse:collapse;font-size:.875rem;margin:1rem 0}
+.contrast-table th,.contrast-table td{padding:.65rem .9rem;border:1px solid var(--border);text-align:left;font-size:.84rem}
+.contrast-table thead{background:var(--bg-alt)}
+.contrast-table th{font-family:var(--font-mono);font-size:.63rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted)}
+.part-intro{background:var(--bg-alt);border-left:3px solid var(--accent);padding:1.25rem 1.5rem;border-radius:0 4px 4px 0;margin:2rem 0;font-size:.95rem;color:var(--text-body);line-height:1.8}
+</style>
+</head>
+<body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<header class="site-header">
+  <div class="header-inner">
+    <div class="site-identity">
+      <a href="index.html" class="site-name-link" aria-label="Sushil Chauhan — homepage">
+        <span class="site-marker" aria-hidden="true">■</span>
+        <span class="site-name">Sushil Chauhan</span>
+      </a>
+      <p class="site-tagline">QA Lead · Senior Accessibility Engineer · IAAP-CPWA | CPACC | WAS</p>
+    </div>
+    <nav class="header-nav" aria-label="Site navigation">
+      <a href="index.html"             class="nav-link">Home</a>
+      <a href="writing.html"           class="nav-link" aria-current="page">Writing</a>
+      <a href="was-practice-quiz.html" class="nav-link">WAS Quiz</a>
+      <a href="mailto:csgn2806@gmail.com" class="header-cta">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main-content">
+  <div class="content-wrap">
+
+    <!-- HERO -->
+    <header class="post-hero" aria-labelledby="post-title">
+      <div class="post-category">Web Accessibility · Testing Manual</div>
+      <h1 class="post-title" id="post-title">Web Accessibility: Complete Guide &amp; Element-wise Testing Manual</h1>
+      <p class="post-excerpt">WCAG 2.1/2.2, POUR principles, conformance levels, and a practical 31-element testing manual with step-by-step NVDA, JAWS, VoiceOver, keyboard, and DevTools instructions.</p>
+      <div class="post-tags-row">
+        <span class="post-tag">WCAG 2.1 / 2.2</span>
+        <span class="post-tag">POUR Principles</span>
+        <span class="post-tag">31 Elements</span>
+        <span class="post-tag">NVDA · JAWS · VoiceOver</span>
+        <span class="post-tag">Keyboard Testing</span>
+        <span class="post-tag">DevTools</span>
+        <span class="post-tag">Training Edition 2026</span>
+      </div>
+      <div class="post-meta-row">
+        <div class="post-author">
+          <div class="author-av" aria-hidden="true">SC</div>
+          <div>
+            <div class="author-name">Sushil Chauhan</div>
+            <div class="author-cert">IAAP-CPWA | CPACC | WAS · DHS Trusted Tester · Mumbai</div>
+          </div>
+        </div>
+        <div class="post-details">
+          <time datetime="2026-03">March 2026</time>
+          <span>Training Edition</span>
+          <span>31 Elements</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- TOC -->
+    <nav class="toc-block" aria-labelledby="toc-h">
+      <div class="toc-title" id="toc-h">Contents</div>
+      <ol class="toc-list">
+        <li><a href="#intro">Part 1 — Introduction to Web Accessibility</a></li>
+        <li><a href="#wcag">WCAG Structure &amp; Conformance Levels</a></li>
+        <li><a href="#pour">The Four POUR Principles</a></li>
+        <li><a href="#testing-approach">Part 2 — How to Test: The Three Layers</a></li>
+        <li><a href="#sr-shortcuts">Screen Reader Quick Reference</a></li>
+        <li><a href="#elements">Part 3 — 31 Element-wise Testing Guide</a></li>
+      </ol>
+    </nav>
+
+    <article class="post-body" aria-labelledby="post-title">
+
+      <!-- ═══════════════════════════════════════════════════════ PART 1 -->
+      <h2 id="intro" tabindex="-1"><span class="section-num">Part 1 —</span> Introduction to Web Accessibility</h2>
+
+      <p>Web accessibility means designing and developing websites, applications, and mobile apps so that <strong>everyone can use them</strong> — including people with disabilities. It is a fundamental quality requirement, not an optional feature.</p>
+      <p>A person who cannot see uses a screen reader. A person who cannot use a mouse relies entirely on the keyboard. A person with hearing difficulties needs captions in videos. A user with cognitive difficulties benefits from plain language and predictable navigation.</p>
+
+      <div class="callout info" role="note">
+        <span class="callout-icon" aria-hidden="true">💡</span>
+        <p><strong>Key Insight:</strong> Accessibility improvements benefit everyone — not just users with permanent disabilities. Someone using a phone in bright sunlight, typing with one hand, or watching a video in a quiet library all benefit from accessible design.</p>
+      </div>
+
+      <h3>Who Benefits</h3>
+      <ul>
+        <li><strong>Visual impairment</strong> — blindness, low vision, colour blindness. Use screen readers, magnifiers, high contrast modes.</li>
+        <li><strong>Hearing impairment</strong> — deaf or hard of hearing. Depend on captions, transcripts, and visual alternatives to audio.</li>
+        <li><strong>Mobility impairment</strong> — limited hand or arm movement. May use keyboard only, switch devices, eye tracking, or voice control.</li>
+        <li><strong>Cognitive impairment</strong> — dyslexia, attention difficulties, memory conditions. Benefit from clear language and consistent layouts.</li>
+        <li><strong>Elderly users</strong> — often experience multiple mild impairments simultaneously.</li>
+        <li><strong>Situational disabilities</strong> — bright sunlight on a phone, one hand occupied, noisy environment, slow connection.</li>
+      </ul>
+
+      <h3>Legal Requirements</h3>
+      <ul>
+        <li><strong>United States:</strong> ADA applies to websites and mobile apps. Section 508 mandates accessibility for federal procurement — VPAT documentation required.</li>
+        <li><strong>European Union:</strong> European Accessibility Act (EAA) effective June 2025 — mobile apps in banking, e-commerce, and transport must meet EN 301 549.</li>
+        <li><strong>India:</strong> RPWD Act 2016, Section 46, mandates accessible ICT.</li>
+        <li><strong>Canada:</strong> AODA — Level AA required for private and public sector organisations.</li>
+      </ul>
+
+      <hr>
+
+      <h2 id="wcag" tabindex="-1"><span class="section-num">WCAG —</span> Structure &amp; Conformance Levels</h2>
+      <p>WCAG (Web Content Accessibility Guidelines) is the international standard published by the W3C Web Accessibility Initiative (WAI). Current versions: <strong>WCAG 2.1</strong> (2018) and <strong>WCAG 2.2</strong> (2023).</p>
+      <p>WCAG is organised into: <strong>4 Principles</strong> → <strong>13 Guidelines</strong> → <strong>78 Testable Success Criteria</strong> at <strong>3 Conformance Levels</strong> (A, AA, AAA).</p>
+
+      <div class="table-wrap">
+        <table aria-label="WCAG conformance levels comparison">
+          <thead><tr><th scope="col">Level</th><th scope="col">Meaning</th><th scope="col">Example</th><th scope="col">Who Requires It</th></tr></thead>
+          <tbody>
+            <tr><td><strong style="color:var(--accent-text)">A — Must</strong></td><td>Minimum. Without this, many users cannot access content at all.</td><td>Images need alt text (SC 1.1.1)</td><td>Every accessibility standard globally</td></tr>
+            <tr><td><strong style="color:#b91c1c">AA — Should</strong></td><td>Standard legal/commercial target. Most laws require this level.</td><td>Text must meet 4.5:1 contrast (SC 1.4.3)</td><td>ADA, Section 508, AODA, EAA, most enterprise procurement</td></tr>
+            <tr><td><strong style="color:#15803d">AAA — Can</strong></td><td>Enhanced. Not required for every page.</td><td>Contrast enhanced to 7:1 (SC 1.4.6)</td><td>Specialised services for blind or deaf users</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout warn" role="note">
+        <span class="callout-icon" aria-hidden="true">⚠️</span>
+        <p>To claim WCAG 2.1 AA conformance, a page must pass <em>all</em> Level A and Level AA criteria — not just a selection of them.</p>
+      </div>
+
+      <hr>
+
+      <h2 id="pour" tabindex="-1"><span class="section-num">POUR —</span> The Four Principles</h2>
+
+      <div class="pour-cards">
+        <div class="pour-card" role="article" aria-label="Principle 1: Perceivable">
+          <div class="pour-icon" aria-hidden="true">👁️</div>
+          <div class="pour-num">Principle 1</div>
+          <div class="pour-title">Perceivable</div>
+          <p class="pour-desc">Information and UI components must be presentable in ways users can perceive — through sight, sound, or assistive technology.</p>
+          <ul><li>1.1 Text alternatives for non-text content</li><li>1.2 Captions and alternatives for multimedia</li><li>1.3 Adaptable content structure</li><li>1.4 Distinguishable content (contrast, resize)</li></ul>
+        </div>
+        <div class="pour-card" role="article" aria-label="Principle 2: Operable">
+          <div class="pour-icon" aria-hidden="true">⌨️</div>
+          <div class="pour-num">Principle 2</div>
+          <div class="pour-title">Operable</div>
+          <p class="pour-desc">UI components and navigation must be operable — users must be able to interact with and navigate the interface.</p>
+          <ul><li>2.1 Keyboard accessible</li><li>2.2 Enough time</li><li>2.3 Seizures and physical reactions</li><li>2.4 Navigable (skip links, headings)</li><li>2.5 Input modalities (touch, voice)</li></ul>
+        </div>
+        <div class="pour-card" role="article" aria-label="Principle 3: Understandable">
+          <div class="pour-icon" aria-hidden="true">💬</div>
+          <div class="pour-num">Principle 3</div>
+          <div class="pour-title">Understandable</div>
+          <p class="pour-desc">Content and the operation of the UI must be understandable — users must be able to comprehend information and predict interface behaviour.</p>
+          <ul><li>3.1 Readable text</li><li>3.2 Predictable behaviour</li><li>3.3 Input assistance and error recovery</li></ul>
+        </div>
+        <div class="pour-card" role="article" aria-label="Principle 4: Robust">
+          <div class="pour-icon" aria-hidden="true">🔩</div>
+          <div class="pour-num">Principle 4</div>
+          <div class="pour-title">Robust</div>
+          <p class="pour-desc">Content must be robust enough to be reliably interpreted by a wide variety of user agents, including assistive technologies — current and future.</p>
+          <ul><li>4.1 Compatible with current and future tools</li></ul>
+        </div>
+      </div>
+
+      <hr>
+
+      <!-- ═══════════════════════════════════════════════════════ PART 2 -->
+      <h2 id="testing-approach" tabindex="-1"><span class="section-num">Part 2 —</span> How to Test: The Three Layers</h2>
+      <p>Apply all three layers to every element. Skipping any one layer will miss real issues.</p>
+
+      <div class="table-wrap">
+        <table aria-label="Three testing layers">
+          <thead><tr><th scope="col">#</th><th scope="col">Layer</th><th scope="col">What You Check</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td><strong>Visual Check</strong></td><td>UI layout, color contrast, 400% zoom/reflow, no color-only indicators, visible focus indicator</td></tr>
+            <tr><td>2</td><td><strong>Keyboard Check</strong></td><td>Tab order, focus trap, Enter/Space/Escape operability, no keyboard traps anywhere</td></tr>
+            <tr><td>3</td><td><strong>Screen Reader + DevTools</strong></td><td>Semantic markup, ARIA states, what SR announces vs what you expect, accessibility tree inspection</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout info" role="note">
+        <span class="callout-icon" aria-hidden="true">ℹ️</span>
+        <p>Automated tools (Axe, WAVE, ANDI) catch approximately <strong>30% of accessibility issues</strong>. Manual testing with keyboard, real screen readers, and zoom testing is essential for a complete audit.</p>
+      </div>
+
+      <h3 id="sr-shortcuts" tabindex="-1">Screen Reader Quick Reference</h3>
+      <div class="table-wrap">
+        <table aria-label="Screen reader shortcuts comparison">
+          <thead><tr><th scope="col">Screen Reader</th><th scope="col">Platform</th><th scope="col">Key Modes</th><th scope="col">Essential Shortcuts</th></tr></thead>
+          <tbody>
+            <tr><td><strong>NVDA</strong></td><td>Windows</td><td>Browse / Forms Mode</td><td>NVDA+Space (Toggle) · Insert+F7 (Elements) · H (Heading) · K (Link) · F (Form field)</td></tr>
+            <tr><td><strong>JAWS</strong></td><td>Windows</td><td>PC / Virtual Cursor</td><td>Insert+Z (Toggle) · Insert+F6 (Headings) · Insert+F7 (Links) · Ctrl+Alt+↓ (Table cells)</td></tr>
+            <tr><td><strong>VoiceOver</strong></td><td>macOS / iOS</td><td>Rotor Navigation</td><td>VO+U (Rotor) · VO+Arrows (Move) · VO+F8 (Inspector) · Control+Option+U (Mac)</td></tr>
+            <tr><td><strong>TalkBack</strong></td><td>Android</td><td>Swipe Navigation</td><td>Swipe right/left · Double-tap (activate) · Swipe up+right (rotor) · Volume keys</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <hr>
+
+      <!-- ═══════════════════════════════════════════════════════ PART 3 -->
+      <h2 id="elements" tabindex="-1"><span class="section-num">Part 3 —</span> 31 Element-wise Testing Guide</h2>
+      <p class="part-intro">Complete practical guide with NVDA, JAWS, VoiceOver, Keyboard &amp; DevTools testing steps for all 31 elements — mapped to WCAG 2.1 success criteria. Pro Tip: Always test with real screen readers using default voice settings on real devices. Browser-based TTS extensions are <strong>NOT</strong> reliable for WCAG compliance testing.</p>
+
+      <!-- ── 1. HEADINGS ─────────────────────────────────────── -->
+      <div class="elem-card" id="el-headings" tabindex="-1">
+        <div class="elem-hdr">
+          <span class="elem-num">01</span>
+          <span class="elem-name">Headings</span>
+        </div>
+        <div class="elem-body">
+          <p>Headings define the structure and hierarchy of a page. Screen reader users navigate exclusively via headings to find content quickly. A broken heading structure renders navigation impossible.</p>
+          <span class="elem-sub">What to Check</span>
+          <div class="check-row"><span class="check-icon">☐</span>Is there at least one H1 on the page?</div>
+          <div class="check-row"><span class="check-icon">☐</span>Are all visually styled headings marked up as actual heading elements (h1–h6)?</div>
+          <div class="check-row"><span class="check-icon">☐</span>Are headings nested correctly — H1 → H2 → H3, no level skipped?</div>
+          <div class="check-row"><span class="check-icon">☐</span>Is H1 used only for the main page title (or primary dialog heading)?</div>
+          <div class="check-row"><span class="check-icon">☐</span>For modal dialogs, does the heading start at H2?</div>
+          <div class="check-row"><span class="check-icon">☐</span>If role="heading" is used, is aria-level also defined?</div>
+          <div class="check-row"><span class="check-icon">☐</span>Are headings used only for structure — not just to make text look big?</div>
+          <span class="elem-sub">How to Test</span>
+          <div class="table-wrap">
+            <table class="test-table" aria-label="How to test headings">
+              <thead><tr><th scope="col">#</th><th scope="col">Method</th><th scope="col">What to Do &amp; What to Expect</th></tr></thead>
+              <tbody>
+                <tr><td>1</td><td>Visual / ANDI</td><td>Open ANDI → Structures → Headings. Review the heading outline tree. Check H1 appears first and no levels are skipped.</td></tr>
+                <tr><td>2</td><td>NVDA</td><td>Press H repeatedly to jump to each heading. NVDA announces: "Heading level 1 [text], heading level 2 [text]". Missing/skipped levels or CSS-only headings will not appear.</td></tr>
+                <tr><td>3</td><td>JAWS</td><td>Insert+F6 opens Headings List. Verify all expected headings appear with correct levels. Use arrow keys to navigate.</td></tr>
+                <tr><td>4</td><td>DevTools</td><td>F12 → Accessibility tab → Select any heading. Check: role = heading, level = 1/2/3. If a visually large div has no role=heading, it is a failure.</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <span class="elem-sub">WCAG References</span>
+          <div class="wcag-ref"><span class="wcag-sc">1.3.1 A</span> Info and Relationships — Headings must convey semantic structure programmatically.</div>
+          <div class="wcag-ref"><span class="wcag-sc">2.4.1 A</span> Bypass Blocks — Heading structure allows users to bypass repeated content.</div>
+          <div class="wcag-ref"><span class="wcag-sc">2.4.6 AA</span> Headings and Labels — Headings must be descriptive of their section.</div>
+          <span class="elem-sub">Common Issues</span>
+          <div class="issue-chip">Heading levels skipped (H1 → H3 directly)</div>
+          <div class="issue-chip">Visual headings styled with CSS class only — no semantic tag used</div>
+          <div class="issue-chip">Multiple H1 elements on a single page</div>
+          <div class="issue-chip">Headings used purely for visual styling (bold/large text)</div>
+        </div>
+      </div>
+
+      <!-- ── 2. IMAGES ──────────────────────────────────────── -->
+      <div class="elem-card" id="el-images" tabindex="-1">
+        <div class="elem-hdr"><span class="elem-num">02</span><span class="elem-name">Images</span></div>
+        <div class="elem-body">
+          <p>Images must communicate their purpose to users who cannot see them. The correct alt strategy depends on whether the image is informative, decorative, or functional.</p>
+          <span class="elem-sub">What to Check</span>
+          <div class="check-row"><span class="check-icon">☐</span>Is the image informative, decorative, or functional (link/button)?</div>
+          <div class="check-row"><span class="check-icon">☐</span>For informative images: does alt text accurately describe the content or purpose?</div>
+          <div class="check-row"><span class="check-icon">☐</span>For decorative images: is alt set to empty string (alt="")?</div>
+          <div class="check-row"><span class="check-icon">☐</span>For image links or buttons: does alt describe the destination or action?</div>
+          <div class="check-row"><span class="check-icon">☐</span>Are images of text avoided? If present, is there a text alternative?</div>
+          <div class="check-row"><span class="check-icon">☐</span>For complex images (charts): is a long description provided via aria-describedby or in content?</div>
+          <div class="check-row"><span class="check-icon">☐</span>Are informative images loaded via CSS background-image? If so, this is a failure.</div>
+          <span class="elem-sub">How to Test</span>
+          <div class="table-wrap">
+            <table class="test-table" aria-label="How to test images">
+              <thead><tr><th scope="col">#</th><th scope="col">Method</th><th scope="col">What to Do &amp; What to Expect</th></tr></thead>
+              <tbody>
+                <tr><td>1</td><td>Visual</td><td>Enable Windows High Contrast Mode. Images loaded via CSS background-image will disappear — indicating a failure.</td></tr>
+                <tr><td>2</td><td>NVDA</td><td>Press G to jump to the next graphic. NVDA announces: "graphic [alt text]". If NVDA announces the filename (e.g., "banner_img.jpg"), alt text is missing — failure.</td></tr>
+                <tr><td>3</td><td>JAWS</td><td>Insert+F7 opens Graphics list. Each graphic should show a meaningful label. Image-only links with empty alt appear as blank — failure.</td></tr>
+                <tr><td>4</td><td>DevTools</td><td>F12 → Select the img element → Accessibility tab. Check: name = [alt text], role = img. If name is empty and image is informative, it is a failure.</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <span class="elem-sub">WCAG References</span>
+          <div class="wcag-ref"><span class="wcag-sc">1.1.1 A</span> Non-text Content — All non-text content must have a text alternative serving equivalent purpose.</div>
+          <div class="wcag-ref"><span class="wcag-sc">1.4.5 AA</span> Images of Text — Use text instead of images of text wherever possible.</div>
+          <span class="elem-sub">Common Issues</span>
+          <div class="issue-chip">alt text says "image of..." or "photo of..." — screen readers already announce "graphic"</div>
+          <div class="issue-chip">Decorative images with descriptive alt text (creates unnecessary noise)</div>
+          <div class="issue-chip">Icon buttons or image links with missing alt text = invisible control</div>
+          <div class="issue-chip">Charts without descriptions — user gets zero data context</div>
+        </div>
+      </div>
+
+      <!-- ── 3. FORMS ───────────────────────────────────────── -->
+      <div class="elem-card" id="el-forms" tabindex="-1">
+        <div class="elem-hdr"><span class="elem-num">03</span><span class="elem-name">Forms</span></div>
+        <div class="elem-body">
+          <p>Forms are the primary interaction model on the web. Poor form accessibility leads to failures at critical points like checkout or registration.</p>
+          <span class="elem-sub">What to Check</span>
+          <div class="check-row"><span class="check-icon">☐</span>Does every form field have a visible, descriptive label?</div>
+          <div class="check-row"><span class="check-icon">☐</span>Is each label programmatically associated with its control (for/id or aria-labelledby)?</div>
+          <div class="check-row"><span class="check-icon">☐</span>Are grouped controls (radio, checkbox) wrapped in fieldset + legend?</div>
+          <div class="check-row"><span class="check-icon">☐</span>Are instructions or format hints provided before the field — not just placeholder?</div>
+          <div class="check-row"><span class="check-icon">☐</span>Are required fields indicated both visually and programmatically (aria-required)?</div>
+          <div class="check-row"><span class="check-icon">☐</span>Are error messages descriptive, actionable, linked via aria-describedby?</div>
+          <div class="check-row"><span class="check-icon">☐</span>Is aria-invalid='true' set on fields with validation errors?</div>
+          <div class="check-row"><span class="check-icon">☐</span>Does focus move to the first error or error summary on form submission?</div>
+          <span class="elem-sub">How to Test</span>
+          <div class="table-wrap">
+            <table class="test-table" aria-label="How to test forms">
+              <thead><tr><th scope="col">#</th><th scope="col">Method</th><th scope="col">What to Do &amp; What to Expect</th></tr></thead>
+              <tbody>
+                <tr><td>1</td><td>ANDI</td><td>Open ANDI → Focusable Elements → Labels tab. Each field should show its associated label. Fields showing "No label" or "Empty label" are failures.</td></tr>
+                <tr><td>2</td><td>NVDA</td><td>Press F to jump to next form field. NVDA announces: "[label text], edit, required". If only field type is announced with no label — failure.</td></tr>
+                <tr><td>3</td><td>Keyboard</td><td>Tab through the entire form. Verify logical order, all fields reachable, Enter submits, Space toggles checkboxes. Verify focus moves to first invalid field after failed submission.</td></tr>
+                <tr><td>4</td><td>DevTools</td><td>Select input field → Accessibility tab. Check: name = [label text], role = textbox, required = true/false, invalid = true (if error). Verify aria-describedby points to error message element.</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <span class="elem-sub">WCAG References</span>
+          <div class="wcag-ref"><span class="wcag-sc">3.3.1 A</span> Error Identification — Errors must be identified and described in text.</div>
+          <div class="wcag-ref"><span class="wcag-sc">3.3.2 A</span> Labels or Instructions — Labels and instructions must be provided for user input.</div>
+          <div class="wcag-ref"><span class="wcag-sc">3.3.3 AA</span> Error Suggestion — Suggestions for correcting input errors must be provided.</div>
+          <div class="wcag-ref"><span class="wcag-sc">4.1.2 A</span> Name, Role, Value — All form controls must expose name, role, and value to AT.</div>
+          <span class="elem-sub">Common Issues</span>
+          <div class="issue-chip">Placeholder text is the only label — disappears on input, SR cannot re-read it</div>
+          <div class="issue-chip">Radio/checkbox groups not in fieldset/legend — group purpose unknown to SR</div>
+          <div class="issue-chip">Generic error "Invalid input" with no guidance on what correct format looks like</div>
+          <div class="issue-chip">Focus not moving to errors after failed submission</div>
+        </div>
+      </div>
+
+      <!-- ── 4–31: Condensed format ──────────────────────────── -->
+      <!-- Elements 4 through 31 follow the same pattern -->
+
+      <div class="elem-card" id="el-links" tabindex="-1">
+        <div class="elem-hdr"><span class="elem-num">04</span><span class="elem-name">Links &amp; Hypertext</span></div>
+        <div class="elem-body">
+          <p>Links are navigation anchors. Their text must communicate destination or purpose clearly — both in context and when read out of context in a links list.</p>
+          <span class="elem-sub">What to Check</span>
+          <div class="check-row"><span class="check-icon">☐</span>Is the link text descriptive — does it make sense out of context?</div>
+          <div class="check-row"><span class="check-icon">☐</span>Are vague link texts ("Click here", "Read more", "Learn more") avoided?</div>
+          <div class="check-row"><span class="check-icon">☐</span>Are bare URLs used as link text?</div>
+          <div class="check-row"><span class="check-icon">☐</span>Are links visually distinguishable from body text (not just by color)?</div>
+          <div class="check-row"><span class="check-icon">☐</span>Are there any empty links (anchor with no text and no aria-label)?</div>
+          <div class="check-row"><span class="check-icon">☐</span>Does the "Skip to main content" link work and move focus correctly?</div>
+          <div class="check-row"><span class="check-icon">☐</span>Do links that open new tabs warn users in advance?</div>
+          <span class="elem-sub">How to Test</span>
+          <div class="table-wrap">
+            <table class="test-table" aria-label="How to test links">
+              <thead><tr><th>#</th><th>Method</th><th>What to Do &amp; What to Expect</th></tr></thead>
+              <tbody>
+                <tr><td>1</td><td>ANDI</td><td>ANDI → Focusable Elements → Links/Buttons. Review each link's accessible name. Empty links and generic "click here" links will be flagged.</td></tr>
+                <tr><td>2</td><td>NVDA</td><td>Press K to jump between links. Open Links List with Insert+F7 — multiple "Read more" links are a failure.</td></tr>
+                <tr><td>3</td><td>JAWS</td><td>Insert+F7 → Links List. Sort alphabetically — duplicate non-descriptive links will be clearly visible.</td></tr>
+                <tr><td>4</td><td>Keyboard</td><td>Tab to each link → Enter → verify correct destination. Tab to any link that opens a new tab — verify advance warning.</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <span class="elem-sub">WCAG References</span>
+          <div class="wcag-ref"><span class="wcag-sc">2.4.4 A</span> Link Purpose (In Context) — Link purpose can be determined from link text or surrounding context.</div>
+          <div class="wcag-ref"><span class="wcag-sc">2.4.9 AAA</span> Link Purpose (Link Only) — Link purpose can be determined from link text alone.</div>
+        </div>
+      </div>
+
+      <div class="elem-card" id="el-keyboard" tabindex="-1">
+        <div class="elem-hdr"><span class="elem-num">05</span><span class="elem-name">Keyboard Accessibility</span></div>
+        <div class="elem-body">
+          <p>Every interactive element must be reachable and operable using the keyboard alone. This is the foundation for screen reader users and users with motor impairments.</p>
+          <span class="elem-sub">What to Check</span>
+          <div class="check-row"><span class="check-icon">☐</span>Can all interactive elements be reached using Tab and Shift+Tab?</div>
+          <div class="check-row"><span class="check-icon">☐</span>Is the focus indicator clearly visible on all focused elements?</div>
+          <div class="check-row"><span class="check-icon">☐</span>Does the tab order follow a logical, predictable sequence?</div>
+          <div class="check-row"><span class="check-icon">☐</span>Are there any keyboard traps (focus cannot exit an area)?</div>
+          <div class="check-row"><span class="check-icon">☐</span>Can dropdowns, expand/collapse, and dialogs be operated via keyboard?</div>
+          <div class="check-row"><span class="check-icon">☐</span>Do modal dialogs trap focus correctly and return focus on close?</div>
+          <span class="elem-sub">WCAG References</span>
+          <div class="wcag-ref"><span class="wcag-sc">2.1.1 A</span> Keyboard — All functionality must be operable via keyboard interface.</div>
+          <div class="wcag-ref"><span class="wcag-sc">2.1.2 A</span> No Keyboard Trap — Focus must not be locked within any component.</div>
+          <div class="wcag-ref"><span class="wcag-sc">2.4.7 AA</span> Focus Visible — Keyboard focus indicator must be visible.</div>
+          <span class="elem-sub">Common Issues</span>
+          <div class="issue-chip">outline:none in CSS removes focus ring — invisible focus for keyboard users</div>
+          <div class="issue-chip">Custom dropdown menus that only work on mouse hover</div>
+          <div class="issue-chip">tabindex values &gt; 0 creating unpredictable tab order</div>
+        </div>
+      </div>
+
+      <div class="elem-card" id="el-colour" tabindex="-1">
+        <div class="elem-hdr"><span class="elem-num">06</span><span class="elem-name">Color &amp; Color Contrast</span></div>
+        <div class="elem-body">
+          <p>Sufficient color contrast ensures readability for users with low vision or color blindness. Color must never be the only means of conveying information.</p>
+          <div class="table-wrap">
+            <table aria-label="Contrast ratio requirements">
+              <thead><tr><th scope="col">Content Type</th><th scope="col">AA (Minimum)</th><th scope="col">AAA (Enhanced)</th></tr></thead>
+              <tbody>
+                <tr><td>Normal text (&lt; 18pt)</td><td><strong>4.5:1</strong></td><td>7:1</td></tr>
+                <tr><td>Large text (≥ 18pt or 14pt bold)</td><td><strong>3:1</strong></td><td>4.5:1</td></tr>
+                <tr><td>UI components / graphical objects</td><td><strong>3:1</strong></td><td>—</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <span class="elem-sub">WCAG References</span>
+          <div class="wcag-ref"><span class="wcag-sc">1.4.1 A</span> Use of Color — Color must not be the only visual means of conveying information.</div>
+          <div class="wcag-ref"><span class="wcag-sc">1.4.3 AA</span> Contrast (Minimum) — Text must have minimum 4.5:1 contrast ratio.</div>
+          <div class="wcag-ref"><span class="wcag-sc">1.4.11 AA</span> Non-text Contrast — UI components must have at least 3:1 contrast ratio.</div>
+        </div>
+      </div>
+
+      <!-- Elements 7–31: compact cards -->
+      <div class="elem-card" id="el-tables" tabindex="-1">
+        <div class="elem-hdr"><span class="elem-num">07</span><span class="elem-name">Tables</span></div>
+        <div class="elem-body">
+          <p>Data tables must be marked up with headers, captions, and scope attributes so screen reader users can understand cell relationships when navigating by row and column.</p>
+          <span class="elem-sub">What to Check</span>
+          <div class="check-row"><span class="check-icon">☐</span>Is a table used only for actual data (not layout purposes)?</div>
+          <div class="check-row"><span class="check-icon">☐</span>Are column and row headers marked with &lt;th&gt; elements and scope attributes?</div>
+          <div class="check-row"><span class="check-icon">☐</span>Is a &lt;caption&gt; provided to describe the table purpose?</div>
+          <div class="check-row"><span class="check-icon">☐</span>For complex tables, are data cells associated with headers via headers/id?</div>
+          <div class="check-row"><span class="check-icon">☐</span>Are sortable column headers using aria-sort attribute?</div>
+          <span class="elem-sub">WCAG References</span>
+          <div class="wcag-ref"><span class="wcag-sc">1.3.1 A</span> Info and Relationships — Table headers and data relationships must be programmatically determinable.</div>
+          <span class="elem-sub">Common Issues</span>
+          <div class="issue-chip">Tables used for page layout — creates incorrect reading order for SR users</div>
+          <div class="issue-chip">Missing &lt;th&gt; elements — SR reads only raw cell data with no column context</div>
+          <div class="issue-chip">Missing &lt;caption&gt; — SR users don't know what the table represents</div>
+        </div>
+      </div>
+
+      <div class="elem-card" id="el-pagetitle" tabindex="-1">
+        <div class="elem-hdr"><span class="elem-num">08</span><span class="elem-name">Page Titles</span></div>
+        <div class="elem-body">
+          <p>The page title is the first thing announced when a screen reader user lands on a page. It must be unique, descriptive, and identify both the current page and the site.</p>
+          <span class="elem-sub">What to Check</span>
+          <div class="check-row"><span class="check-icon">☐</span>Does every page have a &lt;title&gt; element in the &lt;head&gt;?</div>
+          <div class="check-row"><span class="check-icon">☐</span>Is the page title unique across all pages of the website?</div>
+          <div class="check-row"><span class="check-icon">☐</span>Does the title describe the specific page content (not just the site name)?</div>
+          <div class="check-row"><span class="check-icon">☐</span>For multi-step forms, does the title reflect the current step?</div>
+          <span class="elem-sub">WCAG References</span>
+          <div class="wcag-ref"><span class="wcag-sc">2.4.2 A</span> Page Titled — Web pages must have titles that describe their topic or purpose.</div>
+        </div>
+      </div>
+
+      <div class="elem-card" id="el-iframes" tabindex="-1">
+        <div class="elem-hdr"><span class="elem-num">09</span><span class="elem-name">Frames &amp; iframes</span></div>
+        <div class="elem-body">
+          <p>iframes embed external content. Screen reader users encounter them as separate browsable regions. They must be labeled so users know what is inside before entering.</p>
+          <span class="elem-sub">What to Check</span>
+          <div class="check-row"><span class="check-icon">☐</span>Does every &lt;iframe&gt; have a title attribute?</div>
+          <div class="check-row"><span class="check-icon">☐</span>Is the title value descriptive and unique on the page?</div>
+          <div class="check-row"><span class="check-icon">☐</span>Are iframes containing no meaningful content hidden from AT?</div>
+          <span class="elem-sub">WCAG References</span>
+          <div class="wcag-ref"><span class="wcag-sc">4.1.2 A</span> Name, Role, Value — iframes must have an accessible name via the title attribute.</div>
+        </div>
+      </div>
+
+      <div class="elem-card" id="el-lists" tabindex="-1">
+        <div class="elem-hdr"><span class="elem-num">10</span><span class="elem-name">Lists</span></div>
+        <div class="elem-body">
+          <p>Screen readers announce list type and item count, helping users understand content organization and navigate efficiently.</p>
+          <span class="elem-sub">What to Check</span>
+          <div class="check-row"><span class="check-icon">☐</span>Are visual lists marked up as &lt;ul&gt;, &lt;ol&gt;, or &lt;dl&gt;?</div>
+          <div class="check-row"><span class="check-icon">☐</span>Are &lt;li&gt; elements placed only inside list elements?</div>
+          <div class="check-row"><span class="check-icon">☐</span>Are nested lists correctly structured (list inside a list item)?</div>
+          <div class="check-row"><span class="check-icon">☐</span>Are unnecessary single-item lists avoided?</div>
+          <span class="elem-sub">WCAG References</span>
+          <div class="wcag-ref"><span class="wcag-sc">1.3.1 A</span> Info and Relationships — List structure must be programmatically determinable.</div>
+          <span class="elem-sub">Common Issue</span>
+          <div class="issue-chip">Visual bullet points styled with CSS — no semantic &lt;ul&gt;/&lt;li&gt; markup. NVDA does not announce "list".</div>
+        </div>
+      </div>
+
+      <div class="elem-card" id="el-multimedia" tabindex="-1">
+        <div class="elem-hdr"><span class="elem-num">11</span><span class="elem-name">Multimedia (Audio &amp; Video)</span></div>
+        <div class="elem-body">
+          <span class="elem-sub">What to Check</span>
+          <div class="check-row"><span class="check-icon">☐</span>Does all pre-recorded audio have a text transcript?</div>
+          <div class="check-row"><span class="check-icon">☐</span>Does all pre-recorded video have synchronized captions?</div>
+          <div class="check-row"><span class="check-icon">☐</span>Does video with important visual content have an audio description track?</div>
+          <div class="check-row"><span class="check-icon">☐</span>Is auto-playing media avoided? If used, does it stop within 3 seconds or provide controls?</div>
+          <div class="check-row"><span class="check-icon">☐</span>Are all media player controls keyboard operable?</div>
+          <span class="elem-sub">WCAG References</span>
+          <div class="wcag-ref"><span class="wcag-sc">1.2.2 A</span> Captions (Prerecorded) — Captions must be provided for all prerecorded audio in synchronized media.</div>
+          <div class="wcag-ref"><span class="wcag-sc">1.2.3 A</span> Audio Description or Alternative — Audio description or text alternative for prerecorded video.</div>
+          <div class="wcag-ref"><span class="wcag-sc">1.4.2 A</span> Audio Control — If audio plays for more than 3 seconds, a mechanism to pause or stop it must exist.</div>
+        </div>
+      </div>
+
+      <div class="elem-card" id="el-dialogs" tabindex="-1">
+        <div class="elem-hdr"><span class="elem-num">12</span><span class="elem-name">Dialogs &amp; Overlays</span></div>
+        <div class="elem-body">
+          <span class="elem-sub">What to Check</span>
+          <div class="check-row"><span class="check-icon">☐</span>When a modal opens, does focus move inside the dialog?</div>
+          <div class="check-row"><span class="check-icon">☐</span>Is focus trapped within a modal dialog (cannot Tab out to background)?</div>
+          <div class="check-row"><span class="check-icon">☐</span>When the dialog closes, does focus return to the triggering element?</div>
+          <div class="check-row"><span class="check-icon">☐</span>Does the dialog have role='dialog' and a descriptive aria-labelledby?</div>
+          <div class="check-row"><span class="check-icon">☐</span>Can the dialog be closed with the Escape key?</div>
+          <div class="check-row"><span class="check-icon">☐</span>Is background content hidden from screen readers (aria-hidden on background)?</div>
+          <span class="elem-sub">WCAG References</span>
+          <div class="wcag-ref"><span class="wcag-sc">4.1.2 A</span> Name, Role, Value — Dialogs must expose their role and accessible name to AT.</div>
+          <div class="wcag-ref"><span class="wcag-sc">2.1.2 A</span> No Keyboard Trap — Focus must not be locked inside dialog without a way to exit.</div>
+        </div>
+      </div>
+
+      <div class="elem-card" id="el-reflow" tabindex="-1">
+        <div class="elem-hdr"><span class="elem-num">13</span><span class="elem-name">Reflow &amp; Zoom</span></div>
+        <div class="elem-body">
+          <p>Content must reflow and remain fully usable at 400% zoom without requiring horizontal scrolling — equivalent to a 320 CSS pixel viewport width.</p>
+          <span class="elem-sub">What to Check</span>
+          <div class="check-row"><span class="check-icon">☐</span>Set desktop viewport to 1280px, zoom browser to 400%. Does content reflow to single column?</div>
+          <div class="check-row"><span class="check-icon">☐</span>Is any text or content cut off, overlapping, or hidden at 400% zoom?</div>
+          <div class="check-row"><span class="check-icon">☐</span>Does the layout remain functional and usable at high zoom?</div>
+          <span class="elem-sub">WCAG References</span>
+          <div class="wcag-ref"><span class="wcag-sc">1.4.10 AA</span> Reflow — Content can be presented without loss of information at 320 CSS pixels width.</div>
+        </div>
+      </div>
+
+      <div class="elem-card" id="el-status" tabindex="-1">
+        <div class="elem-hdr"><span class="elem-num">14</span><span class="elem-name">Status Messages &amp; Dynamic Content</span></div>
+        <div class="elem-body">
+          <p>Dynamic page updates — cart counts, form errors, loading indicators, search results — must be announced by screen readers without shifting keyboard focus.</p>
+          <span class="elem-sub">What to Check</span>
+          <div class="check-row"><span class="check-icon">☐</span>Are status messages using ARIA live regions or roles?</div>
+          <div class="check-row"><span class="check-icon">☐</span>Are success, error, and progress messages announced without moving focus?</div>
+          <div class="check-row"><span class="check-icon">☐</span>Is role='status' or aria-live='polite' used for non-critical updates?</div>
+          <div class="check-row"><span class="check-icon">☐</span>Is role='alert' or aria-live='assertive' used only for critical messages?</div>
+          <div class="check-row"><span class="check-icon">☐</span>Does the live region exist in the DOM on page load (not injected dynamically)?</div>
+          <span class="elem-sub">WCAG References</span>
+          <div class="wcag-ref"><span class="wcag-sc">4.1.3 AA</span> Status Messages — Status messages can be programmatically determined without receiving focus.</div>
+        </div>
+      </div>
+
+      <div class="elem-card" id="el-accordions" tabindex="-1">
+        <div class="elem-hdr"><span class="elem-num">15</span><span class="elem-name">Accordions</span></div>
+        <div class="elem-body">
+          <span class="elem-sub">What to Check</span>
+          <div class="check-row"><span class="check-icon">☐</span>Is the accordion trigger a &lt;button&gt; element?</div>
+          <div class="check-row"><span class="check-icon">☐</span>Does aria-expanded accurately reflect open/closed state (true/false)?</div>
+          <div class="check-row"><span class="check-icon">☐</span>Does aria-controls reference the id of the content panel?</div>
+          <div class="check-row"><span class="check-icon">☐</span>Does focus stay on the trigger button when toggling content?</div>
+          <div class="check-row"><span class="check-icon">☐</span>Can the accordion be toggled with Enter or Space keys?</div>
+          <span class="elem-sub">WCAG References</span>
+          <div class="wcag-ref"><span class="wcag-sc">4.1.2 A</span> Name, Role, Value — aria-expanded state must be exposed programmatically.</div>
+          <div class="wcag-ref"><span class="wcag-sc">2.1.1 A</span> Keyboard — Accordion must be fully operable by keyboard.</div>
+        </div>
+      </div>
+
+      <!-- Elements 16-31: minimal format -->
+      <div class="elem-card" id="el-css-hc" tabindex="-1">
+        <div class="elem-hdr"><span class="elem-num">16</span><span class="elem-name">Style Sheets &amp; High Contrast Testing</span></div>
+        <div class="elem-body">
+          <span class="elem-sub">What to Check</span>
+          <div class="check-row"><span class="check-icon">☐</span>Is important content delivered via CSS background-image? If so, failure.</div>
+          <div class="check-row"><span class="check-icon">☐</span>Does text remain readable when browser zoom is applied?</div>
+          <div class="check-row"><span class="check-icon">☐</span>Are .sr-only elements genuinely off-screen (not display:none)?</div>
+          <div class="check-row"><span class="check-icon">☐</span>Does the page remain usable in Windows High Contrast Mode?</div>
+          <div class="check-row"><span class="check-icon">☐</span>Are focus indicators visible in forced color / high contrast mode?</div>
+          <span class="elem-sub">WCAG References</span>
+          <div class="wcag-ref"><span class="wcag-sc">1.4.4 AA</span> Resize Text — Text can be resized up to 200% without loss of content or functionality.</div>
+          <div class="wcag-ref"><span class="wcag-sc">1.3.1 A</span> Info and Relationships — Structure must not be conveyed through CSS presentation alone.</div>
+        </div>
+      </div>
+
+      <div class="elem-card" id="el-flash" tabindex="-1">
+        <div class="elem-hdr"><span class="elem-num">17</span><span class="elem-name">Blinking, Moving or Flashing Elements</span></div>
+        <div class="elem-body">
+          <p>Flashing content at 3Hz or more can trigger photosensitive epileptic seizures. Moving content must be controllable.</p>
+          <span class="elem-sub">What to Check</span>
+          <div class="check-row"><span class="check-icon">☐</span>Is there any flashing content? Does it flash fewer than 3 times per second?</div>
+          <div class="check-row"><span class="check-icon">☐</span>Is there any auto-playing animation or moving banner?</div>
+          <div class="check-row"><span class="check-icon">☐</span>Is a mechanism provided to pause, stop, or hide any moving content?</div>
+          <div class="check-row"><span class="check-icon">☐</span>Does any GIF or CSS animation loop continuously without user control?</div>
+          <span class="elem-sub">WCAG References</span>
+          <div class="wcag-ref"><span class="wcag-sc">2.3.1 A</span> Three Flashes or Below Threshold — Pages must not contain content that flashes more than 3 times per second.</div>
+          <div class="wcag-ref"><span class="wcag-sc">2.2.2 A</span> Pause, Stop, Hide — Moving, blinking, or auto-updating content must have a mechanism to pause, stop, or hide.</div>
+        </div>
+      </div>
+
+      <div class="elem-card" id="el-imagemaps" tabindex="-1">
+        <div class="elem-hdr"><span class="elem-num">18</span><span class="elem-name">Image Maps</span></div>
+        <div class="elem-body">
+          <span class="elem-sub">What to Check</span>
+          <div class="check-row"><span class="check-icon">☐</span>Does each &lt;area&gt; element have a meaningful alt attribute?</div>
+          <div class="check-row"><span class="check-icon">☐</span>Can all hotspot areas be reached via Tab key?</div>
+          <div class="check-row"><span class="check-icon">☐</span>Can hotspot links be activated via Enter key?</div>
+          <span class="elem-sub">WCAG References</span>
+          <div class="wcag-ref"><span class="wcag-sc">1.1.1 A</span> Non-text Content — All image map areas must have text alternatives.</div>
+          <div class="wcag-ref"><span class="wcag-sc">2.1.1 A</span> Keyboard — All image map hotspots must be keyboard operable.</div>
+        </div>
+      </div>
+
+      <div class="elem-card" id="el-orientation" tabindex="-1">
+        <div class="elem-hdr"><span class="elem-num">19</span><span class="elem-name">Orientation (SC 1.3.4)</span></div>
+        <div class="elem-body">
+          <p>Content must not be restricted to a single display orientation. Users with devices mounted on wheelchairs may have their device fixed in portrait or landscape.</p>
+          <span class="elem-sub">What to Check</span>
+          <div class="check-row"><span class="check-icon">☐</span>Does content work in both portrait and landscape orientations?</div>
+          <div class="check-row"><span class="check-icon">☐</span>Is there any "Please rotate your device" message blocking content?</div>
+          <span class="elem-sub">WCAG References</span>
+          <div class="wcag-ref"><span class="wcag-sc">1.3.4 AA</span> Orientation — Content must not restrict view to a single orientation unless it is essential.</div>
+        </div>
+      </div>
+
+      <div class="elem-card" id="el-charkey" tabindex="-1">
+        <div class="elem-hdr"><span class="elem-num">20</span><span class="elem-name">Character Key Shortcuts (SC 2.1.4)</span></div>
+        <div class="elem-body">
+          <p>Single-character keyboard shortcuts cause accidental activation for speech-input users and users with motor tremors.</p>
+          <span class="elem-sub">What to Check</span>
+          <div class="check-row"><span class="check-icon">☐</span>If single-key shortcuts exist, can they be turned off, remapped, or set active-on-focus only?</div>
+          <span class="elem-sub">WCAG References</span>
+          <div class="wcag-ref"><span class="wcag-sc">2.1.4 A</span> Character Key Shortcuts — Single-character key shortcuts must be remappable, disableable, or active-on-focus only.</div>
+        </div>
+      </div>
+
+      <div class="elem-card" id="el-ntcontrast" tabindex="-1">
+        <div class="elem-hdr"><span class="elem-num">21</span><span class="elem-name">Non-Text Contrast (SC 1.4.11)</span></div>
+        <div class="elem-body">
+          <p>UI component boundaries and informative graphical objects must have at least 3:1 contrast against adjacent colors.</p>
+          <span class="elem-sub">What to Check</span>
+          <div class="check-row"><span class="check-icon">☐</span>Do input borders meet 3:1 contrast against their background?</div>
+          <div class="check-row"><span class="check-icon">☐</span>Do button boundaries meet 3:1 contrast?</div>
+          <div class="check-row"><span class="check-icon">☐</span>Do focus indicators have 3:1 contrast in all states?</div>
+          <div class="check-row"><span class="check-icon">☐</span>Do informative icons (search, warning) meet 3:1 contrast?</div>
+          <span class="elem-sub">WCAG References</span>
+          <div class="wcag-ref"><span class="wcag-sc">1.4.11 AA</span> Non-text Contrast — UI components and graphical objects must have at least 3:1 contrast ratio.</div>
+          <span class="elem-sub">Common Issues</span>
+          <div class="issue-chip">Light gray (#CCCCCC) input border on white background — approximately 1.6:1 ratio, far below 3:1</div>
+          <div class="issue-chip">Focus ring that disappears or is too thin to be visible at required contrast</div>
+        </div>
+      </div>
+
+      <div class="elem-card" id="el-textspacing" tabindex="-1">
+        <div class="elem-hdr"><span class="elem-num">22</span><span class="elem-name">Text Spacing (SC 1.4.12)</span></div>
+        <div class="elem-body">
+          <p>The page must not break, clip, or overlap content when these overrides are applied: line-height 1.5×, paragraph spacing 2×, letter-spacing 0.12×, word-spacing 0.16×.</p>
+          <span class="elem-sub">What to Check</span>
+          <div class="check-row"><span class="check-icon">☐</span>Does text remain readable when all 4 spacing overrides are applied simultaneously?</div>
+          <div class="check-row"><span class="check-icon">☐</span>Are there fixed-height containers that clip overflowing text?</div>
+          <span class="elem-sub">WCAG References</span>
+          <div class="wcag-ref"><span class="wcag-sc">1.4.12 AA</span> Text Spacing — No loss of content or functionality when text spacing styles are overridden.</div>
+        </div>
+      </div>
+
+      <div class="elem-card" id="el-ptrgest" tabindex="-1">
+        <div class="elem-hdr"><span class="elem-num">23</span><span class="elem-name">Pointer Gestures (SC 2.5.1)</span></div>
+        <div class="elem-body">
+          <p>Any functionality requiring multipoint gestures (pinch zoom) or path-based gestures (swipe, drag) must have a simple single-pointer alternative.</p>
+          <span class="elem-sub">What to Check</span>
+          <div class="check-row"><span class="check-icon">☐</span>Do sliders have + and – increment/decrement buttons as an alternative to dragging?</div>
+          <div class="check-row"><span class="check-icon">☐</span>Do carousels have explicit Next/Previous buttons as an alternative to swipe?</div>
+          <div class="check-row"><span class="check-icon">☐</span>Do drag-and-drop interfaces have a button-based alternative?</div>
+          <span class="elem-sub">WCAG References</span>
+          <div class="wcag-ref"><span class="wcag-sc">2.5.1 A</span> Pointer Gestures — Multipoint or path-based gestures must have a single-pointer alternative.</div>
+        </div>
+      </div>
+
+      <div class="elem-card" id="el-ptrcancel" tabindex="-1">
+        <div class="elem-hdr"><span class="elem-num">24</span><span class="elem-name">Pointer Cancellation (SC 2.5.2)</span></div>
+        <div class="elem-body">
+          <p>Actions should trigger on the Up-Event (releasing), not the Down-Event (pressing). Users must be able to drag away and cancel before releasing.</p>
+          <span class="elem-sub">How to Test</span>
+          <div class="check-row"><span class="check-icon">☐</span>Click and hold a button → drag pointer outside → release. The action should NOT have triggered.</div>
+          <span class="elem-sub">WCAG References</span>
+          <div class="wcag-ref"><span class="wcag-sc">2.5.2 A</span> Pointer Cancellation — For single-pointer functionality, at least one cancellation mechanism must exist.</div>
+        </div>
+      </div>
+
+      <div class="elem-card" id="el-labelinname" tabindex="-1">
+        <div class="elem-hdr"><span class="elem-num">25</span><span class="elem-name">Label in Name (SC 2.5.3)</span></div>
+        <div class="elem-body">
+          <p>The accessible name must contain the exact visible text label. Speech recognition users say exactly what they see — if accessible name differs from visible label, voice commands fail.</p>
+          <span class="elem-sub">What to Check</span>
+          <div class="check-row"><span class="check-icon">☐</span>Does the accessible name contain the visible text label verbatim?</div>
+          <div class="check-row"><span class="check-icon">☐</span>Does NVDA announce the exact same text that appears visually on the button/link?</div>
+          <span class="elem-sub">WCAG References</span>
+          <div class="wcag-ref"><span class="wcag-sc">2.5.3 A</span> Label in Name — Accessible name must contain the visible text label for interactive controls.</div>
+          <span class="elem-sub">Common Issues</span>
+          <div class="issue-chip">Visible button says "Send" but aria-label='Submit Message' — voice command "Click Send" fails</div>
+        </div>
+      </div>
+
+      <div class="elem-card" id="el-sequence" tabindex="-1">
+        <div class="elem-hdr"><span class="elem-num">26</span><span class="elem-name">Meaningful Sequence (SC 1.3.2)</span></div>
+        <div class="elem-body">
+          <p>The DOM order must match the visual reading order. CSS Grid and Flexbox can visually reorder elements — but screen readers follow DOM order.</p>
+          <span class="elem-sub">How to Test</span>
+          <div class="check-row"><span class="check-icon">☐</span>Firefox: View → Page Style → No Style. Does the content still make logical sense?</div>
+          <div class="check-row"><span class="check-icon">☐</span>NVDA: Press Down Arrow to read page linearly. Does reading order match visual left-to-right order?</div>
+          <span class="elem-sub">WCAG References</span>
+          <div class="wcag-ref"><span class="wcag-sc">1.3.2 A</span> Meaningful Sequence — Correct reading sequence must be programmatically determinable.</div>
+        </div>
+      </div>
+
+      <div class="elem-card" id="el-sensory" tabindex="-1">
+        <div class="elem-hdr"><span class="elem-num">27</span><span class="elem-name">Sensory Characteristics (SC 1.3.3)</span></div>
+        <div class="elem-body">
+          <p>Instructions must not rely solely on shape, size, visual location, color, or sound. Example failure: "Click the round button on the right."</p>
+          <span class="elem-sub">WCAG References</span>
+          <div class="wcag-ref"><span class="wcag-sc">1.3.3 A</span> Sensory Characteristics — Instructions must not rely solely on shape, size, visual location, orientation, or sound.</div>
+          <span class="elem-sub">Common Issues</span>
+          <div class="issue-chip">"Click the round green button on the right" — shape + color + location all sensory</div>
+          <div class="issue-chip">"You will hear a confirmation beep" — sound only, no visual alternative</div>
+        </div>
+      </div>
+
+      <div class="elem-card" id="el-multipleways" tabindex="-1">
+        <div class="elem-hdr"><span class="elem-num">28</span><span class="elem-name">Multiple Ways to Find Content (SC 2.4.5)</span></div>
+        <div class="elem-body">
+          <p>Users must have more than one way to find any page — main navigation, search, site map, breadcrumbs, or related links.</p>
+          <span class="elem-sub">WCAG References</span>
+          <div class="wcag-ref"><span class="wcag-sc">2.4.5 AA</span> Multiple Ways — More than one way must exist to locate a web page within a set of web pages.</div>
+        </div>
+      </div>
+
+      <div class="elem-card" id="el-consistent" tabindex="-1">
+        <div class="elem-hdr"><span class="elem-num">29</span><span class="elem-name">Consistent Navigation &amp; Identification (SC 3.2.3 / 3.2.4)</span></div>
+        <div class="elem-body">
+          <p>Navigation menus must appear in the same relative order on every page. Components with the same functionality must have the same accessible name across the site.</p>
+          <span class="elem-sub">WCAG References</span>
+          <div class="wcag-ref"><span class="wcag-sc">3.2.3 AA</span> Consistent Navigation — Navigational menus appear in the same relative order across all pages.</div>
+          <div class="wcag-ref"><span class="wcag-sc">3.2.4 AA</span> Consistent Identification — Components with same functionality have the same accessible name site-wide.</div>
+          <span class="elem-sub">Common Issues</span>
+          <div class="issue-chip">Search icon labeled "Search" on homepage but "Find" on interior pages — breaks voice control</div>
+        </div>
+      </div>
+
+      <div class="elem-card" id="el-language" tabindex="-1">
+        <div class="elem-hdr"><span class="elem-num">30</span><span class="elem-name">Language of Page &amp; Parts (SC 3.1.1 / 3.1.2)</span></div>
+        <div class="elem-body">
+          <p>The primary language must be declared in the HTML element. When text appears in a different language, that passage must be wrapped in a lang attribute.</p>
+          <span class="elem-sub">How to Test</span>
+          <div class="check-row"><span class="check-icon">☐</span>F12 → Elements → Find &lt;html&gt; tag → check lang attribute. Should be: lang='en', lang='hi', lang='fr', etc.</div>
+          <div class="check-row"><span class="check-icon">☐</span>Search DOM for foreign language text — verify it is wrapped: &lt;span lang='fr'&gt;Bonjour!&lt;/span&gt;</div>
+          <span class="elem-sub">WCAG References</span>
+          <div class="wcag-ref"><span class="wcag-sc">3.1.1 A</span> Language of Page — The default human language of each web page must be programmatically determined.</div>
+          <div class="wcag-ref"><span class="wcag-sc">3.1.2 AA</span> Language of Parts — The human language of each passage in a different language must be programmatically determined.</div>
+        </div>
+      </div>
+
+      <div class="elem-card" id="el-parsing" tabindex="-1">
+        <div class="elem-hdr"><span class="elem-num">31</span><span class="elem-name">Parsing &amp; Code Validity (SC 4.1.1)</span></div>
+        <div class="elem-body">
+          <p>Code must be clean and valid so Assistive Technologies can parse it without crashing or misinterpreting the page structure. Duplicate IDs break aria-labelledby and aria-describedby.</p>
+          <span class="elem-sub">What to Check</span>
+          <div class="check-row"><span class="check-icon">☐</span>Are there any duplicate IDs on the same page?</div>
+          <div class="check-row"><span class="check-icon">☐</span>Are all HTML elements properly opened and closed?</div>
+          <div class="check-row"><span class="check-icon">☐</span>Are elements correctly nested (no block-level elements inside inline)?</div>
+          <div class="check-row"><span class="check-icon">☐</span>Do aria-labelledby and aria-describedby reference IDs that actually exist?</div>
+          <span class="elem-sub">How to Test</span>
+          <div class="table-wrap">
+            <table class="test-table" aria-label="How to test code validity">
+              <thead><tr><th>#</th><th>Method</th><th>What to Do &amp; What to Expect</th></tr></thead>
+              <tbody>
+                <tr><td>1</td><td>W3C Validator</td><td>validator.w3.org — Enter the page URL. Check for Duplicate ID errors — critical because ARIA attributes referencing duplicate IDs behave unpredictably.</td></tr>
+                <tr><td>2</td><td>DevTools Console</td><td>Run: <code>const ids = [...document.querySelectorAll('[id]')].map(el => el.id); const dupes = ids.filter((id, i) => ids.indexOf(id) !== i); console.log(dupes)</code></td></tr>
+                <tr><td>3</td><td>NVDA</td><td>If NVDA announces nothing, crashes, or reads garbled content on certain elements, invalid HTML may be the cause.</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <span class="elem-sub">WCAG References</span>
+          <div class="wcag-ref"><span class="wcag-sc">4.1.1 A</span> Parsing — Elements must have correct nesting, unique IDs, and complete tags.</div>
+          <span class="elem-sub">Common Issues</span>
+          <div class="issue-chip">Duplicate id attributes — multiple elements with id='header' breaks aria-labelledby</div>
+          <div class="issue-chip">Unclosed tags creating invalid DOM structure — SR reads incorrect content</div>
+          <div class="issue-chip">aria-describedby pointing to an id that does not exist — announcement fails silently</div>
+        </div>
+      </div>
+
+      <!-- ── TOOLS REFERENCE ──────────────────────────────────── -->
+      <h2 id="tools-ref" tabindex="-1">Testing Tools Reference</h2>
+      <div class="table-wrap">
+        <table aria-label="Accessibility testing tools reference">
+          <thead><tr><th scope="col">Tool</th><th scope="col">Best Used For</th><th scope="col">Access</th></tr></thead>
+          <tbody>
+            <tr><td><strong>ANDI</strong></td><td>Headings, focusable elements, images, forms, iframes, tables, page title</td><td>Free bookmarklet — Chrome &amp; Firefox</td></tr>
+            <tr><td><strong>ARC Toolkit</strong></td><td>Full WCAG audit, text spacing override, reflow simulation</td><td>Free Chrome extension</td></tr>
+            <tr><td><strong>Colour Contrast Analyser</strong></td><td>Manual contrast check for text and UI component boundaries</td><td>Free Windows/Mac app (TPGi)</td></tr>
+            <tr><td><strong>WAVE</strong></td><td>Visual accessibility overlay — quick scan for common issues</td><td>Free Chrome/Firefox extension</td></tr>
+            <tr><td><strong>axe DevTools</strong></td><td>Automated CI/CD testing, component-level scanning</td><td>Free Chrome extension + paid API</td></tr>
+            <tr><td><strong>PEAT</strong></td><td>Photosensitive epilepsy / flashing content analysis</td><td>Free Windows app — Trace Center</td></tr>
+            <tr><td><strong>NVDA</strong></td><td>Windows screen reader for comprehensive AT testing</td><td>Free — nvaccess.org</td></tr>
+            <tr><td><strong>JAWS</strong></td><td>Enterprise Windows screen reader — most common among blind users</td><td>Commercial — freedomscientific.com</td></tr>
+            <tr><td><strong>VoiceOver</strong></td><td>macOS and iOS built-in screen reader</td><td>Built-in — Cmd+F5 on Mac</td></tr>
+            <tr><td><strong>W3C Validator</strong></td><td>HTML markup validation — catch duplicate IDs, invalid nesting</td><td>Free — validator.w3.org</td></tr>
+            <tr><td><strong>Text Spacing Bookmarklet</strong></td><td>Apply WCAG 1.4.12 spacing overrides instantly</td><td>Free — accessibility-bookmarklets.com</td></tr>
+            <tr><td><strong>Playwright + axe-core</strong></td><td>Automated accessibility testing in CI/CD pipelines</td><td>Open source</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout ok" role="note">
+        <span class="callout-icon" aria-hidden="true">✓</span>
+        <p>Automated tools catch approximately <strong>30% of accessibility issues</strong>. Manual testing with keyboard-only navigation, real screen readers (NVDA/JAWS/VoiceOver), and zoom testing is essential for a complete audit. Always test with real users when possible.</p>
+      </div>
+
+    </article>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-top">
+      <nav class="footer-nav" aria-label="Footer navigation">
+        <a href="index.html">Home</a>
+        <span class="footer-sep" aria-hidden="true">■</span>
+        <a href="writing.html">Writing</a>
+        <span class="footer-sep" aria-hidden="true">■</span>
+        <a href="was-practice-quiz.html">WAS Quiz</a>
+        <span class="footer-sep" aria-hidden="true">■</span>
+        <a href="accessibility-statement.html">Accessibility</a>
+      </nav>
+      <fieldset class="scheme-fieldset">
+        <legend class="scheme-legend">Color scheme:</legend>
+        <div class="scheme-options">
+          <label class="scheme-label is-selected"><input class="scheme-radio" type="radio" name="cs" value="system" checked><span class="scheme-dot" aria-hidden="true"></span>System</label>
+          <label class="scheme-label"><input class="scheme-radio" type="radio" name="cs" value="light"><span class="scheme-dot" aria-hidden="true"></span>Light</label>
+          <label class="scheme-label"><input class="scheme-radio" type="radio" name="cs" value="dark"><span class="scheme-dot" aria-hidden="true"></span>Dark</label>
+        </div>
+      </fieldset>
+    </div>
+    <p class="footer-copy">© 2026 Sushil Chauhan · IAAP-CPWA | CPACC | WAS</p>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
