@@ -27,47 +27,49 @@
       <a href="index.html" class="nav-link">Home</a>
       <a href="writing.html" class="nav-link">Writing</a>
       <a href="was-practice-quiz.html" class="nav-link" aria-current="page">WAS Quiz</a>
-      <a href="mailto:csgn2806@gmail.com" class="header-cta">Contact</a>
+      <a href="mailto:csgn2806@gmail.com" class="header-cta" aria-label="Contact Sushil — opens email client">Contact</a>
     </nav>
   </div>
 </header>
 
-<main id="main-content">
+<main id="main-content" tabindex="-1">
   <div class="wrap">
 
     <header class="quiz-hero" aria-labelledby="quiz-title">
       <div class="eyebrow">WAS Exam Preparation</div>
       <h1 id="quiz-title">WAS Certification Practice Quiz</h1>
       <p>84 scenario-based practice questions across 10 topics — WCAG criteria, ARIA, screen readers, keyboard navigation, forms, colour contrast, images, and more. Select an answer to see instantly whether it is correct and read a full explanation.</p>
-      <div class="stats-row" aria-label="Quiz overview">
-        <div class="stat-card"><span class="stat-num" id="sn-total">84</span><span class="stat-lbl">Total questions</span></div>
-        <div class="stat-card"><span class="stat-num" id="sn-done">0</span><span class="stat-lbl">Answered</span></div>
-        <div class="stat-card"><span class="stat-num" id="sn-right">0</span><span class="stat-lbl">Correct</span></div>
-        <div class="stat-card"><span class="stat-num" id="sn-pct">0%</span><span class="stat-lbl">Score</span></div>
-      </div>
+      <dl class="stats-row" aria-label="Quiz statistics">
+        <div class="stat-card"><dd class="stat-num" id="sn-total">84</dd><dt class="stat-lbl">Total questions</dt></div>
+        <div class="stat-card"><dd class="stat-num" id="sn-done">0</dd><dt class="stat-lbl">Answered</dt></div>
+        <div class="stat-card"><dd class="stat-num" id="sn-right">0</dd><dt class="stat-lbl">Correct</dt></div>
+        <div class="stat-card"><dd class="stat-num" id="sn-pct">0%</dd><dt class="stat-lbl">Score</dt></div>
+      </dl>
     </header>
 
-    <section aria-label="Quiz questions">
+    <section aria-labelledby="quiz-section-h">
+      <h2 id="quiz-section-h" class="sr-only">Quiz Questions</h2>
       <div class="filter-wrap">
         <span class="filter-lbl" id="filter-group-lbl">Filter by topic</span>
         <div class="filter-btns" role="group" aria-labelledby="filter-group-lbl">
-          <button class="f-btn active" data-cat="all">All (84)</button>
-          <button class="f-btn" data-cat="WCAG Criteria">WCAG Criteria</button>
-          <button class="f-btn" data-cat="Screen Readers">Screen Readers</button>
-          <button class="f-btn" data-cat="ARIA &amp; Roles">ARIA &amp; Roles</button>
-          <button class="f-btn" data-cat="Keyboard &amp; Focus">Keyboard &amp; Focus</button>
-          <button class="f-btn" data-cat="Forms &amp; Inputs">Forms &amp; Inputs</button>
-          <button class="f-btn" data-cat="Colour &amp; Contrast">Colour &amp; Contrast</button>
-          <button class="f-btn" data-cat="Images &amp; Alt Text">Images &amp; Alt Text</button>
-          <button class="f-btn" data-cat="Media &amp; Animation">Media &amp; Animation</button>
-          <button class="f-btn" data-cat="General Accessibility">General</button>
+          <button class="f-btn active" data-cat="all" aria-pressed="true">All (84)</button>
+          <button class="f-btn" aria-pressed="false" data-cat="WCAG Criteria">WCAG Criteria</button>
+          <button class="f-btn" aria-pressed="false" data-cat="Screen Readers">Screen Readers</button>
+          <button class="f-btn" aria-pressed="false" data-cat="ARIA &amp; Roles">ARIA &amp; Roles</button>
+          <button class="f-btn" aria-pressed="false" data-cat="Keyboard &amp; Focus">Keyboard &amp; Focus</button>
+          <button class="f-btn" aria-pressed="false" data-cat="Forms &amp; Inputs">Forms &amp; Inputs</button>
+          <button class="f-btn" aria-pressed="false" data-cat="Colour &amp; Contrast">Colour &amp; Contrast</button>
+          <button class="f-btn" aria-pressed="false" data-cat="Images &amp; Alt Text">Images &amp; Alt Text</button>
+          <button class="f-btn" aria-pressed="false" data-cat="Media &amp; Animation">Media &amp; Animation</button>
+          <button class="f-btn" aria-pressed="false" data-cat="General Accessibility">General</button>
         </div>
       </div>
 
       <div class="progress-bar-wrap" aria-label="Progress">
         <span class="prog-text" id="prog-label">0 of 84 answered</span>
-        <div class="prog-track" aria-hidden="true"><div class="prog-fill" id="prog-fill"></div></div>
-        <button class="reset-btn" id="reset-btn">Reset all</button>
+        <div role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="84" aria-labelledby="prog-label" class="prog-track"><div class="prog-fill" id="prog-fill"></div></div>
+        <button class="reset-btn" id="reset-btn" aria-describedby="reset-warning">Reset all</button>
+      <p id="reset-warning" class="sr-only">Warning: this will erase all your quiz answers and reset your score to zero.</p>
       </div>
 
       <div id="q-list" class="q-list" role="list" aria-label="Practice questions"></div>
@@ -183,7 +185,7 @@ var QS=[
 {q:"What does SC 2.4.3 Focus Order (A) require?",o:["a) All focusable elements have a visible focus indicator","b) Focus order must be logical and meaningful","c) Skip links are provided on every page","d) Tab key is the only key for navigation"],a:1,cat:"Keyboard & Focus",e:"SC 2.4.3 Focus Order (A) requires that if a page can be navigated sequentially, the focus order preserves meaning and operability. DOM order determines tab order — CSS visual reordering does not change focus order."},
 {q:"When should you use aria-live='assertive' vs 'polite'?",o:["a) assertive for all dynamic updates; polite for static content","b) assertive for urgent interruptions (errors); polite for non-urgent updates","c) polite for all dynamic updates to avoid interruption","d) assertive and polite have no practical difference"],a:1,cat:"ARIA & Roles",e:"aria-live='assertive' interrupts current speech immediately — use for errors and critical alerts only. aria-live='polite' waits until the user finishes their current action before announcing — use for status messages, search results, save confirmations."},
 {q:"What is the POUR acronym in WCAG?",o:["a) Perceivable, Usable, Operable, Readable","b) Perceivable, Operable, Understandable, Robust","c) Portable, Operable, Universal, Responsive","d) Practical, Operable, Usable, Reachable"],a:1,cat:"WCAG Criteria",e:"POUR: Perceivable (information presentable in ways users can perceive), Operable (UI components operable by all), Understandable (content and operation understandable), Robust (content interpretable by current and future AT)."},
-{q:"What is the minimum touch target size recommended per WCAG 2.2?",o:["a) 24x24 CSS pixels","b) 44x44 CSS pixels","c) 32x32 CSS pixels","d) 48x48 CSS pixels"],a:1,cat:"Keyboard & Focus",e:"SC 2.5.5 Target Size (AAA) in WCAG 2.1 recommends 44x44px. SC 2.5.8 Target Size Minimum (AA) in WCAG 2.2 requires at least 24x24 CSS pixels for most targets. iOS HIG and Android Material both recommend 44x44px minimum tap targets."},
+{q:"What is the minimum touch target size recommended per WCAG 2.2?",o:["a) 24x24 CSS pixels","b) 44x44 CSS pixels","c) 32x32 CSS pixels","d) 48x48 CSS pixels"],a:0,cat:"Keyboard & Focus",e:"SC 2.5.8 Target Size Minimum (WCAG 2.2, Level AA) requires a minimum of 24x24 CSS pixels. SC 2.5.5 (WCAG 2.1, Level AAA) recommends 44x44px. Apple HIG and Android Material Design also recommend 44x44px as best practice, but the WCAG 2.2 AA compliance threshold is 24×24px."},
 {q:"What role does <fieldset> play in accessible forms?",o:["a) It adds visual borders around form sections","b) It groups related form controls and gives them a shared label via <legend>","c) It creates keyboard shortcuts for form navigation","d) It hides form controls from screen readers"],a:1,cat:"Forms & Inputs",e:"<fieldset> groups related form controls (radio buttons, checkboxes, related inputs). <legend> provides the group name that screen readers announce before each control in the group — e.g. 'Preferred contact method: Email, radio button'."},
 {q:"Which tool is most appropriate for testing colour contrast ratios?",o:["a) NVDA screen reader","b) Colour Contrast Analyser (CCA) by TPGi","c) JAWS virtual cursor","d) Axe browser extension"],a:1,cat:"Colour & Contrast",e:"The Colour Contrast Analyser (CCA) by TPGi is a free dedicated tool for measuring contrast ratios. It includes eyedroppers to sample foreground and background colours from anywhere on screen. Available for Windows and macOS."},
 {q:"Which WCAG SC covers providing error suggestions when a user makes an input error?",o:["a) SC 3.3.1 Error Identification","b) SC 3.3.2 Labels or Instructions","c) SC 3.3.3 Error Suggestion","d) SC 3.3.4 Error Prevention"],a:2,cat:"WCAG Criteria",e:"SC 3.3.3 Error Suggestion (AA) requires that if an input error is detected and suggestions for correction are known, the suggestion is provided — unless it would jeopardise security or purpose. e.g., 'Please enter a date in DD/MM/YYYY format.'"},
@@ -217,6 +219,9 @@ function updateStats(){
   document.getElementById('prog-label').textContent=done+' of '+total+' answered';
   var fillPct=total>0?Math.round((done/total)*100):0;
   document.getElementById('prog-fill').style.width=fillPct+'%';
+  // Update progressbar ARIA value
+  var pb = document.querySelector('[role="progressbar"]');
+  if(pb) { pb.setAttribute('aria-valuenow', String(done)); }
 }
 
 // ── RENDER QUESTIONS ──────────────────────────────────────────────────────────
@@ -247,11 +252,11 @@ function render(){
             '<span class="q-num">Q'+(di+1)+'</span>'+
             '<span class="q-cat">'+esc(q.cat)+'</span>'+
           '</div>'+
-          '<div class="q-text">'+esc(q.q)+'</div>'+
+          '<div class="q-text" id="qt-'+gi+'">'+esc(q.q)+'</div>'+
         '</div>'+
         '<div class="'+badgeClass+'" aria-hidden="true">'+badgeTxt+'</div>'+
       '</div>'+
-      '<div class="q-opts" role="group" aria-label="Answer options for question '+(di+1)+'"></div>'+
+      '<div class="q-opts" role="group" aria-labelledby="qt-'+gi+'"></div>'+
       '<div class="expl'+(ans!==undefined?' show':'')+'" id="expl-'+gi+'"></div>';
 
     // Options
@@ -307,8 +312,13 @@ function pick(gi,chosen,correct,expl,card){
   explEl.className='expl show';
   showExpl(explEl,isRight,QS[gi].o[correct],expl);
 
-  announce(isRight?'Correct!':'Incorrect. See the explanation below.');
+  var scoreMsg = isRight ? 'Correct!' : 'Incorrect. See the explanation below.';
   updateStats();
+  // Announce score after updateStats has recalculated
+  var doneNow = Object.keys(answered).length;
+  var rightNow = Object.values(answered).filter(Boolean).length;
+  var pctNow = doneNow > 0 ? Math.round((rightNow/doneNow)*100) : 0;
+  announce(scoreMsg + ' Score: ' + rightNow + ' correct out of ' + doneNow + ' answered. ' + pctNow + '%.'); 
 }
 
 function showExpl(el,isRight,correctAns,explText){
@@ -322,8 +332,12 @@ function showExpl(el,isRight,correctAns,explText){
 // ── FILTER BUTTONS ────────────────────────────────────────────────────────────
 document.querySelectorAll('.f-btn').forEach(function(btn){
   btn.addEventListener('click',function(){
-    document.querySelectorAll('.f-btn').forEach(function(b){b.classList.remove('active')});
+    document.querySelectorAll('.f-btn').forEach(function(b){
+      b.classList.remove('active');
+      b.setAttribute('aria-pressed','false');
+    });
     btn.classList.add('active');
+    btn.setAttribute('aria-pressed','true');
     curCat=btn.dataset.cat;
     render();
   });
@@ -331,8 +345,9 @@ document.querySelectorAll('.f-btn').forEach(function(btn){
 
 // ── RESET ─────────────────────────────────────────────────────────────────────
 document.getElementById('reset-btn').addEventListener('click',function(){
+  if(!confirm('Reset all answers? This will erase your quiz progress and cannot be undone.')) return;
   answered={};chosenMap={};render();
-  announce('All answers reset. Quiz restarted.');
+  announce('All answers reset. Quiz restarted from the beginning.');
 });
 
 // ── INIT ──────────────────────────────────────────────────────────────────────
