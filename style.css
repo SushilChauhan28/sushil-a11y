@@ -702,9 +702,25 @@ main   { padding: 0 0 5rem; }
 .quiz-hero h1 { font-family: var(--font-display); font-size: clamp(1.75rem, 4vw, 2.4rem); font-weight: 700; line-height: 1.2; letter-spacing: -.02em; margin-bottom: .75rem; }
 .quiz-hero p  { font-size: .96rem; color: var(--text-muted); line-height: 1.8; max-width: 660px; margin-bottom: 1.5rem; }
 .quiz-stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: .6rem; margin: 1.5rem 0; }
-.qs-card { background: var(--bg-alt); border: 1px solid var(--border); border-radius: 4px; padding: .85rem 1rem; text-align: center; }
-.qs-num  { font-family: var(--font-mono); font-size: 1.25rem; font-weight: 700; display: block; color: var(--text); line-height: 1; }
-.qs-lbl  { font-size: .63rem; color: var(--text-muted); margin-top: .25rem; display: block; }
+.qs-card {
+  background: var(--bg-alt); border: 1px solid var(--border); border-radius: 4px;
+  padding: .85rem 1rem; text-align: center;
+  /* flex-direction column-reverse: dt (label) is in DOM first (semantic),
+     but visually shown second (below the number) using flex reverse */
+  display: flex; flex-direction: column-reverse; gap: .2rem;
+}
+.qs-num  { font-family: var(--font-mono); font-size: 1.25rem; font-weight: 700; display: block; color: var(--text); line-height: 1; margin: 0; }
+.qs-lbl  { font-size: .63rem; color: var(--text-muted); display: block; font-weight: 400; margin: 0; }
+/* Reset browser defaults for dl/dt/dd inside stat cards */
+.stats-row dt, .stats-row dd { margin: 0; padding: 0; font-weight: inherit; font-size: inherit; }
+/* stat-card aliases */
+.stat-card {
+  background: var(--bg-alt); border: 1px solid var(--border); border-radius: 4px;
+  padding: .85rem 1rem; text-align: center;
+  display: flex; flex-direction: column-reverse; gap: .2rem;
+}
+.stat-num { font-family: var(--font-mono); font-size: 1.25rem; font-weight: 700; display: block; color: var(--text); line-height: 1; margin: 0; }
+.stat-lbl { font-size: .63rem; color: var(--text-muted); display: block; font-weight: 400; margin: 0; }
 .filter-wrap { margin: 2rem 0 1.25rem; }
 .filter-lbl  { font-family: var(--font-mono); font-size: .63rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--text-subtle); display: block; margin-bottom: .65rem; }
 .filter-btns { display: flex; flex-wrap: wrap; gap: .38rem; }
@@ -714,9 +730,11 @@ main   { padding: 0 0 5rem; }
   background: var(--bg-card); color: var(--text-muted);
   cursor: pointer; transition: all var(--ease); font-family: var(--font-body);
 }
-.f-btn:hover { border-color: var(--border-strong); color: var(--text); }
+.f-btn:hover:not([aria-disabled="true"]) { border-color: var(--border-strong); color: var(--text); }
 .f-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .f-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 700; }
+/* Active (currently selected) filter button — disable interaction */
+.f-btn[aria-disabled="true"] { cursor: default; }
 .progress-bar-wrap { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 1.5rem; padding: 1rem 1.25rem; background: var(--bg-alt); border: 1px solid var(--border); border-radius: 4px; flex-wrap: wrap; }
 .prog-text  { font-family: var(--font-mono); font-size: .72rem; color: var(--text-muted); }
 .prog-track { flex: 1; min-width: 120px; height: 7px; background: var(--border); border-radius: 100px; overflow: hidden; }

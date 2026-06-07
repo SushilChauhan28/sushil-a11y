@@ -40,10 +40,10 @@
       <h1 id="quiz-title">WAS Certification Practice Quiz</h1>
       <p>84 scenario-based practice questions across 10 topics — WCAG criteria, ARIA, screen readers, keyboard navigation, forms, colour contrast, images, and more. Select an answer to see instantly whether it is correct and read a full explanation.</p>
       <dl class="stats-row" aria-label="Quiz statistics">
-        <div class="stat-card"><dd class="stat-num" id="sn-total">84</dd><dt class="stat-lbl">Total questions</dt></div>
-        <div class="stat-card"><dd class="stat-num" id="sn-done">0</dd><dt class="stat-lbl">Answered</dt></div>
-        <div class="stat-card"><dd class="stat-num" id="sn-right">0</dd><dt class="stat-lbl">Correct</dt></div>
-        <div class="stat-card"><dd class="stat-num" id="sn-pct">0%</dd><dt class="stat-lbl">Score</dt></div>
+        <div class="stat-card"><dt class="stat-lbl">Total questions</dt><dd class="stat-num" id="sn-total">84</dd></div>
+        <div class="stat-card"><dt class="stat-lbl">Answered</dt><dd class="stat-num" id="sn-done">0</dd></div>
+        <div class="stat-card"><dt class="stat-lbl">Correct</dt><dd class="stat-num" id="sn-right">0</dd></div>
+        <div class="stat-card"><dt class="stat-lbl">Score</dt><dd class="stat-num" id="sn-pct">0%</dd></div>
       </dl>
     </header>
 
@@ -52,7 +52,7 @@
       <div class="filter-wrap">
         <span class="filter-lbl" id="filter-group-lbl">Filter by topic</span>
         <div class="filter-btns" role="group" aria-labelledby="filter-group-lbl">
-          <button class="f-btn active" data-cat="all" aria-pressed="true">All (84)</button>
+          <button class="f-btn active" data-cat="all" aria-pressed="true" aria-disabled="true">All (84)</button>
           <button class="f-btn" aria-pressed="false" data-cat="WCAG Criteria">WCAG Criteria</button>
           <button class="f-btn" aria-pressed="false" data-cat="Screen Readers">Screen Readers</button>
           <button class="f-btn" aria-pressed="false" data-cat="ARIA &amp; Roles">ARIA &amp; Roles</button>
@@ -66,7 +66,7 @@
       </div>
 
       <div class="progress-bar-wrap" aria-label="Progress">
-        <span class="prog-text" id="prog-label">0 of 84 answered</span>
+        <span class="prog-text" id="prog-label" role="status" aria-live="polite" aria-atomic="true">0 of 84 answered</span>
         <div role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="84" aria-labelledby="prog-label" class="prog-track"><div class="prog-fill" id="prog-fill"></div></div>
         <button class="reset-btn" id="reset-btn" aria-describedby="reset-warning">Reset all</button>
       <p id="reset-warning" class="sr-only">Warning: this will erase all your quiz answers and reset your score to zero.</p>
@@ -191,7 +191,7 @@ var QS=[
 {q:"Which WCAG SC covers providing error suggestions when a user makes an input error?",o:["a) SC 3.3.1 Error Identification","b) SC 3.3.2 Labels or Instructions","c) SC 3.3.3 Error Suggestion","d) SC 3.3.4 Error Prevention"],a:2,cat:"WCAG Criteria",e:"SC 3.3.3 Error Suggestion (AA) requires that if an input error is detected and suggestions for correction are known, the suggestion is provided — unless it would jeopardise security or purpose. e.g., 'Please enter a date in DD/MM/YYYY format.'"},
 {q:"What is the correct heading hierarchy for an accessible web page?",o:["a) Multiple <h1> elements for each main section","b) One <h1> per page, followed by <h2>, <h3> in logical order without skipping levels","c) Start with <h2> to avoid conflicts with the page title","d) Use heading levels based on visual size, not document structure"],a:1,cat:"General Accessibility",e:"One <h1> per page (the primary topic). Heading levels must be nested correctly: h1→h2→h3, never h1→h3 (skipping h2). Headings communicate document outline to screen readers. Never choose heading level for visual size — use CSS for styling."},
 {q:"Which ARIA attribute communicates that a panel or section is currently expanded?",o:["a) aria-selected='true'","b) aria-pressed='true'","c) aria-expanded='true'","d) aria-checked='true'"],a:2,cat:"ARIA & Roles",e:"aria-expanded='true/false' communicates expand/collapse state for disclosures, accordions, menus, and submenus. aria-selected is for tabs and options. aria-pressed is for toggle buttons. aria-checked is for checkboxes and radio buttons."},
-{q:"What makes a good accessible error message?",o:["a) Display an error icon in red color only","b) Identify the specific field, describe what went wrong, and explain how to fix it","c) Display a generic 'Form error' message at the top of the page","d) Automatically correct the error without telling the user"],a:1,cat:"Forms & Inputs",e:"Good error messages: identify the specific field ('Email address: Enter a valid email'), describe what went wrong ('The email you entered is not in a valid format'), and explain how to fix it ('Use format: name@example.com'). SC 3.3.1 and 3.3.3."}
+{q:"What makes a good accessible error message?",o:["a) Display an error icon in red color only","b) Identify the specific field, describe what went wrong, and explain how to fix it","c) Display a generic 'Form error' message at the top of the page","d) Automatically correct the error without telling the user"],a:1,cat:"Forms & Inputs",e:"Good error messages: identify the specific field ('Email address: Enter a valid email'), describe what went wrong ('The email you entered is not in a valid format'), and explain how to fix it ('Use format: name@example.com'). SC 3.3.1 and 3.3.3."},{q:"Which WCAG SC requires that web pages have titles describing their topic?",o:["a) SC 2.4.1 Bypass Blocks","b) SC 2.4.2 Page Titled","c) SC 1.3.1 Info and Relationships","d) SC 3.1.1 Language of Page"],a:1,cat:"WCAG Criteria",e:"SC 2.4.2 Page Titled (A) requires every web page to have a title that describes its topic or purpose. The title is the first thing a screen reader announces when a page loads and the text shown in browser tabs and bookmarks."}
 ];
 
 // ── STATE ─────────────────────────────────────────────────────────────────────
@@ -219,9 +219,12 @@ function updateStats(){
   document.getElementById('prog-label').textContent=done+' of '+total+' answered';
   var fillPct=total>0?Math.round((done/total)*100):0;
   document.getElementById('prog-fill').style.width=fillPct+'%';
-  // Update progressbar ARIA value
-  var pb = document.querySelector('[role="progressbar"]');
-  if(pb) { pb.setAttribute('aria-valuenow', String(done)); }
+  // Update progressbar ARIA value and max (changes when filtered)
+  var pb=document.querySelector('[role="progressbar"]');
+  if(pb){pb.setAttribute('aria-valuenow',String(done));pb.setAttribute('aria-valuemax',String(total));}
+  // Update All filter button count
+  var allBtn=document.querySelector('.f-btn[data-cat="all"]');
+  if(allBtn&&curCat==='all'){allBtn.textContent='All ('+QS.length+')';}
 }
 
 // ── RENDER QUESTIONS ──────────────────────────────────────────────────────────
@@ -332,12 +335,15 @@ function showExpl(el,isRight,correctAns,explText){
 // ── FILTER BUTTONS ────────────────────────────────────────────────────────────
 document.querySelectorAll('.f-btn').forEach(function(btn){
   btn.addEventListener('click',function(){
+    if(btn.getAttribute('aria-pressed')==='true') return; // already active, do nothing
     document.querySelectorAll('.f-btn').forEach(function(b){
       b.classList.remove('active');
       b.setAttribute('aria-pressed','false');
+      b.removeAttribute('aria-disabled');
     });
     btn.classList.add('active');
     btn.setAttribute('aria-pressed','true');
+    btn.setAttribute('aria-disabled','true');
     curCat=btn.dataset.cat;
     render();
   });
