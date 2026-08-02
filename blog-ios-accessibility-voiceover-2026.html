@@ -3,19 +3,105 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Complete Guide to iOS Accessibility Testing with VoiceOver (2026) — Sushil Chauhan</title>
-<meta name="description" content="Comprehensive guide to iOS mobile app accessibility — VoiceOver gestures, UIKit traits, SwiftUI grouping, and VPAT reporting. By Sushil Chauhan, IAAP-CPWA.">
+<title>Native iOS Accessibility: Component-wise Testing Guide — Sushil Chauhan</title>
+<meta name="description" content="Complete native iOS accessibility guide — every component explained: what it is, why it matters, SwiftUI and UIKit code, VoiceOver testing steps, checkpoints, and common failures. By Sushil Chauhan, IAAP-CPWA | CPACC | WAS.">
 <meta name="author" content="Sushil Chauhan">
-<meta property="og:title" content="Complete Guide to iOS Accessibility Testing with VoiceOver (2026) — Sushil Chauhan">
-<meta property="og:type" content="article">
-<link rel="canonical" href="https://sushilchauhan.com/blog/ios-accessibility-voiceover-2026">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Playfair+Display:wght@600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
+<style>
+/* ── Page-specific: iOS component guide ──────────────────────── */
+.comp-card{border:1px solid var(--border);border-radius:6px;overflow:hidden;margin:2.5rem 0;scroll-margin-top:5rem}
+.comp-hdr{display:flex;align-items:center;gap:1rem;padding:1rem 1.5rem;background:var(--bg-alt);border-bottom:1px solid var(--border)}
+.comp-num{font-family:var(--font-mono);font-size:.68rem;font-weight:700;color:var(--text-subtle);flex-shrink:0;min-width:26px}
+.comp-title{font-size:1.02rem;font-weight:700;letter-spacing:-.01em;color:var(--text)}
+.comp-kind{font-size:.68rem;color:var(--text-muted);font-family:var(--font-mono);margin-top:.1rem}
+.comp-body{padding:1.5rem}
+.comp-lbl{font-family:var(--font-mono);font-size:.6rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--text-subtle);display:block;margin:1.5rem 0 .65rem;padding-top:1.25rem;border-top:1px solid var(--border)}
+.comp-lbl:first-child{margin-top:0;padding-top:0;border-top:none}
+
+/* Platform badges */
+.plat{display:inline-block;font-family:var(--font-mono);font-size:.6rem;font-weight:700;letter-spacing:.06em;padding:.16rem .5rem;border-radius:3px;margin-bottom:.4rem}
+.plat-swift{background:#fff4ed;color:#9a3412;border:1px solid #fdba74}
+.plat-uikit{background:#eff6ff;color:#1e40af;border:1px solid #93c5fd}
+[data-scheme="dark"] .plat-swift{background:rgba(249,115,22,.12);color:#fdba74;border-color:rgba(249,115,22,.3)}
+[data-scheme="dark"] .plat-uikit{background:rgba(59,130,246,.12);color:#93c5fd;border-color:rgba(59,130,246,.3)}
+@media(prefers-color-scheme:dark){:root:not([data-scheme="light"]) .plat-swift{background:rgba(249,115,22,.12);color:#fdba74;border-color:rgba(249,115,22,.3)}:root:not([data-scheme="light"]) .plat-uikit{background:rgba(59,130,246,.12);color:#93c5fd;border-color:rgba(59,130,246,.3)}}
+
+/* VoiceOver output line */
+.vo-out{display:flex;align-items:flex-start;gap:.6rem;padding:.6rem .9rem;background:var(--accent-bg);border-left:3px solid var(--accent);border-radius:0 4px 4px 0;font-size:.85rem;color:var(--text-body);margin:.6rem 0;line-height:1.55}
+.vo-out::before{content:'🔊';flex-shrink:0;font-size:.85rem}
+.vo-out em{font-style:normal;font-family:var(--font-mono);font-size:.8rem;color:var(--accent-text);font-weight:600}
+
+/* Checkpoint rows */
+.check-row{display:flex;align-items:flex-start;gap:.6rem;padding:.38rem 0;font-size:.88rem;color:var(--text-body);line-height:1.58}
+.check-icon{color:var(--accent-text);flex-shrink:0;margin-top:.08rem;font-size:.8rem}
+
+/* WCAG reference lines */
+.wcag-ref{display:flex;align-items:baseline;gap:.55rem;padding:.38rem 0;font-size:.87rem;color:var(--text-muted);line-height:1.5;border-bottom:1px solid var(--border)}
+.wcag-ref:last-child{border-bottom:none}
+.wcag-sc{font-family:var(--font-mono);font-size:.64rem;font-weight:700;color:var(--accent-text);flex-shrink:0;white-space:nowrap}
+
+/* Failure chips */
+.fail{display:flex;align-items:flex-start;gap:.6rem;padding:.55rem .8rem;background:#fef2f2;border:1px solid rgba(239,68,68,.22);border-radius:4px;font-size:.85rem;color:var(--text-muted);margin:.35rem 0;line-height:1.58}
+.fail::before{content:'✕';color:#ef4444;flex-shrink:0;font-weight:700;font-size:.75rem;margin-top:.18rem}
+.fail strong{color:var(--text)}
+[data-scheme="dark"] .fail{background:rgba(239,68,68,.07);border-color:rgba(239,68,68,.2)}
+@media(prefers-color-scheme:dark){:root:not([data-scheme="light"]) .fail{background:rgba(239,68,68,.07);border-color:rgba(239,68,68,.2)}}
+
+/* Good practice chips */
+.good{display:flex;align-items:flex-start;gap:.6rem;padding:.55rem .8rem;background:#f0fdf4;border:1px solid rgba(34,197,94,.22);border-radius:4px;font-size:.85rem;color:var(--text-muted);margin:.35rem 0;line-height:1.58}
+.good::before{content:'✓';color:#22c55e;flex-shrink:0;font-weight:700;font-size:.8rem;margin-top:.15rem}
+.good strong{color:var(--text)}
+[data-scheme="dark"] .good{background:rgba(34,197,94,.07);border-color:rgba(34,197,94,.2)}
+@media(prefers-color-scheme:dark){:root:not([data-scheme="light"]) .good{background:rgba(34,197,94,.07);border-color:rgba(34,197,94,.2)}}
+
+/* Code blocks with wrong/right marker */
+.code-wrong,.code-right{position:relative;margin:.5rem 0 1rem}
+.code-tag{display:inline-block;font-family:var(--font-mono);font-size:.58rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:.16rem .5rem;border-radius:3px 3px 0 0;margin-bottom:0}
+.code-tag-bad{background:#fef2f2;color:#b91c1c;border:1px solid #fca5a5;border-bottom:none}
+.code-tag-good{background:#f0fdf4;color:#15803d;border:1px solid #86efac;border-bottom:none}
+[data-scheme="dark"] .code-tag-bad{background:rgba(239,68,68,.14);color:#f87171;border-color:rgba(239,68,68,.3)}
+[data-scheme="dark"] .code-tag-good{background:rgba(34,197,94,.14);color:#4ade80;border-color:rgba(34,197,94,.3)}
+@media(prefers-color-scheme:dark){:root:not([data-scheme="light"]) .code-tag-bad{background:rgba(239,68,68,.14);color:#f87171;border-color:rgba(239,68,68,.3)}:root:not([data-scheme="light"]) .code-tag-good{background:rgba(34,197,94,.14);color:#4ade80;border-color:rgba(34,197,94,.3)}}
+.code-wrong pre{border-color:#fca5a5!important;border-top-left-radius:0!important;margin-top:0!important}
+.code-right pre{border-color:#86efac!important;border-top-left-radius:0!important;margin-top:0!important}
+[data-scheme="dark"] .code-wrong pre{border-color:rgba(239,68,68,.3)!important}
+[data-scheme="dark"] .code-right pre{border-color:rgba(34,197,94,.3)!important}
+@media(prefers-color-scheme:dark){:root:not([data-scheme="light"]) .code-wrong pre{border-color:rgba(239,68,68,.3)!important}:root:not([data-scheme="light"]) .code-right pre{border-color:rgba(34,197,94,.3)!important}}
+
+/* Test steps */
+.test-steps{counter-reset:ts;list-style:none;margin:.6rem 0 1rem 0;padding:0;display:flex;flex-direction:column;gap:.5rem}
+.test-steps li{counter-increment:ts;display:flex;gap:.85rem;align-items:flex-start;padding:.6rem .9rem;background:var(--bg-alt);border:1px solid var(--border);border-radius:4px;font-size:.87rem;color:var(--text-body);line-height:1.6}
+.test-steps li::before{content:counter(ts);font-family:var(--font-mono);font-size:.65rem;font-weight:700;color:var(--accent-text);background:var(--accent-bg);border-radius:3px;padding:.14rem .45rem;flex-shrink:0;margin-top:.12rem}
+.test-steps strong{color:var(--text)}
+
+/* Compact reference table */
+.ref-table{width:100%;border-collapse:collapse;font-size:.84rem;margin:.7rem 0}
+.ref-table thead tr{background:var(--bg-alt)}
+.ref-table th{padding:.6rem .85rem;text-align:left;font-family:var(--font-mono);font-size:.58rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);border-bottom:1px solid var(--border)}
+.ref-table tbody tr{border-bottom:1px solid var(--border)}
+.ref-table tbody tr:hover{background:var(--bg-alt)}
+.ref-table tbody tr:last-child{border-bottom:none}
+.ref-table td{padding:.6rem .85rem;vertical-align:top;line-height:1.55;color:var(--text-muted)}
+.ref-table td:first-child{font-weight:600;color:var(--text)}
+.ref-table code{font-size:.78em}
+
+/* TOC grid */
+.toc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:.28rem .55rem}
+.toc-grid a{font-size:.82rem;color:var(--text-muted);text-decoration:none;padding:.2rem 0;display:block}
+.toc-grid a:hover,.toc-grid a:focus-visible{color:var(--accent-text)}
+.toc-grid a:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:2px}
+
+/* Why box */
+.why-box{background:var(--bg-alt);border-left:3px solid var(--accent);border-radius:0 4px 4px 0;padding:.85rem 1.15rem;margin:.7rem 0 1rem;font-size:.88rem;color:var(--text-body);line-height:1.7}
+.why-box strong{color:var(--text)}
+</style>
 </head>
 <body>
 <a href="#main-content" class="skip-link">Skip to main content</a>
+
 <header class="site-header">
   <div class="header-inner">
     <div class="site-identity">
@@ -26,355 +112,1776 @@
       <p class="site-tagline">QA Lead · Senior Accessibility Engineer · IAAP-CPWA | CPACC | WAS</p>
     </div>
     <nav class="header-nav" aria-label="Site navigation">
-      <a href="index.html" class="nav-link">Home</a>
-      <a href="writing.html" class="nav-link" aria-current="page">Writing</a>
+      <a href="index.html"             class="nav-link">Home</a>
+      <a href="writing.html"           class="nav-link" aria-current="page">Writing</a>
       <a href="was-practice-quiz.html" class="nav-link">WAS Quiz</a>
-      <a href="mailto:csgn2806@gmail.com" class="header-cta">Contact</a>
+      <a href="mailto:csgn2806@gmail.com" class="header-cta" aria-label="Contact Sushil — opens email client">Contact</a>
     </nav>
   </div>
 </header>
-<main id="main-content">
+
+<main id="main-content" tabindex="-1">
   <div class="content-wrap">
+
     <header class="post-hero" aria-labelledby="post-title">
-      <div class="post-category">iOS Accessibility</div>
-      <h1 class="post-title" id="post-title">Complete Guide to iOS Mobile App Accessibility Testing with VoiceOver: From WCAG Compliance to VPAT Reporting</h1>
-      <p class="post-excerpt">Everything you need to audit iOS apps for WCAG 2.2 compliance — VoiceOver gestures, UIKit traits, SwiftUI semantic grouping, and how to produce a VPAT report that procurement teams actually accept.</p>
+      <div class="post-category">Native iOS · Component Testing Manual</div>
+      <h1 class="post-title" id="post-title">Native iOS Accessibility: Component-wise Testing Guide</h1>
+      <p class="post-excerpt">Every native iOS component explained the way an auditor needs it — what the component is, why accessibility breaks on it, the correct SwiftUI and UIKit code, exact VoiceOver testing steps, checkpoints, and the failures I find in almost every audit.</p>
       <div class="post-tags-row">
-        <span class="post-tag">WCAG 2.2</span><span class="post-tag">VoiceOver</span><span class="post-tag">SwiftUI</span><span class="post-tag">UIKit</span><span class="post-tag">VPAT</span><span class="post-tag">Mobile Testing</span><span class="post-tag">IAAP</span><span class="post-tag">2026 Edition</span>
+        <span class="post-tag">SwiftUI</span>
+        <span class="post-tag">UIKit</span>
+        <span class="post-tag">VoiceOver</span>
+        <span class="post-tag">Voice Control</span>
+        <span class="post-tag">Switch Control</span>
+        <span class="post-tag">WCAG 2.2</span>
+        <span class="post-tag">Apple HIG</span>
+        <span class="post-tag">2026 Edition</span>
       </div>
       <div class="post-meta-row">
         <div class="post-author">
           <div class="author-av" aria-hidden="true">SC</div>
-          <div><div class="author-name">Sushil Chauhan</div><div class="author-cert">IAAP-CPWA | CPACC | WAS · Mumbai</div></div>
+          <div>
+            <div class="author-name">Sushil Chauhan</div>
+            <div class="author-cert">IAAP-CPWA | CPACC | WAS · DHS Trusted Tester · Mumbai</div>
+          </div>
         </div>
         <div class="post-details">
-          <time datetime="2026-01">January 2026</time>
-          <span>20 min read</span>
-          <span>2026 Edition</span>
+          <time datetime="2026-08">August 2026</time>
+          <span>18 components</span>
+          <span>Testing manual</span>
         </div>
       </div>
     </header>
 
-    <nav class="toc-block" aria-labelledby="toc-heading">
-      <div class="toc-title" id="toc-heading">Table of Contents</div>
-      <ol class="toc-list">
-        <li><a href="#intro">Why iOS Accessibility Cannot Be Optional</a></li>
-        <li><a href="#voiceover">VoiceOver Fundamentals — Gestures, Rotor, Reading Flow</a></li>
-        <li><a href="#uikit">UIKit Accessibility Deep Dive</a></li>
-        <li><a href="#swiftui">SwiftUI Best Practices</a></li>
-        <li><a href="#testing">Testing and Auditing — Tools, Workflow, and VPAT</a></li>
-        <li><a href="#advanced">Advanced Patterns and Common Pitfalls</a></li>
-        <li><a href="#conclusion">Conclusion, Checklist, and Resources</a></li>
-      </ol>
+    <nav class="toc-block" aria-labelledby="toc-h">
+      <div class="toc-title" id="toc-h">Components covered</div>
+      <div class="toc-grid">
+        <a href="#c-foundation">01 · Accessibility properties</a>
+        <a href="#c-traits">02 · Traits</a>
+        <a href="#c-headings">03 · Headings</a>
+        <a href="#c-buttons">04 · Buttons</a>
+        <a href="#c-images">05 · Images &amp; icons</a>
+        <a href="#c-textfields">06 · Text fields</a>
+        <a href="#c-toggles">07 · Toggles &amp; switches</a>
+        <a href="#c-sliders">08 · Sliders</a>
+        <a href="#c-alerts">09 · Alerts</a>
+        <a href="#c-dialogs">10 · Dialogs &amp; sheets</a>
+        <a href="#c-tabs">11 · Tab bars</a>
+        <a href="#c-lists">12 · Lists &amp; cards</a>
+        <a href="#c-focus">13 · Focus management</a>
+        <a href="#c-order">14 · Reading order</a>
+        <a href="#c-announce">15 · Announcements</a>
+        <a href="#c-targets">16 · Touch targets</a>
+        <a href="#c-dynamictype">17 · Dynamic Type</a>
+        <a href="#c-motion">18 · Motion &amp; contrast settings</a>
+        <a href="#gestures">VoiceOver gesture reference</a>
+        <a href="#workflow">Audit workflow</a>
+        <a href="#cheatsheet">Web ↔ iOS cheatsheet</a>
+      </div>
     </nav>
 
     <article class="post-body" aria-labelledby="post-title">
 
+      <p>Web accessibility gives you a lot for free. A <code>&lt;button&gt;</code> is a button, an <code>&lt;h2&gt;</code> is a heading, and the browser builds the accessibility tree from your markup. On native iOS, none of that is automatic once you step outside Apple's stock controls. A <code>ZStack</code> with a tap gesture looks like a button, behaves like a button for sighted users, and is completely invisible to VoiceOver, Voice Control, and Switch Control.</p>
+
+      <p>That gap is where almost every iOS accessibility bug lives. This guide walks component by component: what the component actually is, why it breaks, the correct code in both SwiftUI and UIKit, the exact steps to test it on a real device, a checkpoint list you can run during an audit, and the failures that show up again and again.</p>
+
       <div class="callout info" role="note">
-        <span class="callout-icon" aria-hidden="true">📖</span>
-        <p>A few years ago, I audited a healthcare app for a US client. Beautiful UI, fast loading, great App Store reviews. Then I turned on VoiceOver. The "Book Appointment" button announced itself as <em>"button."</em> Just that. Nothing else. The prescription list read out as jumbled numbers. The password field had no label. <strong>Accessibility is not a feature you add at the end. It is the foundation of a usable product.</strong></p>
+        <span class="callout-icon" aria-hidden="true">📱</span>
+        <p><strong>Test on a real device.</strong> The iOS Simulator's Accessibility Inspector is useful for a quick tree check, but it does not reproduce VoiceOver gestures, rotor behaviour, or Voice Control matching. Every finding in an audit report should come from a physical iPhone or iPad.</p>
       </div>
 
-      <h2 id="intro" tabindex="-1"><span class="section-num">01 — Introduction</span>Why iOS Accessibility Cannot Be Optional</h2>
+      <h2 id="c-foundation" tabindex="-1"><span class="section-num">01 —</span> Accessibility properties: the foundation</h2>
 
-      <p>According to the WHO, <strong>1.3 billion people — roughly 15% of the global population</strong> — live with some form of disability. In the US, the ADA applies to mobile apps. Section 508 mandates accessibility for federal technology procurement — making VPAT documentation a hard requirement for government contracts. The European Accessibility Act (EAA) came into force in June 2025. In India, the RPWD Act 2016, Section 46, mandates accessible ICT.</p>
+      <p>Before any component makes sense, you need the five properties every accessible element is built from. Get these wrong and nothing downstream works.</p>
 
-      <h3>WCAG 2.2 AA → iOS Mapping</h3>
       <div class="table-wrap">
-        <table aria-label="WCAG 2.2 AA success criteria mapped to iOS requirements">
-          <thead><tr><th scope="col">WCAG Criterion</th><th scope="col">Level</th><th scope="col">iOS Requirement</th></tr></thead>
+        <table class="ref-table" aria-label="Core iOS accessibility properties">
+          <thead><tr><th scope="col">Property</th><th scope="col">Answers</th><th scope="col">VoiceOver says</th><th scope="col">Required?</th></tr></thead>
           <tbody>
-            <tr><td>1.1.1 Non-text Content</td><td><span class="badge">A</span></td><td>All images need accessibilityLabel; decorative images must be hidden</td></tr>
-            <tr><td>1.3.1 Info and Relationships</td><td><span class="badge">A</span></td><td>Headings, lists, and groups conveyed via traits and grouping</td></tr>
-            <tr><td>1.4.3 Contrast Ratio</td><td><span class="badge badge-warn">AA</span></td><td>Text 4.5:1 minimum; large text 3:1 minimum</td></tr>
-            <tr><td>1.4.10 Reflow</td><td><span class="badge badge-warn">AA</span></td><td>Dynamic Type support; no horizontal scrolling at large sizes</td></tr>
-            <tr><td>2.1.1 Keyboard</td><td><span class="badge">A</span></td><td>Full Keyboard Access and Switch Control must work throughout</td></tr>
-            <tr><td>2.4.3 Focus Order</td><td><span class="badge">A</span></td><td>VoiceOver navigation order must be logical and meaningful</td></tr>
-            <tr><td>2.5.3 Label in Name</td><td><span class="badge badge-warn">AA</span></td><td>Accessible label must contain the element's visible text</td></tr>
-            <tr><td>3.3.1 Error Identification</td><td><span class="badge">A</span></td><td>Form errors must be announced via VoiceOver, not shown visually only</td></tr>
-            <tr><td>4.1.2 Name, Role, Value</td><td><span class="badge">A</span></td><td>Every interactive element needs a label, trait, and current value</td></tr>
-            <tr><td>4.1.3 Status Messages</td><td><span class="badge badge-warn">AA</span></td><td>Success/error messages announced without moving focus</td></tr>
+            <tr><td><code>accessibilityLabel</code></td><td>What is this?</td><td>"Like, button"</td><td>Always, for anything interactive</td></tr>
+            <tr><td><code>accessibilityValue</code></td><td>What is its current state?</td><td>"Volume, 50%"</td><td>Anything with a changing value</td></tr>
+            <tr><td><code>accessibilityHint</code></td><td>What happens if I activate it?</td><td>"Double tap to like"</td><td>Optional — only when non-obvious</td></tr>
+            <tr><td><code>accessibilityTraits</code></td><td>What role does it play?</td><td>"button", "heading", "selected"</td><td>Required on custom views</td></tr>
+            <tr><td><code>accessibilityIdentifier</code></td><td>How do tests find it?</td><td>Nothing — VoiceOver ignores it</td><td>XCUITest only</td></tr>
           </tbody>
         </table>
       </div>
 
+      <div class="why-box">
+        <strong>The distinction that matters most:</strong> label is stable, value is dynamic. A volume slider's label is always "Volume". Its value changes every time the user swipes. Putting the current value into the label means VoiceOver announces "Volume 50 percent" as the name of the control, and screen reader users lose the ability to tell the control apart from its state.
+      </div>
+
+      <span class="comp-lbl">Label vs value in practice</span>
+      <div class="code-right">
+        <span class="code-tag code-tag-good">Correct</span>
+<pre><code>// SwiftUI
+Slider(value: $volume, in: 0...100)
+    .accessibilityLabel("Volume")           // stable name
+    .accessibilityValue("\(Int(volume))%")  // changes on every adjust
+
+// UIKit
+slider.accessibilityLabel = "Volume"
+slider.accessibilityValue = "\(Int(slider.value))%"</code></pre>
+      </div>
+      <div class="vo-out">VoiceOver announces: <em>"Volume, 50 percent, adjustable"</em></div>
+
+      <span class="comp-lbl">accessibilityInputLabels — the property most teams miss</span>
+      <p>VoiceOver users hear the <code>accessibilityLabel</code>. Voice Control users <em>speak</em> it. Those are two different assistive technologies serving two different disability groups, and the words that work for one are not always the words a person would say out loud.</p>
+<pre><code>// SwiftUI
+TextField("", text: $email)
+    .accessibilityLabel("Email Address")
+    .accessibilityInputLabels(["Email Address", "Email", "E-mail"])
+
+// UIKit
+emailField.accessibilityLabel = "Email Address"
+emailField.accessibilityUserInputLabels = ["Email Address", "Email", "E-mail"]</code></pre>
+      <div class="good"><strong>Result:</strong> a Voice Control user can say "Tap Email", "Tap E-mail", or the full "Tap Email Address" and all three work. Without input labels, only the exact label string matches.</div>
+
+      <span class="comp-lbl">Hiding elements — two different behaviours</span>
+      <div class="table-wrap">
+        <table class="ref-table" aria-label="Hiding elements from assistive technology">
+          <thead><tr><th scope="col">Goal</th><th scope="col">SwiftUI</th><th scope="col">UIKit</th><th scope="col">VoiceOver</th><th scope="col">Touch</th></tr></thead>
+          <tbody>
+            <tr><td>Hide completely</td><td><code>.accessibilityHidden(true)</code></td><td><code>isAccessibilityElement = false</code></td><td>Skipped</td><td>Still works</td></tr>
+            <tr><td>Readable, not interactive</td><td><code>.accessibilityRespondsToUserInteraction(false)</code></td><td>—</td><td>Reads it</td><td>Ignored</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <span class="comp-lbl">Checkpoints</span>
+      <div class="check-row"><span class="check-icon">☐</span>Every interactive element has a non-empty <code>accessibilityLabel</code></div>
+      <div class="check-row"><span class="check-icon">☐</span>Labels describe purpose, not appearance — "Close" not "X icon"</div>
+      <div class="check-row"><span class="check-icon">☐</span>Dynamic state lives in <code>accessibilityValue</code>, never in the label</div>
+      <div class="check-row"><span class="check-icon">☐</span>Hints describe the outcome of an action and are not duplicates of the label</div>
+      <div class="check-row"><span class="check-icon">☐</span>Labels are localised alongside visible strings — not hardcoded English</div>
+      <div class="check-row"><span class="check-icon">☐</span><code>accessibilityInputLabels</code> provided wherever the visible text is long or abbreviated</div>
+
+      <span class="comp-lbl">Common failures</span>
+      <div class="fail"><strong>Label contains state:</strong> <code>accessibilityLabel = "Volume 50%"</code> — the name changes on every swipe, so the control has no stable identity.</div>
+      <div class="fail"><strong>Hint used as label:</strong> element has only a hint and no label. VoiceOver focuses it and announces nothing meaningful — hints are not read when a label is absent in some contexts.</div>
+      <div class="fail"><strong>Identifier mistaken for label:</strong> <code>accessibilityIdentifier = "btn_submit"</code> with no label. VoiceOver reads nothing; the identifier is invisible to it.</div>
+      <div class="fail"><strong>Untranslated labels:</strong> UI is localised into Hindi but every <code>accessibilityLabel</code> is still English — VoiceOver reads English words with a Hindi voice, producing gibberish.</div>
+
+      <span class="comp-lbl">WCAG mapping</span>
+      <div class="wcag-ref"><span class="wcag-sc">4.1.2 A</span> Name, Role, Value — every UI component must expose all three programmatically.</div>
+      <div class="wcag-ref"><span class="wcag-sc">1.1.1 A</span> Non-text Content — icon-only controls need a text alternative via the label.</div>
+      <div class="wcag-ref"><span class="wcag-sc">2.5.3 A</span> Label in Name — the accessible label must contain the visible text.</div>
+
       <hr>
 
-      <h2 id="voiceover" tabindex="-1"><span class="section-num">02 — VoiceOver</span>Fundamentals — Gestures, Rotor, and Reading Flow</h2>
+      <h2 id="c-traits" tabindex="-1"><span class="section-num">02 —</span> Traits: the iOS equivalent of ARIA roles</h2>
+
+      <p>Traits tell VoiceOver what an element <em>is</em> and how it behaves. Native controls get them automatically. Custom views get nothing until you assign them, and a custom view with no trait is announced as plain text — the user never learns it can be tapped.</p>
+
+      <div class="callout warn" role="note">
+        <span class="callout-icon" aria-hidden="true">⚠️</span>
+        <p><code>.accessibilityTraits()</code> <strong>replaces</strong> the existing trait set. <code>.accessibilityAddTraits()</code> <strong>adds</strong> to it. Using the first on a <code>Text</code> silently strips <code>.isStaticText</code>. Default to <code>addTraits</code> unless you deliberately want to wipe the set.</p>
+      </div>
+
+      <div class="code-wrong">
+        <span class="code-tag code-tag-bad">Replaces — loses isStaticText</span>
+<pre><code>Text("Section Title")
+    .accessibilityTraits(.isHeader)</code></pre>
+      </div>
+      <div class="code-right">
+        <span class="code-tag code-tag-good">Adds — keeps everything</span>
+<pre><code>Text("Section Title")
+    .accessibilityAddTraits(.isHeader)</code></pre>
+      </div>
+
+      <span class="comp-lbl">Traits reference</span>
+      <div class="table-wrap">
+        <table class="ref-table" aria-label="iOS accessibility traits">
+          <thead><tr><th scope="col">SwiftUI trait</th><th scope="col">UIKit</th><th scope="col">VoiceOver announces</th><th scope="col">Use for</th></tr></thead>
+          <tbody>
+            <tr><td><code>.isButton</code></td><td><code>.button</code></td><td>"button"</td><td>Anything tappable that performs an action</td></tr>
+            <tr><td><code>.isLink</code></td><td><code>.link</code></td><td>"link"</td><td>Navigation to another destination</td></tr>
+            <tr><td><code>.isHeader</code></td><td><code>.header</code></td><td>"heading"</td><td>Section titles — enables rotor navigation</td></tr>
+            <tr><td><code>.isSelected</code></td><td><code>.selected</code></td><td>"selected"</td><td>Active tab, chosen option, toggled state</td></tr>
+            <tr><td><code>.isModal</code></td><td><code>accessibilityViewIsModal</code></td><td>—</td><td>Traps focus inside a dialog</td></tr>
+            <tr><td><code>.isStaticText</code></td><td><code>.staticText</code></td><td>—</td><td>Non-interactive labels</td></tr>
+            <tr><td><code>.isSearchField</code></td><td><code>.searchField</code></td><td>"search field"</td><td>Search inputs</td></tr>
+            <tr><td><code>.updatesFrequently</code></td><td><code>.updatesFrequently</code></td><td>Suppresses spam</td><td>Timers, live scores, progress</td></tr>
+            <tr><td><code>.startsMediaSession</code></td><td><code>.startsMediaSession</code></td><td>Pauses VO speech</td><td>Play buttons on audio and video</td></tr>
+            <tr><td>—</td><td><code>.adjustable</code></td><td>"adjustable"</td><td>UIKit custom sliders and steppers</td></tr>
+            <tr><td><code>.disabled</code> via <code>.disabled(true)</code></td><td><code>.notEnabled</code></td><td>"dimmed"</td><td>Unavailable controls</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <span class="comp-lbl">accessibilityRepresentation — custom visuals, native behaviour</span>
+      <p>When a control is visually custom but functionally standard, you do not have to rebuild its accessibility from scratch. <code>accessibilityRepresentation</code> swaps in a real native control for the accessibility tree only — the screen still shows your design.</p>
+<pre><code>CustomSliderShape(value: $value)
+    .accessibilityRepresentation {
+        Slider(value: $value, in: 0...100)
+            .accessibilityLabel("Volume")
+            .accessibilityValue("\(Int(value))%")
+    }
+// Screen: your custom shape
+// VoiceOver: a real Slider — swipe up/down works, no manual adjustable action needed</code></pre>
+
+      <span class="comp-lbl">How to test</span>
+      <ol class="test-steps">
+        <li>Turn on VoiceOver (<strong>Settings → Accessibility → VoiceOver</strong>, or triple-click the side button if you set the shortcut).</li>
+        <li>Swipe right through the screen. Every element that <em>looks</em> tappable must announce a role — "button", "link", "adjustable". Silence on the role means the trait is missing.</li>
+        <li>Open the rotor (two-finger twist), select <strong>Headings</strong>, swipe down. If nothing is listed, no <code>.isHeader</code> traits exist on the screen.</li>
+        <li>Check any static text that is styled to look like a link or button. If VoiceOver says only the text with no role, sighted users and VoiceOver users are seeing two different interfaces.</li>
+        <li>Open <strong>Xcode → Open Developer Tool → Accessibility Inspector</strong>, target the running app, and inspect the element. Confirm the <em>Traits</em> row matches what the element actually does.</li>
+      </ol>
+
+      <span class="comp-lbl">Checkpoints</span>
+      <div class="check-row"><span class="check-icon">☐</span>Every custom tappable view carries <code>.isButton</code> or a more specific trait</div>
+      <div class="check-row"><span class="check-icon">☐</span>Section titles carry <code>.isHeader</code> and appear in the rotor's Headings list</div>
+      <div class="check-row"><span class="check-icon">☐</span>Selected items in a set carry <code>.isSelected</code>, and it updates when selection changes</div>
+      <div class="check-row"><span class="check-icon">☐</span><code>accessibilityAddTraits</code> used instead of <code>accessibilityTraits</code> unless replacement is intended</div>
+      <div class="check-row"><span class="check-icon">☐</span>No decorative element is given <code>.isButton</code></div>
+
+      <span class="comp-lbl">Common failures</span>
+      <div class="fail"><strong>No trait on custom control:</strong> a styled <code>HStack</code> that opens a screen announces as plain text. The user never knows it is actionable.</div>
+      <div class="fail"><strong>Wrong trait:</strong> <code>.isButton</code> on static text. The user double-taps, nothing happens, and they assume the app is broken. Worse than no trait at all.</div>
+      <div class="fail"><strong>Header trait missing app-wide:</strong> rotor Headings is empty on every screen, so there is no way to skim. This is a direct 1.3.1 failure.</div>
+      <div class="fail"><strong>Stale isSelected:</strong> trait is set once at build time and never updated, so VoiceOver announces two tabs as "selected" simultaneously.</div>
+
+      <span class="comp-lbl">WCAG mapping</span>
+      <div class="wcag-ref"><span class="wcag-sc">4.1.2 A</span> Name, Role, Value — traits are how role is exposed on iOS.</div>
+      <div class="wcag-ref"><span class="wcag-sc">1.3.1 A</span> Info and Relationships — heading traits convey document structure.</div>
+
+      <hr>
+
+      <h2 id="c-headings" tabindex="-1"><span class="section-num">03 —</span> Headings</h2>
+
+      <div class="why-box">
+        <strong>What it is:</strong> a text element marked as a section title so VoiceOver's rotor can list it.<br>
+        <strong>Why it matters:</strong> a sighted user skims a screen in under a second. A VoiceOver user without headings has to swipe through every single element in order. On a settings screen with forty rows, that is forty swipes to reach the bottom section. Headings turn that into three.
+      </div>
+
+      <p>On the web, <code>&lt;h1&gt;</code> through <code>&lt;h6&gt;</code> do this automatically. On iOS there is no heading element at all — a title is just a <code>Text</code> with a bigger font until you tell the system otherwise.</p>
+
+      <div class="code-wrong">
+        <span class="code-tag code-tag-bad">Looks like a heading, is not one</span>
+<pre><code>Text("Notification Settings")
+    .font(.title2)
+    .bold()
+// VoiceOver: "Notification Settings"
+// Rotor → Headings: empty</code></pre>
+      </div>
+      <div class="code-right">
+        <span class="code-tag code-tag-good">SwiftUI</span>
+<pre><code>Text("Notification Settings")
+    .font(.title2)
+    .bold()
+    .accessibilityAddTraits(.isHeader)
+// VoiceOver: "Notification Settings, heading"
+// Rotor → Headings: listed ✓</code></pre>
+      </div>
+      <div class="code-right">
+        <span class="code-tag code-tag-good">UIKit</span>
+<pre><code>titleLabel.accessibilityTraits = .header
+// Note: UIKit uses .header, SwiftUI uses .isHeader</code></pre>
+      </div>
 
       <div class="callout tip" role="note">
         <span class="callout-icon" aria-hidden="true">💡</span>
-        <p><strong>Try this before your next audit:</strong> Turn on VoiceOver, place your phone face-down, and try to complete a task using only what you hear. The discomfort you feel within thirty seconds is what your blind users experience in every session.</p>
+        <p>iOS has no heading <em>levels</em> the way HTML does. There is no <code>.isHeader(level: 2)</code>. VoiceOver announces every header trait identically. If a screen genuinely needs hierarchy, convey it through the text itself and through grouping — do not try to fake levels with traits.</p>
       </div>
 
-      <p>VoiceOver follows a <strong>linear, sequential navigation model</strong>. Users swipe right to advance, swipe left to go back, and double-tap to activate. Every piece of information must be discovered one element at a time. When VoiceOver focuses on an element, it reads: <strong>Label → Trait → Value → Hint</strong>.</p>
+      <span class="comp-lbl">How to test</span>
+      <ol class="test-steps">
+        <li>Turn on VoiceOver and open the screen.</li>
+        <li>Two-finger twist to open the rotor. Rotate to <strong>Headings</strong> and lift your fingers.</li>
+        <li>Swipe down repeatedly. VoiceOver should jump between each section title on the screen.</li>
+        <li>Compare against what you see. Every visually distinct section title must appear in that list. Anything missing is a finding.</li>
+        <li>Also confirm the reverse: nothing that is <em>not</em> a section title should appear as a heading.</li>
+      </ol>
 
-      <h3>Complete VoiceOver Gesture Reference</h3>
+      <span class="comp-lbl">Checkpoints</span>
+      <div class="check-row"><span class="check-icon">☐</span>Every screen has at least one element with the header trait</div>
+      <div class="check-row"><span class="check-icon">☐</span>Rotor Headings navigation reaches every major section</div>
+      <div class="check-row"><span class="check-icon">☐</span>Navigation bar titles are announced — usually automatic, verify on custom nav bars</div>
+      <div class="check-row"><span class="check-icon">☐</span>Heading text is descriptive, not "Section 1"</div>
+      <div class="check-row"><span class="check-icon">☐</span>Body text and captions do not carry the header trait</div>
+
+      <span class="comp-lbl">Common failures</span>
+      <div class="fail"><strong>No headings anywhere:</strong> by far the most common iOS finding. Rotor Headings is empty on every screen of the app.</div>
+      <div class="fail"><strong>Custom navigation bar title not exposed:</strong> teams replace the system nav bar with a custom <code>HStack</code> and forget the trait, so the screen has no announced title.</div>
+      <div class="fail"><strong>Everything is a heading:</strong> the trait applied to every <code>Text</code> in a list, making the rotor as useless as having none.</div>
+
+      <span class="comp-lbl">WCAG mapping</span>
+      <div class="wcag-ref"><span class="wcag-sc">1.3.1 A</span> Info and Relationships — section structure must be programmatically determinable.</div>
+      <div class="wcag-ref"><span class="wcag-sc">2.4.6 AA</span> Headings and Labels — headings must describe the content that follows.</div>
+
+      <hr>
+
+      <h2 id="c-buttons" tabindex="-1"><span class="section-num">04 —</span> Buttons</h2>
+
+      <div class="why-box">
+        <strong>What it is:</strong> a control that performs an action in place, as opposed to a link that navigates.<br>
+        <strong>Why it matters:</strong> buttons are where custom design work happens most often, and every custom implementation is a chance to drop the trait, the label, or the activation gesture. A button that a VoiceOver user cannot activate is a dead end in the middle of a task flow.
+      </div>
+
+      <p><strong>Rule one: use the native <code>Button</code> whenever it is possible.</strong> You get the trait, double-tap activation, Switch Control scanning, Voice Control matching, and Full Keyboard Access support without writing a line of accessibility code.</p>
+
+      <span class="comp-lbl">Icon-only buttons</span>
+      <p>An icon with no visible text has no label source. SF Symbols do not provide one — VoiceOver falls back to reading the symbol name character by character, which produces "heart dot fill" instead of "Like".</p>
+      <div class="code-wrong">
+        <span class="code-tag code-tag-bad">Reads the SF Symbol name</span>
+<pre><code>Button(action: likeTapped) {
+    Image(systemName: "heart.fill")
+}
+// VoiceOver: "heart dot fill, button"</code></pre>
+      </div>
+      <div class="code-right">
+        <span class="code-tag code-tag-good">SwiftUI</span>
+<pre><code>Button(action: likeTapped) {
+    Image(systemName: "heart.fill")
+}
+.accessibilityLabel("Like post")
+// VoiceOver: "Like post, button"
+// Voice Control: "Tap Like post" ✓</code></pre>
+      </div>
+      <div class="code-right">
+        <span class="code-tag code-tag-good">UIKit</span>
+<pre><code>likeButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
+likeButton.accessibilityLabel = "Like post"</code></pre>
+      </div>
+
+      <span class="comp-lbl">Custom views used as buttons</span>
+      <p>This is the single most damaging pattern in native iOS. A styled container with <code>.onTapGesture</code> works perfectly for a sighted user with a finger and fails for every assistive technology at once.</p>
+      <div class="code-wrong">
+        <span class="code-tag code-tag-bad">Breaks VoiceOver, Switch Control, and Voice Control</span>
+<pre><code>ZStack {
+    RoundedRectangle(cornerRadius: 10).fill(Color.blue)
+    Text("Buy Now").foregroundColor(.white)
+}
+.onTapGesture { buyNow() }
+
+// ✕ VoiceOver double tap does nothing
+// ✕ Switch Control cannot reach it
+// ✕ Voice Control "Tap Buy Now" does nothing
+// ✕ No .isButton trait</code></pre>
+      </div>
+      <div class="code-right">
+        <span class="code-tag code-tag-good">Wrap the same visual in a Button</span>
+<pre><code>Button(action: buyNow) {
+    ZStack {
+        RoundedRectangle(cornerRadius: 10).fill(Color.blue)
+        Text("Buy Now").foregroundColor(.white)
+    }
+}
+// Label inferred from the Text — "Buy Now, button"
+// All assistive technologies work ✓</code></pre>
+      </div>
+
+      <span class="comp-lbl">Repeated buttons need context</span>
+      <p>A list of ten products with ten "Delete" buttons gives a VoiceOver user ten identical announcements. In the rotor's Buttons list they are indistinguishable.</p>
+<pre><code>// SwiftUI
+Button("Delete") { delete(item) }
+    .accessibilityLabel("Delete \(item.name)")
+// "Delete Blue Shirt, button" / "Delete Running Shoes, button"
+
+// UIKit
+deleteButton.accessibilityLabel = "Delete \(item.name)"</code></pre>
+      <div class="callout tip" role="note">
+        <span class="callout-icon" aria-hidden="true">💡</span>
+        <p>Keep the visible word at the <em>start</em> of the accessible label — "Delete Blue Shirt", not "Blue Shirt delete button". SC 2.5.3 requires the visible text to be contained in the accessible name, and leading with it also makes Voice Control matching more forgiving.</p>
+      </div>
+
+      <span class="comp-lbl">Disabled and loading states</span>
+      <div class="good"><strong>Keep disabled buttons visible to VoiceOver.</strong> Removing them from the tree means the user cannot tell the action exists. Announcing "dimmed" tells them it exists but is currently unavailable — and then they know to look for what unlocks it.</div>
+<pre><code>// SwiftUI — disabled
+Button("Submit") { submit() }
+    .disabled(!formIsValid)
+// VoiceOver: "Submit, dimmed, button" — .notEnabled applied automatically
+
+// SwiftUI — loading
+Button(action: submitTapped) {
+    if isLoading { ProgressView() } else { Text("Submit") }
+}
+.accessibilityLabel(isLoading ? "Submitting, please wait" : "Submit")
+.disabled(isLoading)
+
+// UIKit
+submitButton.isEnabled = !isLoading
+submitButton.accessibilityLabel = isLoading ? "Submitting, please wait" : "Submit"</code></pre>
+
+      <span class="comp-lbl">Destructive actions</span>
+<pre><code>Button("Delete Account") { showConfirm = true }
+    .accessibilityLabel("Delete Account")
+    .accessibilityHint("Permanently deletes your account. This cannot be undone.")</code></pre>
+
+      <span class="comp-lbl">How to test</span>
+      <ol class="test-steps">
+        <li>With VoiceOver on, swipe to each button. Confirm it announces <strong>label then "button"</strong>.</li>
+        <li><strong>Double tap</strong> to activate. If nothing happens, the control is a tap gesture rather than a real button.</li>
+        <li>Open the rotor, select <strong>Buttons</strong>, and swipe down. Every action on screen should be listed and every entry should be distinguishable from the others.</li>
+        <li>Turn on <strong>Voice Control</strong> (Settings → Accessibility → Voice Control). Say "Tap [visible label]" for each button. Then say <strong>"Show names"</strong> — every actionable control should get a name badge.</li>
+        <li>Turn on <strong>Switch Control</strong> and run one full scan cycle. Any button the scanner skips is unreachable for motor-impaired users.</li>
+        <li>Disable a button through the UI and confirm VoiceOver now says "dimmed" rather than the button disappearing.</li>
+      </ol>
+
+      <span class="comp-lbl">Checkpoints</span>
+      <div class="check-row"><span class="check-icon">☐</span>Every icon-only button has a descriptive label</div>
+      <div class="check-row"><span class="check-icon">☐</span>No interactive element uses <code>.onTapGesture</code> in place of <code>Button</code></div>
+      <div class="check-row"><span class="check-icon">☐</span>Repeated buttons include item context in the label</div>
+      <div class="check-row"><span class="check-icon">☐</span>Visible text appears at the start of the accessible label (SC 2.5.3)</div>
+      <div class="check-row"><span class="check-icon">☐</span>Disabled buttons remain in the accessibility tree and announce "dimmed"</div>
+      <div class="check-row"><span class="check-icon">☐</span>Loading state changes the label so the user knows work is in progress</div>
+      <div class="check-row"><span class="check-icon">☐</span>Destructive actions carry a hint explaining the consequence</div>
+      <div class="check-row"><span class="check-icon">☐</span>Every button is reachable by Switch Control scanning</div>
+
+      <span class="comp-lbl">Common failures</span>
+      <div class="fail"><strong>SF Symbol name read aloud:</strong> "square dot and dot arrow dot up" instead of "Share". Occurs on every icon button with no label.</div>
+      <div class="fail"><strong>onTapGesture instead of Button:</strong> the visual works, the accessibility does not. Fails 4.1.2 and 2.1.1 simultaneously.</div>
+      <div class="fail"><strong>Icon and text both announced:</strong> a button containing an icon plus "Share" text reads "share dot up, Share, button". Hide the decorative icon with <code>.accessibilityHidden(true)</code>.</div>
+      <div class="fail"><strong>Label does not contain visible text:</strong> button shows "Send" but the label is "Submit message" — Voice Control users say "Tap Send" and nothing happens. Direct 2.5.3 failure.</div>
+      <div class="fail"><strong>Disabled buttons removed entirely:</strong> the control vanishes from the tree, so the user cannot discover the action exists at all.</div>
+
+      <span class="comp-lbl">WCAG mapping</span>
+      <div class="wcag-ref"><span class="wcag-sc">4.1.2 A</span> Name, Role, Value — button role and name must be exposed.</div>
+      <div class="wcag-ref"><span class="wcag-sc">1.1.1 A</span> Non-text Content — icon buttons require a text alternative.</div>
+      <div class="wcag-ref"><span class="wcag-sc">2.5.3 A</span> Label in Name — accessible name must contain the visible label.</div>
+      <div class="wcag-ref"><span class="wcag-sc">2.1.1 A</span> Keyboard — action must be operable without a pointing device.</div>
+
+      <hr>
+
+      <h2 id="c-images" tabindex="-1"><span class="section-num">05 —</span> Images and icons</h2>
+
+      <div class="why-box">
+        <strong>What it is:</strong> any non-text visual — photos, illustrations, SF Symbols, charts, avatars.<br>
+        <strong>Why it matters:</strong> images fall into three categories and each needs opposite treatment. Getting the category wrong either strips information from the user or floods them with noise they have to swipe past.
+      </div>
+
       <div class="table-wrap">
-        <table aria-label="VoiceOver gestures with keyboard equivalents">
-          <thead><tr><th scope="col">Gesture (Touch)</th><th scope="col">Action</th><th scope="col">Keyboard Equivalent</th></tr></thead>
+        <table class="ref-table" aria-label="Image categories and treatment">
+          <thead><tr><th scope="col">Category</th><th scope="col">Example</th><th scope="col">Treatment</th></tr></thead>
           <tbody>
-            <tr><td>One-finger swipe right</td><td>Move to next element</td><td>VO + Right Arrow</td></tr>
-            <tr><td>One-finger swipe left</td><td>Move to previous element</td><td>VO + Left Arrow</td></tr>
-            <tr><td>Double-tap</td><td>Activate selected element</td><td>VO + Space</td></tr>
-            <tr><td>Two-finger swipe down</td><td>Read all from current position</td><td>VO + A</td></tr>
-            <tr><td>Two-finger swipe up</td><td>Read all from top</td><td>VO + B</td></tr>
-            <tr><td>Two-finger tap</td><td>Pause / resume speech</td><td>VO + Control</td></tr>
-            <tr><td>Two-finger rotate</td><td>Open Rotor menu</td><td>Up/Down after rotor select</td></tr>
-            <tr><td>Two-finger scrub (Z shape)</td><td>Dismiss modal / go back</td><td>Escape</td></tr>
-            <tr><td>Three-finger swipe left/right</td><td>Scroll next/previous page</td><td>Option + Left/Right Arrow</td></tr>
-            <tr><td>Swipe up on element</td><td>Increment adjustable value</td><td>VO + Up Arrow</td></tr>
-            <tr><td>Swipe down on element</td><td>Decrement adjustable value</td><td>VO + Down Arrow</td></tr>
-            <tr><td>Four-finger tap (top)</td><td>Move to first element</td><td>Control + Up Arrow</td></tr>
-            <tr><td>Four-finger tap (bottom)</td><td>Move to last element</td><td>Control + Down Arrow</td></tr>
+            <tr><td>Informative</td><td>Product photo, chart, user avatar</td><td>Descriptive <code>accessibilityLabel</code></td></tr>
+            <tr><td>Decorative</td><td>Background gradient, divider flourish, shadow</td><td><code>.accessibilityHidden(true)</code></td></tr>
+            <tr><td>Functional</td><td>Icon inside a button, tappable thumbnail</td><td>Label describes the <em>action</em>, not the picture</td></tr>
+            <tr><td>Redundant</td><td>Icon sitting next to text that says the same thing</td><td>Hide the icon, let the text speak</td></tr>
           </tbody>
         </table>
       </div>
 
-      <hr>
+<pre><code>// Informative
+Image("goa_beach_villa")
+    .accessibilityLabel("Beachfront villa in Goa with private pool and ocean view")
 
-      <h2 id="uikit" tabindex="-1"><span class="section-num">03 — UIKit</span>Accessibility Deep Dive</h2>
+// Decorative — two equivalent ways
+Image("card_shadow").accessibilityHidden(true)
+Image(decorative: "background_gradient")
 
-      <h3>The Four Core Properties</h3>
-      <pre><code>// Scenario: "Place Order" button in an e-commerce checkout
-let placeOrderButton = UIButton()
-
-// 1. Label — what VoiceOver announces as the element's name
-placeOrderButton.accessibilityLabel = "Place order"
-
-// 2. Hint — consequence of activation; full sentence with full stop
-placeOrderButton.accessibilityHint = "Confirms and submits your order for delivery."
-
-// 3. Value — current state or relevant context
-placeOrderButton.accessibilityValue = "Total: £89.99, 2 items"
-
-// 4. Traits — defines role and interactive behaviour
-placeOrderButton.accessibilityTraits = [.button]</code></pre>
-
-      <h3>UIKit Accessibility Traits — Complete Reference</h3>
-      <div class="table-wrap">
-        <table aria-label="UIKit accessibility traits">
-          <thead><tr><th scope="col">Trait</th><th scope="col">VoiceOver Effect</th><th scope="col">When to Use</th></tr></thead>
-          <tbody>
-            <tr><td>.button</td><td>Announces "button"</td><td>Any tappable element that performs an action</td></tr>
-            <tr><td>.link</td><td>Announces "link"</td><td>Elements that navigate to a destination</td></tr>
-            <tr><td>.header</td><td>Announces "heading"; accessible via rotor</td><td>Screen titles, section headers</td></tr>
-            <tr><td>.selected</td><td>Announces "selected"</td><td>Tabs, segmented controls, selected list items</td></tr>
-            <tr><td>.notEnabled</td><td>Announces "dimmed"</td><td>Disabled or inactive interactive elements</td></tr>
-            <tr><td>.adjustable</td><td>Announces "adjustable"; swipe up/down changes value</td><td>Custom sliders, steppers, rating controls</td></tr>
-            <tr><td>.isModal</td><td>Traps VoiceOver focus within container</td><td>Modals, alerts, bottom sheets</td></tr>
-            <tr><td>.updatesFrequently</td><td>VoiceOver polls for value changes</td><td>Countdowns, live scores, real-time data</td></tr>
-            <tr><td>.summaryElement</td><td>Read automatically on screen load</td><td>Dashboard summaries, weather overview</td></tr>
-          </tbody>
-        </table>
-      </div>
-
-      <h3>UIAccessibility Notifications</h3>
-      <pre><code>// ❌ Broken — VoiceOver focus stays on Search button, user never hears error
-self.dateErrorLabel.text = "Please select a departure date."
-self.dateErrorLabel.isHidden = false
-
-// ✅ Fixed — focus moves directly to the error
-self.dateErrorLabel.text = "Please select a departure date."
-self.dateErrorLabel.isHidden = false
-UIAccessibility.post(notification: .layoutChanged, argument: self.dateErrorLabel)
-
-// Background success — announce without moving focus (WCAG 4.1.3)
-UIAccessibility.post(notification: .announcement, argument: "Booking confirmed. Reference: FL-2094.")</code></pre>
-
-      <hr>
-
-      <h2 id="swiftui" tabindex="-1"><span class="section-num">04 — SwiftUI</span>Accessibility Best Practices</h2>
-
-      <h3>Images</h3>
-      <pre><code>// Informative image — requires a descriptive label
-Image("beachfront_villa_goa")
-    .accessibilityLabel(Text("Beachfront villa in Goa with private pool and ocean view"))
-
-// Decorative — must be hidden from VoiceOver
-Image("card_shadow_effect")
-    .accessibilityHidden(true)
-
-// SwiftUI's built-in decorative initialiser
-Image(decorative: "listing_background_gradient")
-
-// SF Symbol as standalone action icon — always needs contextual label
+// Functional — describes the action
 Image(systemName: "location.fill")
-    .accessibilityLabel(Text("View property on map"))
+    .accessibilityLabel("View property on map")
     .accessibilityAddTraits(.isButton)
 
-// SF Symbol next to visible text — hide the icon
+// Redundant — hide the icon
 HStack(spacing: 6) {
-    Image(systemName: "bed.double.fill")
-        .accessibilityHidden(true)  // "3 Bedrooms" text covers this meaning
+    Image(systemName: "bed.double.fill").accessibilityHidden(true)
     Text("3 Bedrooms")
-}</code></pre>
-
-      <h3>Semantic Grouping — The Most Important Pattern</h3>
-      <p>Without grouping, a hotel search result card with five pieces of information requires five separate swipes. Multiply that across twenty results and a blind user makes over a hundred swipes just to scan the list.</p>
-      <pre><code>// ❌ Without grouping — 5 separate elements, 5 swipes per card
-VStack(alignment: .leading, spacing: 4) {
-    Text("The Taj Mahal Palace")
-    Text("5 stars")
-    Text("0.3 km from city centre")
-    Text("From ₹12,500 per night")
-    Button("Book Now") { selectHotel(hotel) }
 }
+// VoiceOver: "3 Bedrooms" — clean ✓</code></pre>
 
-// ✅ With semantic grouping — 1 element, 1 swipe, full context
-VStack(alignment: .leading, spacing: 4) { ... }
-.accessibilityElement(children: .ignore)
-.accessibilityLabel(Text("The Taj Mahal Palace, 5 stars, 0.3 km, from 12,500 rupees per night"))
-.accessibilityAddTraits(.isButton)
-.accessibilityHint(Text("Double-tap to view hotel details and availability."))
-.accessibilityAction { selectHotel(hotel) }</code></pre>
+      <span class="comp-lbl">UIKit equivalents</span>
+<pre><code>photoView.isAccessibilityElement = true
+photoView.accessibilityLabel = "Beachfront villa in Goa with private pool"
 
-      <h3>Dynamic Type — Non-Negotiable for WCAG 1.4.10</h3>
-      <pre><code>// ✅ Correct — system text styles scale with Dynamic Type automatically
-Text("Account holder").font(.subheadline)
+decorativeView.isAccessibilityElement = false   // hidden
 
-// UIKit — these two lines are both required
-referenceLabel.font = UIFont.preferredFont(forTextStyle: .body)
-referenceLabel.adjustsFontForContentSizeCategory = true
+iconButton.accessibilityLabel = "View property on map"</code></pre>
 
-// ❌ Fails WCAG 1.4.10 — fixed size never scales
-referenceLabel.font = UIFont.systemFont(ofSize: 15)</code></pre>
+      <span class="comp-lbl">Charts and complex graphics</span>
+      <p>A chart's label should carry the <em>finding</em>, not a description of the shapes. "Bar chart" tells the user nothing. iOS 15+ also supports Audio Graphs, which let VoiceOver users hear the data as sound.</p>
+<pre><code>ChartView(data: revenue)
+    .accessibilityLabel("Quarterly revenue by region")
+    .accessibilityValue("Asia-Pacific leads at 4.2 million dollars, "
+                      + "North America 3.8 million, Europe 2.1 million")</code></pre>
 
-      <div class="callout warning" role="note">
-        <span class="callout-icon" aria-hidden="true">⚠️</span>
-        <p>Test at maximum Dynamic Type size: <strong>Settings → Accessibility → Display &amp; Text Size → Larger Text → drag to maximum (AX5)</strong>. Your layout must remain readable and must not introduce horizontal scrolling.</p>
-      </div>
+      <span class="comp-lbl">How to test</span>
+      <ol class="test-steps">
+        <li>With VoiceOver on, swipe through the screen and listen to every image announcement.</li>
+        <li>Any image announcing a <strong>file name or SF Symbol name</strong> is missing its label.</li>
+        <li>Any decorative image that VoiceOver stops on is noise — it should be skipped entirely.</li>
+        <li>For each informative image, ask: <em>if I could not see this, would the announcement give me the same information?</em> If not, the label is too thin.</li>
+        <li>Open the rotor and select <strong>Images</strong>. Review the list — it should contain only meaningful images.</li>
+        <li>In Accessibility Inspector, confirm decorative images are absent from the tree rather than present with an empty label.</li>
+      </ol>
+
+      <span class="comp-lbl">Checkpoints</span>
+      <div class="check-row"><span class="check-icon">☐</span>Every informative image has a label that conveys its content</div>
+      <div class="check-row"><span class="check-icon">☐</span>Decorative images are hidden, not given empty labels</div>
+      <div class="check-row"><span class="check-icon">☐</span>Icons paired with visible text are hidden from VoiceOver</div>
+      <div class="check-row"><span class="check-icon">☐</span>Functional icons describe the action, not the graphic</div>
+      <div class="check-row"><span class="check-icon">☐</span>No label starts with "image of" or "picture of" — VoiceOver already says "image"</div>
+      <div class="check-row"><span class="check-icon">☐</span>Charts convey the data trend, not just the chart type</div>
+
+      <span class="comp-lbl">Common failures</span>
+      <div class="fail"><strong>File name announced:</strong> "IMG underscore 4471 dot png" — the label was never set.</div>
+      <div class="fail"><strong>SF Symbol name announced:</strong> "chevron dot right" when the intent was "Open details".</div>
+      <div class="fail"><strong>Decorative images not hidden:</strong> a VoiceOver user swipes through six background shapes before reaching the content.</div>
+      <div class="fail"><strong>Duplicate announcement:</strong> icon and adjacent text both read, producing "person dot circle, Profile".</div>
+      <div class="fail"><strong>Chart labelled as "chart":</strong> no data conveyed at all — an information failure under 1.1.1.</div>
+
+      <span class="comp-lbl">WCAG mapping</span>
+      <div class="wcag-ref"><span class="wcag-sc">1.1.1 A</span> Non-text Content — all meaningful images need a text alternative.</div>
+      <div class="wcag-ref"><span class="wcag-sc">1.4.5 AA</span> Images of Text — avoid rendering text as an image where real text will do.</div>
 
       <hr>
 
-      <h2 id="testing" tabindex="-1"><span class="section-num">05 — Testing</span>Tools, Workflow, and VPAT</h2>
+      <h2 id="c-textfields" tabindex="-1"><span class="section-num">06 —</span> Text fields</h2>
+
+      <div class="why-box">
+        <strong>What it is:</strong> <code>TextField</code>, <code>SecureField</code>, <code>TextEditor</code>, and their UIKit counterparts.<br>
+        <strong>Why it matters:</strong> forms are where users commit to something — signing up, paying, booking. A field whose label vanishes the moment you start typing leaves a VoiceOver user filling in a box they can no longer identify.
+      </div>
+
+      <div class="callout warn" role="note">
+        <span class="callout-icon" aria-hidden="true">⚠️</span>
+        <p><strong>A placeholder is not a label.</strong> It disappears on first keystroke, is often below contrast minimums, and cannot be re-read by a screen reader after the field has content. Always set an explicit <code>accessibilityLabel</code> — ideally alongside a visible label above the field.</p>
+      </div>
+
+      <div class="code-wrong">
+        <span class="code-tag code-tag-bad">Placeholder as the only label</span>
+<pre><code>TextField("Email Address", text: $email)
+// Once the user types, the label is gone from screen
+// VoiceOver on a filled field: "sushil@example.com, text field"
+// The user no longer knows what this field is for</code></pre>
+      </div>
+      <div class="code-right">
+        <span class="code-tag code-tag-good">SwiftUI</span>
+<pre><code>VStack(alignment: .leading, spacing: 4) {
+    Text("Email Address")            // visible, persistent
+    TextField("", text: $email)
+        .accessibilityLabel("Email Address")
+        .accessibilityHint("Enter the email you registered with")
+        .textContentType(.emailAddress)   // enables autofill
+        .keyboardType(.emailAddress)
+        .accessibilityInputLabels(["Email Address", "Email", "E-mail"])
+}</code></pre>
+      </div>
+      <div class="code-right">
+        <span class="code-tag code-tag-good">UIKit</span>
+<pre><code>emailField.accessibilityLabel = "Email Address"
+emailField.accessibilityHint  = "Enter the email you registered with"
+emailField.textContentType    = .emailAddress
+emailField.keyboardType       = .emailAddress
+emailField.accessibilityUserInputLabels = ["Email Address", "Email"]</code></pre>
+      </div>
+
+      <div class="good"><strong><code>textContentType</code> is an accessibility feature, not just a convenience.</strong> It powers autofill, which removes the need to type at all — a significant benefit for users with motor or cognitive disabilities. It maps directly to the web's <code>autocomplete</code> attribute and WCAG SC 1.3.5.</div>
+
+      <span class="comp-lbl">Errors — announce and move focus</span>
+      <p>A red border communicates nothing to a VoiceOver user. The error needs to reach them through the accessibility layer and focus needs to land on the field that failed.</p>
+<pre><code>// SwiftUI
+TextField("", text: $email)
+    .accessibilityLabel("Email Address")
+    .accessibilityValue(hasError ? "Error: \(errorMessage)" : email)
+
+// UIKit — set the value, then move focus to the field
+emailField.accessibilityValue = "Error: Please enter a valid email address"
+UIAccessibility.post(notification: .layoutChanged, argument: emailField)</code></pre>
+      <div class="vo-out">VoiceOver announces: <em>"Email Address, Error: Please enter a valid email address, text field"</em></div>
+
+      <span class="comp-lbl">Secure fields</span>
+<pre><code>SecureField("", text: $password)
+    .accessibilityLabel("Password")
+    .textContentType(.password)
+// VoiceOver: "Password, secure text field"
+// VoiceOver deliberately does not read back the characters</code></pre>
+
+      <span class="comp-lbl">How to test</span>
+      <ol class="test-steps">
+        <li>With VoiceOver on, swipe to each field. Confirm it announces <strong>label, then any value, then "text field"</strong>.</li>
+        <li>Type something into a field, then swipe away and back. The label must still be announced — if only the typed text is read, the label was a placeholder.</li>
+        <li>Submit the form with deliberate errors. Confirm focus moves to the first failed field and the error text is announced, not just shown.</li>
+        <li>Open the rotor, select <strong>Form Controls</strong>, and confirm every field is listed with a distinct name.</li>
+        <li>Turn on Voice Control and say "Tap [label]" for each field. Try the short natural form as well — "Tap Email" for "Email Address".</li>
+        <li>Check autofill: tap a field and confirm the keyboard offers saved credentials where <code>textContentType</code> applies.</li>
+      </ol>
+
+      <span class="comp-lbl">Checkpoints</span>
+      <div class="check-row"><span class="check-icon">☐</span>Every field has a persistent label that survives typing</div>
+      <div class="check-row"><span class="check-icon">☐</span>Placeholder is never the only source of the label</div>
+      <div class="check-row"><span class="check-icon">☐</span><code>textContentType</code> set on name, email, phone, address, and credential fields</div>
+      <div class="check-row"><span class="check-icon">☐</span>Errors update <code>accessibilityValue</code> and are announced</div>
+      <div class="check-row"><span class="check-icon">☐</span>Focus moves to the first field in error on failed submission</div>
+      <div class="check-row"><span class="check-icon">☐</span>Required fields are indicated in the label or hint, not by colour alone</div>
+      <div class="check-row"><span class="check-icon">☐</span>Keyboard type matches the expected input</div>
+      <div class="check-row"><span class="check-icon">☐</span>Error text explains how to fix, not just that something is wrong</div>
+
+      <span class="comp-lbl">Common failures</span>
+      <div class="fail"><strong>Placeholder-only labelling:</strong> the most frequent form finding on iOS. Fails 3.3.2 and 4.1.2.</div>
+      <div class="fail"><strong>Silent validation:</strong> the field turns red, VoiceOver announces nothing, focus stays where it was. The user cannot tell submission failed.</div>
+      <div class="fail"><strong>Generic errors:</strong> "Invalid input" with no explanation of the expected format. Fails 3.3.3.</div>
+      <div class="fail"><strong>Missing textContentType:</strong> autofill unavailable, forcing manual typing of long strings — a real barrier for motor and cognitive disabilities.</div>
+      <div class="fail"><strong>Required marked by asterisk colour only:</strong> conveyed visually and never programmatically.</div>
+
+      <span class="comp-lbl">WCAG mapping</span>
+      <div class="wcag-ref"><span class="wcag-sc">3.3.2 A</span> Labels or Instructions — every input needs a label.</div>
+      <div class="wcag-ref"><span class="wcag-sc">3.3.1 A</span> Error Identification — errors identified and described in text.</div>
+      <div class="wcag-ref"><span class="wcag-sc">3.3.3 AA</span> Error Suggestion — tell the user how to correct it.</div>
+      <div class="wcag-ref"><span class="wcag-sc">1.3.5 AA</span> Identify Input Purpose — <code>textContentType</code> is the iOS equivalent of <code>autocomplete</code>.</div>
+
+      <hr>
+
+      <h2 id="c-toggles" tabindex="-1"><span class="section-num">07 —</span> Toggles and switches</h2>
+
+      <div class="why-box">
+        <strong>What it is:</strong> a binary on/off control that takes effect immediately — no Save button.<br>
+        <strong>Why it matters:</strong> the entire value of a toggle is its current state. If VoiceOver announces "Notifications, switch" without saying whether it is on or off, the user has to flip it and observe the result to find out what it was.
+      </div>
+
+      <div class="code-right">
+        <span class="code-tag code-tag-good">SwiftUI — native, nothing extra required</span>
+<pre><code>Toggle(isOn: $notificationsEnabled) {
+    Text("Push Notifications")   // becomes the accessibility label
+}
+// Off: "Push Notifications, off, switch button"
+// On:  "Push Notifications, on, switch button"
+// Voice Control: "Tap Push Notifications" ✓</code></pre>
+      </div>
+
+      <div class="callout warn" role="note">
+        <span class="callout-icon" aria-hidden="true">⚠️</span>
+        <p><strong>UIKit does not link the label to the switch for you.</strong> A <code>UILabel</code> beside a <code>UISwitch</code> are two unrelated elements. VoiceOver reads the label, swipes to the switch, and announces just "off, switch button" with no idea what is off.</p>
+      </div>
+
+      <div class="code-right">
+        <span class="code-tag code-tag-good">UIKit — link them manually</span>
+<pre><code>notificationSwitch.accessibilityLabel = "Push Notifications"
+// Optionally hide the separate visual label to avoid a double announcement:
+notificationLabel.isAccessibilityElement = false</code></pre>
+      </div>
+
+      <span class="comp-lbl">Custom toggles</span>
+<pre><code>// SwiftUI — Button wrapper, never onTapGesture
+Button(action: { isOn.toggle() }) {
+    ZStack(alignment: isOn ? .trailing : .leading) {
+        Capsule().fill(isOn ? Color.green : Color.gray)
+        Circle().fill(.white).padding(2)
+    }
+    .frame(width: 52, height: 32)
+}
+.accessibilityLabel("Push Notifications")
+.accessibilityValue(isOn ? "On" : "Off")
+.accessibilityAddTraits(isOn ? .isSelected : [])
+
+// UIKit
+self.accessibilityLabel = "Push Notifications"
+self.accessibilityValue = isOn ? "On" : "Off"
+self.accessibilityTraits = .button
+// Announce the change so the user gets confirmation
+UIAccessibility.post(notification: .announcement,
+                     argument: "Push Notifications \(isOn ? "on" : "off")")</code></pre>
+
+      <span class="comp-lbl">How to test</span>
+      <ol class="test-steps">
+        <li>With VoiceOver on, swipe to the toggle. It must announce <strong>label, current state, and role</strong> — all three.</li>
+        <li>Double tap to flip it. VoiceOver should announce the new state immediately.</li>
+        <li>Swipe away and back. The announced state must match what is displayed.</li>
+        <li>Turn off VoiceOver and check the visual: is the on/off difference conveyed by more than colour alone? Position of the knob counts; a green-versus-grey capsule with no other difference does not.</li>
+        <li>Voice Control: say "Tap [label]" and confirm the toggle responds.</li>
+        <li>Enable <strong>Settings → Accessibility → Display &amp; Text Size → On/Off Labels</strong> and confirm the I/O indicators appear on system switches.</li>
+      </ol>
+
+      <span class="comp-lbl">Checkpoints</span>
+      <div class="check-row"><span class="check-icon">☐</span>Current state is announced on focus, not only after flipping</div>
+      <div class="check-row"><span class="check-icon">☐</span>State change is announced when the user activates it</div>
+      <div class="check-row"><span class="check-icon">☐</span>UIKit switches have <code>accessibilityLabel</code> set explicitly</div>
+      <div class="check-row"><span class="check-icon">☐</span>State is not conveyed by colour alone visually</div>
+      <div class="check-row"><span class="check-icon">☐</span>Custom toggles use <code>Button</code>, not <code>.onTapGesture</code></div>
+      <div class="check-row"><span class="check-icon">☐</span>Label describes what is being switched, not the switch itself</div>
+
+      <span class="comp-lbl">Common failures</span>
+      <div class="fail"><strong>State missing:</strong> "Notifications, switch button" with no on or off. The user must toggle it to discover the original state — and has now changed a setting they may not have wanted to change.</div>
+      <div class="fail"><strong>UIKit label not linked:</strong> "off, switch button" with no indication of what is off.</div>
+      <div class="fail"><strong>State baked into the label:</strong> <code>accessibilityLabel = "Notifications On"</code> — the name changes with state, so the control has no stable identity for Voice Control.</div>
+      <div class="fail"><strong>Colour-only state:</strong> green versus grey with the knob in the same position. Fails 1.4.1 for colour-blind users.</div>
+
+      <span class="comp-lbl">WCAG mapping</span>
+      <div class="wcag-ref"><span class="wcag-sc">4.1.2 A</span> Name, Role, Value — state is the "value" part.</div>
+      <div class="wcag-ref"><span class="wcag-sc">1.4.1 A</span> Use of Color — state must not rely on colour alone.</div>
+
+      <hr>
+
+      <h2 id="c-sliders" tabindex="-1"><span class="section-num">08 —</span> Sliders</h2>
+
+      <div class="why-box">
+        <strong>What it is:</strong> a control for selecting a value within a range — volume, brightness, price filters.<br>
+        <strong>Why it matters:</strong> sliders are inherently gesture-based. A VoiceOver user cannot drag a thumb along a track; they rely on the <code>adjustable</code> trait, which converts swipe up and swipe down into increment and decrement. Without it the control is completely unusable.
+      </div>
+
+      <div class="code-right">
+        <span class="code-tag code-tag-good">SwiftUI — native slider</span>
+<pre><code>Slider(value: $volume, in: 0...100, step: 1)
+    .accessibilityLabel("Volume")
+    .accessibilityValue("\(Int(volume)) percent")
+// "Volume, 50 percent, adjustable"
+// Swipe up → increases, swipe down → decreases — automatic ✓</code></pre>
+      </div>
+
+      <div class="callout warn" role="note">
+        <span class="callout-icon" aria-hidden="true">⚠️</span>
+        <p><strong>UIKit's <code>UISlider</code> does not update <code>accessibilityValue</code> on its own.</strong> Set it once at build time and VoiceOver will announce that stale number forever, no matter how the user adjusts it. This is a subtle bug that passes visual review and fails every screen reader test.</p>
+      </div>
+
+      <div class="code-right">
+        <span class="code-tag code-tag-good">UIKit — update the value on change</span>
+<pre><code>slider.minimumValue = 0
+slider.maximumValue = 100
+slider.accessibilityLabel = "Volume"
+slider.accessibilityValue = "\(Int(slider.value)) percent"
+
+slider.addTarget(self, action: #selector(sliderChanged), for: .valueChanged)
+
+@objc func sliderChanged() {
+    slider.accessibilityValue = "\(Int(slider.value)) percent"
+}</code></pre>
+      </div>
+
+      <span class="comp-lbl">Custom sliders — three approaches</span>
+      <p>A custom-drawn slider has no adjustable behaviour by default. You have three options, in order of preference.</p>
+
+      <p><strong>1. <code>accessibilityRepresentation</code> — best.</strong> Hand VoiceOver a real <code>Slider</code> while the screen keeps your design.</p>
+<pre><code>CustomSliderShape(value: $budget)
+    .accessibilityRepresentation {
+        Slider(value: $budget, in: 0...5000, step: 100)
+            .accessibilityLabel("Maximum budget")
+            .accessibilityValue("\(Int(budget)) rupees")
+    }
+// Swipe up/down works with no adjustable action written ✓</code></pre>
+
+      <p><strong>2. <code>accessibilityAdjustableAction</code> — SwiftUI manual.</strong></p>
+<pre><code>CustomSliderShape(value: $budget)
+    .accessibilityLabel("Maximum budget")
+    .accessibilityValue("\(Int(budget)) rupees")
+    .accessibilityAdjustableAction { direction in
+        switch direction {
+        case .increment: budget = min(budget + 100, 5000)
+        case .decrement: budget = max(budget - 100, 0)
+        @unknown default: break
+        }
+    }</code></pre>
+
+      <p><strong>3. UIKit <code>.adjustable</code> trait plus overrides.</strong></p>
+<pre><code>self.accessibilityTraits = .adjustable
+self.accessibilityLabel  = "Maximum budget"
+self.accessibilityValue  = "0 rupees"
+
+override func accessibilityIncrement() {
+    budget = min(budget + 100, 5000)
+    accessibilityValue = "\(Int(budget)) rupees"
+}
+
+override func accessibilityDecrement() {
+    budget = max(budget - 100, 0)
+    accessibilityValue = "\(Int(budget)) rupees"
+}</code></pre>
+
+      <div class="good"><strong>Choose a sensible step size.</strong> A 0–5000 range with a step of 1 requires 5000 swipes to cross. Steps should let a user reach any reasonable value in ten to twenty gestures.</div>
+
+      <span class="comp-lbl">How to test</span>
+      <ol class="test-steps">
+        <li>With VoiceOver on, focus the slider. It must announce <strong>label, current value, and "adjustable"</strong>.</li>
+        <li><strong>Swipe up</strong> with one finger. The value must increase and the new value must be announced.</li>
+        <li><strong>Swipe down</strong>. The value must decrease and announce.</li>
+        <li>Push to both extremes. Confirm it stops cleanly at minimum and maximum without wrapping or overflowing.</li>
+        <li>Count the swipes needed to cross the full range. More than about twenty means the step is too small.</li>
+        <li>Confirm the value has units — "50 percent" or "1200 rupees", not a bare "50".</li>
+        <li>Enable <strong>Full Keyboard Access</strong> with a Bluetooth keyboard and confirm arrow keys adjust the value.</li>
+      </ol>
+
+      <span class="comp-lbl">Checkpoints</span>
+      <div class="check-row"><span class="check-icon">☐</span>Slider announces the <code>adjustable</code> trait</div>
+      <div class="check-row"><span class="check-icon">☐</span>Swipe up and down change the value</div>
+      <div class="check-row"><span class="check-icon">☐</span>Value updates and is announced after every adjustment</div>
+      <div class="check-row"><span class="check-icon">☐</span>Value includes units, not a bare number</div>
+      <div class="check-row"><span class="check-icon">☐</span>Step size makes the full range reachable in a reasonable number of gestures</div>
+      <div class="check-row"><span class="check-icon">☐</span>Range boundaries are respected</div>
+      <div class="check-row"><span class="check-icon">☐</span>UIKit sliders update <code>accessibilityValue</code> in the value-changed handler</div>
+
+      <span class="comp-lbl">Common failures</span>
+      <div class="fail"><strong>Stale UIKit value:</strong> announces the initial value forever because the update handler was never wired up.</div>
+      <div class="fail"><strong>Custom slider with no adjustable action:</strong> VoiceOver can focus it but not change it. Complete blocker.</div>
+      <div class="fail"><strong>Bare numbers:</strong> "Volume, 50" — fifty of what? Percent, decibels, steps?</div>
+      <div class="fail"><strong>Step too small:</strong> a price filter from 0 to 100,000 in steps of 1 is unusable by swipe.</div>
+      <div class="fail"><strong>Value in the label:</strong> <code>accessibilityLabel = "Volume 50%"</code>, breaking Voice Control targeting.</div>
+
+      <span class="comp-lbl">WCAG mapping</span>
+      <div class="wcag-ref"><span class="wcag-sc">4.1.2 A</span> Name, Role, Value — the value must be current and exposed.</div>
+      <div class="wcag-ref"><span class="wcag-sc">2.1.1 A</span> Keyboard — value must be changeable without dragging.</div>
+      <div class="wcag-ref"><span class="wcag-sc">2.5.1 A</span> Pointer Gestures — path-based drag needs a single-pointer alternative.</div>
+
+      <hr>
+
+      <h2 id="c-alerts" tabindex="-1"><span class="section-num">09 —</span> Alerts</h2>
+
+      <div class="why-box">
+        <strong>What it is:</strong> a small modal interrupting the user with a message and one or two actions.<br>
+        <strong>Why it matters:</strong> alerts appear without warning and demand a decision. If focus does not move into the alert, a VoiceOver user hears nothing change while the rest of the screen quietly becomes untappable.
+      </div>
+
+      <div class="code-right">
+        <span class="code-tag code-tag-good">SwiftUI — native alert handles everything</span>
+<pre><code>.alert("Delete Account", isPresented: $showAlert) {
+    Button("Cancel", role: .cancel) { }
+    Button("Delete", role: .destructive) { deleteAccount() }
+} message: {
+    Text("This permanently removes your account and cannot be undone.")
+}
+// Focus moves in automatically
+// VoiceOver reads: title → message → buttons
+// Two-finger Z dismisses via the cancel role ✓</code></pre>
+      </div>
+
+      <div class="code-right">
+        <span class="code-tag code-tag-good">UIKit</span>
+<pre><code>let alert = UIAlertController(
+    title: "Delete Account",
+    message: "This permanently removes your account and cannot be undone.",
+    preferredStyle: .alert)
+
+alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+alert.addAction(UIAlertAction(title: "Delete", style: .destructive) { _ in
+    self.deleteAccount()
+})
+present(alert, animated: true)</code></pre>
+      </div>
+
+      <div class="good"><strong>Use the <code>role:</code> parameter.</strong> <code>.cancel</code> and <code>.destructive</code> are not just colour — they tell the system which action is safe, which enables the escape gesture to map to cancel and gives assistive technologies useful semantics.</div>
+
+      <span class="comp-lbl">Custom alerts — the three things you must add</span>
+      <p>The moment you build your own alert view, you take on everything the system was doing for you.</p>
+<pre><code>VStack(spacing: 16) {
+    Text("Payment Failed")
+        .font(.headline)
+        .accessibilityAddTraits(.isHeader)          // 1. announce as heading
+
+    Text("Please check your card details and try again.")
+
+    HStack {
+        Button("Cancel") { isPresented = false }
+        Button("Try Again") { retry() }
+    }
+}
+.accessibilityAddTraits(.isModal)                    // 2. trap focus
+.onAppear {
+    UIAccessibility.post(notification: .screenChanged, argument: nil)  // 3. move focus in
+}</code></pre>
+<pre><code>// UIKit equivalent
+override func viewDidAppear(_ animated: Bool) {
+    super.viewDidAppear(animated)
+    view.accessibilityViewIsModal = true
+    UIAccessibility.post(notification: .screenChanged, argument: titleLabel)
+}
+
+override func accessibilityPerformEscape() -> Bool {
+    dismiss(animated: true)
+    return true      // handles the two-finger Z gesture
+}</code></pre>
+
+      <span class="comp-lbl">How to test</span>
+      <ol class="test-steps">
+        <li>With VoiceOver on, trigger the alert. Focus must move into it and the title must be announced without any user action.</li>
+        <li>Swipe right repeatedly. You should cycle through the alert's own elements and <strong>never</strong> reach content behind it.</li>
+        <li>Perform the <strong>two-finger Z</strong> escape gesture. The alert should dismiss as if Cancel were tapped.</li>
+        <li>Dismiss the alert normally and confirm focus returns to the control that opened it — not to the top of the screen.</li>
+        <li>Confirm every alert button is reachable and correctly labelled.</li>
+        <li>Repeat with Switch Control to verify the scanner stays inside the alert.</li>
+      </ol>
+
+      <span class="comp-lbl">Checkpoints</span>
+      <div class="check-row"><span class="check-icon">☐</span>Focus moves into the alert on presentation</div>
+      <div class="check-row"><span class="check-icon">☐</span>Title is announced and carries the header trait on custom alerts</div>
+      <div class="check-row"><span class="check-icon">☐</span>Background content is unreachable while the alert is open</div>
+      <div class="check-row"><span class="check-icon">☐</span>Two-finger Z dismisses the alert</div>
+      <div class="check-row"><span class="check-icon">☐</span>Focus returns to the triggering control on dismissal</div>
+      <div class="check-row"><span class="check-icon">☐</span>Destructive actions use <code>role: .destructive</code></div>
+      <div class="check-row"><span class="check-icon">☐</span>Button labels describe the action — "Delete", not "OK"</div>
+
+      <span class="comp-lbl">Common failures</span>
+      <div class="fail"><strong>Missing <code>.isModal</code>:</strong> VoiceOver swipes straight past the alert into the disabled content behind it. The most common custom-alert failure.</div>
+      <div class="fail"><strong>No focus move on appear:</strong> the alert is visible but focus is still wherever it was. A VoiceOver user has no idea anything happened.</div>
+      <div class="fail"><strong>Focus lost on dismiss:</strong> focus jumps to the top of the screen, forcing the user to swipe back to where they were.</div>
+      <div class="fail"><strong>Escape gesture not implemented:</strong> two-finger Z does nothing on a custom alert, leaving no gesture-based exit.</div>
+      <div class="fail"><strong>Ambiguous buttons:</strong> "OK" and "Cancel" on a destructive alert — which one deletes?</div>
+
+      <span class="comp-lbl">WCAG mapping</span>
+      <div class="wcag-ref"><span class="wcag-sc">4.1.2 A</span> Name, Role, Value — the dialog role and name must be exposed.</div>
+      <div class="wcag-ref"><span class="wcag-sc">2.4.3 A</span> Focus Order — focus must move logically into and out of the alert.</div>
+      <div class="wcag-ref"><span class="wcag-sc">2.1.2 A</span> No Keyboard Trap — a dismissal path must always exist.</div>
+
+      <hr>
+
+      <h2 id="c-dialogs" tabindex="-1"><span class="section-num">10 —</span> Dialogs and sheets</h2>
+
+      <div class="why-box">
+        <strong>What it is:</strong> a larger modal surface containing real UI — a form, a picker, a filter panel.<br>
+        <strong>Why it matters:</strong> iOS has no dialog <em>component</em>. <code>.sheet</code> and <code>.fullScreenCover</code> are presentation mechanisms — they control <em>how</em> something appears, not <em>what</em> it is. The accessibility semantics of the content inside are entirely yours to build.
+      </div>
 
       <div class="table-wrap">
-        <table aria-label="iOS accessibility testing tools">
-          <thead><tr><th scope="col">Tool</th><th scope="col">Type</th><th scope="col">Primary Use</th><th scope="col">Cost</th></tr></thead>
+        <table class="ref-table" aria-label="Alert versus dialog on iOS">
+          <thead><tr><th scope="col"></th><th scope="col">Alert</th><th scope="col">Dialog / sheet</th></tr></thead>
           <tbody>
-            <tr><td>VoiceOver (real device)</td><td>Manual</td><td>Complete user experience audit</td><td><span class="badge badge-ok">Free</span></td></tr>
-            <tr><td>Xcode Accessibility Inspector</td><td>Semi-automated</td><td>Live tree inspection, audit scan</td><td><span class="badge badge-ok">Free</span></td></tr>
-            <tr><td>Switch Control</td><td>Manual</td><td>Motor disability simulation</td><td><span class="badge badge-ok">Free</span></td></tr>
-            <tr><td>Full Keyboard Access</td><td>Manual</td><td>Keyboard-only navigation testing</td><td><span class="badge badge-ok">Free</span></td></tr>
-            <tr><td>Colour Contrast Analyser</td><td>Automated</td><td>Contrast ratio measurement</td><td><span class="badge badge-ok">Free</span></td></tr>
-            <tr><td>Axe DevTools Mobile</td><td>Automated</td><td>WCAG checks in web/hybrid views</td><td><span class="badge badge-info">Free tier</span></td></tr>
+            <tr><td>Content</td><td>Text plus one or two buttons</td><td>Forms, lists, images, complex UI</td></tr>
+            <tr><td>Native component</td><td>Yes — <code>.alert()</code></td><td>No — custom view inside a presentation</td></tr>
+            <tr><td>Focus trap</td><td>Automatic</td><td>Manual — <code>.isModal</code></td></tr>
+            <tr><td>Escape gesture</td><td>Automatic</td><td>Automatic in <code>.sheet</code>; manual in custom overlays</td></tr>
+            <tr><td>Focus on appear</td><td>Automatic</td><td>Post <code>.screenChanged</code> yourself</td></tr>
           </tbody>
         </table>
+      </div>
+
+<pre><code>// SwiftUI — sheet presentation
+.sheet(isPresented: $showFilters) {
+    FilterView(isPresented: $showFilters)
+}
+
+struct FilterView: View {
+    @Binding var isPresented: Bool
+
+    var body: some View {
+        NavigationStack {
+            Form { /* filter controls */ }
+                .navigationTitle("Filter results")
+                .toolbar {
+                    ToolbarItem(placement: .cancellationAction) {
+                        Button("Cancel") { isPresented = false }
+                    }
+                    ToolbarItem(placement: .confirmationAction) {
+                        Button("Apply") { applyFilters(); isPresented = false }
+                    }
+                }
+        }
+        .accessibilityAddTraits(.isModal)
+        .onAppear {
+            UIAccessibility.post(notification: .screenChanged, argument: nil)
+        }
+    }
+}</code></pre>
+
+      <div class="callout tip" role="note">
+        <span class="callout-icon" aria-hidden="true">💡</span>
+        <p>Wrapping sheet content in a <code>NavigationStack</code> with a <code>navigationTitle</code> gives you an announced screen title and standard toolbar placements for free. It is the least-effort way to make a sheet feel like a proper screen to VoiceOver.</p>
+      </div>
+
+      <span class="comp-lbl">Custom overlay dialogs</span>
+      <p>If the dialog is a <code>ZStack</code> overlay rather than a real presentation, none of the system behaviour applies. You need all four pieces.</p>
+<pre><code>// UIKit
+override func viewDidAppear(_ animated: Bool) {
+    super.viewDidAppear(animated)
+    view.accessibilityViewIsModal = true                                   // 1
+    UIAccessibility.post(notification: .screenChanged, argument: titleLabel) // 2
+}
+
+override func viewDidDisappear(_ animated: Bool) {
+    super.viewDidDisappear(animated)
+    UIAccessibility.post(notification: .screenChanged, argument: triggerButton) // 3
+}
+
+override func accessibilityPerformEscape() -> Bool {                        // 4
+    dismiss(animated: true)
+    return true
+}</code></pre>
+
+      <span class="comp-lbl">How to test</span>
+      <ol class="test-steps">
+        <li>Open the sheet with VoiceOver on. Focus must move inside and the title must be announced.</li>
+        <li>Swipe right through every element. Confirm you loop within the sheet and never reach the screen behind.</li>
+        <li>Try the <strong>two-finger Z</strong> gesture. A <code>.sheet</code> should dismiss; a custom overlay needs <code>accessibilityPerformEscape</code>.</li>
+        <li>If the sheet is a partial-height detent, confirm the drag indicator is announced and that the sheet can be resized or dismissed without dragging.</li>
+        <li>Dismiss and confirm focus returns to the button that opened it.</li>
+        <li>Turn on <strong>Reduce Transparency</strong> and confirm the sheet background remains distinguishable from the content behind it.</li>
+      </ol>
+
+      <span class="comp-lbl">Checkpoints</span>
+      <div class="check-row"><span class="check-icon">☐</span>Focus moves into the sheet on presentation</div>
+      <div class="check-row"><span class="check-icon">☐</span>Sheet has an announced title</div>
+      <div class="check-row"><span class="check-icon">☐</span>Background content is unreachable — <code>.isModal</code> applied</div>
+      <div class="check-row"><span class="check-icon">☐</span>Escape gesture dismisses the sheet</div>
+      <div class="check-row"><span class="check-icon">☐</span>Focus returns to the trigger on dismissal</div>
+      <div class="check-row"><span class="check-icon">☐</span>Dismissal is possible without a drag gesture</div>
+      <div class="check-row"><span class="check-icon">☐</span>Cancel and confirm actions are both clearly labelled</div>
+
+      <span class="comp-lbl">Common failures</span>
+      <div class="fail"><strong>Drag-to-dismiss only:</strong> the only way out is a swipe-down gesture. Fails 2.5.1 for users who cannot perform path-based gestures.</div>
+      <div class="fail"><strong>Custom overlay with no <code>.isModal</code>:</strong> VoiceOver wanders behind the dialog into content the user cannot actually tap.</div>
+      <div class="fail"><strong>No title:</strong> the sheet opens and the user has no idea what it is for.</div>
+      <div class="fail"><strong>Focus stranded after dismissal:</strong> returns to the top of a long screen instead of the trigger.</div>
+
+      <span class="comp-lbl">WCAG mapping</span>
+      <div class="wcag-ref"><span class="wcag-sc">2.4.3 A</span> Focus Order — focus must move logically in and out.</div>
+      <div class="wcag-ref"><span class="wcag-sc">2.5.1 A</span> Pointer Gestures — drag dismissal needs a tappable alternative.</div>
+      <div class="wcag-ref"><span class="wcag-sc">4.1.2 A</span> Name, Role, Value — the modal must be identified as such.</div>
+
+      <hr>
+
+      <h2 id="c-tabs" tabindex="-1"><span class="section-num">11 —</span> Tab bars</h2>
+
+      <div class="why-box">
+        <strong>What it is:</strong> the persistent bottom bar switching between the app's top-level sections.<br>
+        <strong>Why it matters:</strong> the tab bar is the app's primary navigation. If the selected state is not announced, a VoiceOver user cannot tell which section they are in. If focus stays on the tab bar after switching, they have to swipe past every tab to reach the content they just navigated to.
+      </div>
+
+      <div class="code-right">
+        <span class="code-tag code-tag-good">SwiftUI — native TabView</span>
+<pre><code>TabView(selection: $selectedTab) {
+    HomeView()
+        .tabItem { Label("Home", systemImage: "house") }
+        .tag(0)
+    SearchView()
+        .tabItem { Label("Search", systemImage: "magnifyingglass") }
+        .tag(1)
+    ProfileView()
+        .tabItem { Label("Profile", systemImage: "person") }
+        .badge(3)
+        .tag(2)
+}
+// "Home, selected, tab, 1 of 3"
+// "Profile, 3 items, tab, 3 of 3"  ← badge announced automatically ✓</code></pre>
+      </div>
+
+      <div class="callout warn" role="note">
+        <span class="callout-icon" aria-hidden="true">⚠️</span>
+        <p>Always use <code>Label("Home", systemImage:)</code> rather than a bare <code>Image</code>. An icon-only tab item announces the SF Symbol name — "house, tab" — which tells the user nothing about where the tab goes.</p>
+      </div>
+
+      <span class="comp-lbl">UIKit</span>
+<pre><code>homeVC.tabBarItem = UITabBarItem(
+    title: "Home",                                  // used by VoiceOver and Voice Control
+    image: UIImage(systemName: "house"),
+    selectedImage: UIImage(systemName: "house.fill"))
+
+messagesVC.tabBarItem.badgeValue = "3"              // "Messages, 3 items, tab"</code></pre>
+
+      <span class="comp-lbl">Custom tab bars</span>
+<pre><code>Button(action: { selectedTab = 0 }) {
+    VStack(spacing: 4) {
+        Image(systemName: selectedTab == 0 ? "house.fill" : "house")
+        Text("Home").font(.caption2)
+    }
+}
+.accessibilityLabel("Home")
+.accessibilityAddTraits(selectedTab == 0 ? [.isButton, .isSelected] : .isButton)
+.accessibilityHint(selectedTab == 0 ? "" : "Shows the home screen")
+
+// Move focus to the new content after switching
+.onChange(of: selectedTab) { _ in
+    UIAccessibility.post(notification: .screenChanged, argument: nil)
+}</code></pre>
+
+      <div class="good"><strong>Suppress the hint on the selected tab.</strong> "Shows the home screen" is useful when you are elsewhere and considering the tab. It is noise when you are already there.</div>
+
+      <span class="comp-lbl">How to test</span>
+      <ol class="test-steps">
+        <li>With VoiceOver on, swipe through the tab bar. Each tab must announce <strong>name, selected state where applicable, role, and position</strong> — "Home, selected, tab, 1 of 4".</li>
+        <li>Double tap a different tab. Confirm the new tab announces as selected and the previous one no longer does.</li>
+        <li>After switching, check where focus landed. It should be in the new content, not still on the tab bar.</li>
+        <li>Check any badge. It should be announced as part of the tab — "Messages, 5 items" — not as a separate element.</li>
+        <li>Turn off VoiceOver and confirm the selected tab is distinguishable by more than colour — a filled icon or bold label.</li>
+        <li>Increase text size to the largest accessibility setting and confirm tab labels remain readable and do not truncate into meaninglessness.</li>
+      </ol>
+
+      <span class="comp-lbl">Checkpoints</span>
+      <div class="check-row"><span class="check-icon">☐</span>Every tab has a text label, not just an icon</div>
+      <div class="check-row"><span class="check-icon">☐</span>Selected tab announces its selected state</div>
+      <div class="check-row"><span class="check-icon">☐</span>Only one tab is announced as selected at a time</div>
+      <div class="check-row"><span class="check-icon">☐</span>Focus moves into content after a tab switch</div>
+      <div class="check-row"><span class="check-icon">☐</span>Badges are announced with the tab</div>
+      <div class="check-row"><span class="check-icon">☐</span>Selection is conveyed visually by more than colour</div>
+      <div class="check-row"><span class="check-icon">☐</span>Tab bar order is consistent across the app</div>
+
+      <span class="comp-lbl">Common failures</span>
+      <div class="fail"><strong>Icon-only tabs:</strong> "magnifyingglass, tab" instead of "Search, tab".</div>
+      <div class="fail"><strong>No selected state:</strong> all four tabs announce identically, so the user cannot tell where they are.</div>
+      <div class="fail"><strong>Focus stuck on the tab bar:</strong> after switching, the user must swipe past every remaining tab to reach content.</div>
+      <div class="fail"><strong>Badge as a separate element:</strong> VoiceOver announces "Messages, tab" then separately "5", with no connection between them.</div>
+      <div class="fail"><strong>Colour-only selection:</strong> blue versus grey icon with identical shape. Fails 1.4.1.</div>
+
+      <span class="comp-lbl">WCAG mapping</span>
+      <div class="wcag-ref"><span class="wcag-sc">4.1.2 A</span> Name, Role, Value — selected state must be exposed.</div>
+      <div class="wcag-ref"><span class="wcag-sc">1.4.1 A</span> Use of Color — selection must not rely on colour alone.</div>
+      <div class="wcag-ref"><span class="wcag-sc">3.2.3 AA</span> Consistent Navigation — tab order stays the same across screens.</div>
+
+      <hr>
+
+      <h2 id="c-lists" tabindex="-1"><span class="section-num">12 —</span> Lists, cells, and cards</h2>
+
+      <div class="why-box">
+        <strong>What it is:</strong> repeating rows of related content — a product list, a feed, a contacts table.<br>
+        <strong>Why it matters:</strong> a card with an image, a title, a subtitle, a price, and a button is five separate elements by default. Twenty cards become a hundred swipes. Grouping them into one element per card turns that back into twenty.
+      </div>
+
+      <div class="code-wrong">
+        <span class="code-tag code-tag-bad">Five swipes per card</span>
+<pre><code>VStack(alignment: .leading) {
+    Image(hotel.photo)
+    Text(hotel.name)
+    Text("\(hotel.stars) stars")
+    Text("\(hotel.distance) km from centre")
+    Text("From ₹\(hotel.price) per night")
+}
+// 20 hotels × 5 elements = 100 swipes to scan the list</code></pre>
+      </div>
+      <div class="code-right">
+        <span class="code-tag code-tag-good">One swipe per card</span>
+<pre><code>VStack(alignment: .leading) { /* same visual content */ }
+    .accessibilityElement(children: .combine)
+// VoiceOver reads all the text as one element ✓</code></pre>
+      </div>
+
+      <span class="comp-lbl">The three grouping modes</span>
+      <div class="table-wrap">
+        <table class="ref-table" aria-label="accessibilityElement children options">
+          <thead><tr><th scope="col">Option</th><th scope="col">Behaviour</th><th scope="col">Use when</th></tr></thead>
+          <tbody>
+            <tr><td><code>.combine</code></td><td>Merges children into one element, concatenating their labels</td><td>Cards and cells whose children are all non-interactive</td></tr>
+            <tr><td><code>.ignore</code></td><td>Hides children; the parent's own label is used</td><td>You want full manual control of the announcement</td></tr>
+            <tr><td><code>.contain</code></td><td>Default — each child stays a separate element</td><td>Children include buttons or other controls</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout warn" role="note">
+        <span class="callout-icon" aria-hidden="true">⚠️</span>
+        <p>With <code>children: .ignore</code> you <strong>must</strong> supply an <code>accessibilityLabel</code> on the parent. Without one, VoiceOver focuses the group and announces nothing at all — a blank focus stop is worse than no grouping.</p>
+      </div>
+
+      <span class="comp-lbl">Cards with an action</span>
+      <p>If the whole card is tappable, make it one element with a button trait and a custom action rather than a group of five elements plus a button.</p>
+<pre><code>VStack(alignment: .leading) { /* card content */ }
+    .accessibilityElement(children: .ignore)
+    .accessibilityLabel("\(hotel.name), \(hotel.stars) stars, "
+                      + "\(hotel.distance) kilometres from centre, "
+                      + "from \(hotel.price) rupees per night")
+    .accessibilityAddTraits(.isButton)
+    .accessibilityHint("Opens hotel details and availability")
+    .accessibilityAction { selectHotel(hotel) }</code></pre>
+
+      <span class="comp-lbl">Custom actions for secondary controls</span>
+      <p>When a card has extra actions — save, share, delete — do not leave them as separate swipe stops on every row. Expose them through the VoiceOver Actions rotor instead.</p>
+<pre><code>HotelCard(hotel: hotel)
+    .accessibilityElement(children: .combine)
+    .accessibilityAction(named: "Save to wishlist") { save(hotel) }
+    .accessibilityAction(named: "Share") { share(hotel) }
+// VoiceOver: "…, actions available"
+// Swipe up/down on the element cycles the actions, double tap runs one</code></pre>
+
+      <span class="comp-lbl">UIKit reading order</span>
+<pre><code>override var accessibilityElements: [Any]? {
+    get { [nameLabel, priceLabel, ratingLabel, bookButton] }
+    set { }
+}
+// Explicit array = exactly this order, regardless of frame positions</code></pre>
+
+      <span class="comp-lbl">How to test</span>
+      <ol class="test-steps">
+        <li>With VoiceOver on, swipe through one card and count the stops. More than two or three for a simple card means it needs grouping.</li>
+        <li>Confirm the combined announcement reads naturally and in a sensible order — name before price, not price before name.</li>
+        <li>On any grouped card, swipe up and down to check for <strong>custom actions</strong>. If secondary buttons exist, they should be here.</li>
+        <li>Confirm no focus stop announces nothing — that indicates <code>.ignore</code> without a label.</li>
+        <li>Scroll a long list with three-finger swipes and confirm new rows become reachable and are announced.</li>
+        <li>Check that swipe-to-delete rows expose the delete action to VoiceOver as a custom action, not only as a swipe gesture.</li>
+      </ol>
+
+      <span class="comp-lbl">Checkpoints</span>
+      <div class="check-row"><span class="check-icon">☐</span>Related content in a cell is grouped into a single element</div>
+      <div class="check-row"><span class="check-icon">☐</span>Grouped announcements read in a logical order</div>
+      <div class="check-row"><span class="check-icon">☐</span><code>.ignore</code> is always paired with an explicit label</div>
+      <div class="check-row"><span class="check-icon">☐</span>Tappable cards carry <code>.isButton</code> and an accessibility action</div>
+      <div class="check-row"><span class="check-icon">☐</span>Secondary actions are exposed as custom actions, not extra swipe stops</div>
+      <div class="check-row"><span class="check-icon">☐</span>Swipe-gesture actions have a non-gesture equivalent</div>
+      <div class="check-row"><span class="check-icon">☐</span>Decorative images inside cells are hidden</div>
+
+      <span class="comp-lbl">Common failures</span>
+      <div class="fail"><strong>No grouping:</strong> a hundred swipes to scan twenty results. Not a hard failure of any single criterion, but the most fatiguing usability problem in native apps.</div>
+      <div class="fail"><strong>Blank focus stop:</strong> <code>children: .ignore</code> with no label. VoiceOver stops and says nothing.</div>
+      <div class="fail"><strong>Swipe-only delete:</strong> row deletion available exclusively through a swipe gesture. Fails 2.5.1.</div>
+      <div class="fail"><strong>Whole card grouped but a button inside it:</strong> using <code>.combine</code> on a card containing a button swallows the button — it becomes unreachable.</div>
+
+      <span class="comp-lbl">WCAG mapping</span>
+      <div class="wcag-ref"><span class="wcag-sc">1.3.1 A</span> Info and Relationships — grouping conveys which content belongs together.</div>
+      <div class="wcag-ref"><span class="wcag-sc">2.5.1 A</span> Pointer Gestures — swipe actions need a simple alternative.</div>
+      <div class="wcag-ref"><span class="wcag-sc">2.4.3 A</span> Focus Order — announcement order must preserve meaning.</div>
+
+      <hr>
+
+      <h2 id="c-focus" tabindex="-1"><span class="section-num">13 —</span> Focus management</h2>
+
+      <div class="why-box">
+        <strong>What it is:</strong> deliberately moving VoiceOver's cursor when the interface changes.<br>
+        <strong>Why it matters:</strong> sighted users notice a change instantly through peripheral vision. VoiceOver users only know what is under the cursor. If the screen changes and focus does not move, the change effectively did not happen.
+      </div>
+
+      <div class="table-wrap">
+        <table class="ref-table" aria-label="When to move focus">
+          <thead><tr><th scope="col">Scenario</th><th scope="col">Notification</th><th scope="col">Target</th></tr></thead>
+          <tbody>
+            <tr><td>Modal or new screen appears</td><td><code>.screenChanged</code></td><td>Title, or <code>nil</code> for first element</td></tr>
+            <tr><td>Modal dismissed</td><td><code>.screenChanged</code></td><td>The control that opened it</td></tr>
+            <tr><td>Validation error appears</td><td><code>.layoutChanged</code></td><td>The field in error</td></tr>
+            <tr><td>Content inserted in place</td><td><code>.layoutChanged</code></td><td>The new content, or <code>nil</code></td></tr>
+            <tr><td>Status message, no focus change</td><td><code>.announcement</code></td><td>The message string</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="good"><strong><code>.screenChanged</code> versus <code>.layoutChanged</code>:</strong> screenChanged plays the "new screen" sound and is for whole-context changes. layoutChanged is quieter and is for partial updates within the current screen. Using screenChanged for a small inline update is jarring; using layoutChanged for a full modal leaves the user unsure what happened.</div>
+
+      <span class="comp-lbl">SwiftUI — AccessibilityFocusState</span>
+      <p>Since iOS 15, SwiftUI has a first-class way to move focus without dropping to UIKit APIs.</p>
+<pre><code>struct CheckoutView: View {
+    @AccessibilityFocusState private var errorFocused: Bool
+    @State private var showError = false
+
+    var body: some View {
+        VStack {
+            if showError {
+                Text("Card declined. Please check the card number.")
+                    .accessibilityFocused($errorFocused)   // focus target
+            }
+            TextField("", text: $cardNumber)
+                .accessibilityLabel("Card number")
+
+            Button("Pay") {
+                if !isValid {
+                    showError = true
+                    errorFocused = true                    // move focus here
+                }
+            }
+        }
+    }
+}</code></pre>
+
+      <span class="comp-lbl">UIKit</span>
+<pre><code>// New screen or modal
+UIAccessibility.post(notification: .screenChanged, argument: titleLabel)
+
+// Inline error — move focus to the failing field
+UIAccessibility.post(notification: .layoutChanged, argument: emailField)
+
+// Return focus after dismissing
+UIAccessibility.post(notification: .screenChanged, argument: openButton)</code></pre>
+
+      <span class="comp-lbl">Focus trapping</span>
+      <div class="table-wrap">
+        <table class="ref-table" aria-label="When to trap focus">
+          <thead><tr><th scope="col">Surface</th><th scope="col">Trap focus?</th></tr></thead>
+          <tbody>
+            <tr><td>Modal, dialog, bottom sheet</td><td>Yes — <code>.isModal</code></td></tr>
+            <tr><td>Dropdown or picker menu</td><td>No</td></tr>
+            <tr><td>Tooltip or popover</td><td>No</td></tr>
+            <tr><td>Toast or snackbar</td><td>No — announce instead</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <span class="comp-lbl">How to test</span>
+      <ol class="test-steps">
+        <li>Trigger every modal, sheet, and full-screen cover in the app. Confirm focus lands inside each one.</li>
+        <li>Dismiss each of them and confirm focus returns to the trigger, not to the top of the screen.</li>
+        <li>Submit every form with errors. Confirm focus moves to the first error and the message is announced.</li>
+        <li>Trigger any inline content insertion — load more, expand section — and confirm the new content is announced or focused.</li>
+        <li>Inside any modal, swipe right past the last element. Focus must wrap within the modal, never escape behind it.</li>
+        <li>Rotate the device and confirm focus is preserved rather than reset to the top.</li>
+      </ol>
+
+      <span class="comp-lbl">Checkpoints</span>
+      <div class="check-row"><span class="check-icon">☐</span>Focus moves into every modal on presentation</div>
+      <div class="check-row"><span class="check-icon">☐</span>Focus returns to the trigger on dismissal</div>
+      <div class="check-row"><span class="check-icon">☐</span>Focus moves to the first error on failed validation</div>
+      <div class="check-row"><span class="check-icon">☐</span><code>.isModal</code> applied to every modal surface</div>
+      <div class="check-row"><span class="check-icon">☐</span>Non-modal surfaces do not trap focus</div>
+      <div class="check-row"><span class="check-icon">☐</span>Focus is never left on a removed or hidden element</div>
+      <div class="check-row"><span class="check-icon">☐</span>Correct notification type used for the scale of the change</div>
+
+      <span class="comp-lbl">Common failures</span>
+      <div class="fail"><strong>Focus never moves:</strong> a modal opens, VoiceOver stays on the button behind it. The user has no idea anything changed.</div>
+      <div class="fail"><strong>Focus lost on dismiss:</strong> jumps to the top of a long screen, forcing the user to swipe all the way back.</div>
+      <div class="fail"><strong>Focus on a destroyed element:</strong> focus lands nowhere and VoiceOver goes silent until the user taps the screen.</div>
+      <div class="fail"><strong>Errors announced but not focused:</strong> the user hears there was an error but has to hunt for which field caused it.</div>
+      <div class="fail"><strong>screenChanged for tiny updates:</strong> the screen-change sound fires every time a counter increments — genuinely unpleasant to use.</div>
+
+      <span class="comp-lbl">WCAG mapping</span>
+      <div class="wcag-ref"><span class="wcag-sc">2.4.3 A</span> Focus Order — focus sequence must preserve meaning.</div>
+      <div class="wcag-ref"><span class="wcag-sc">3.2.1 A</span> On Focus — focus must not trigger unexpected context changes.</div>
+      <div class="wcag-ref"><span class="wcag-sc">4.1.3 AA</span> Status Messages — changes must reach assistive technology.</div>
+
+      <hr>
+
+      <h2 id="c-order" tabindex="-1"><span class="section-num">14 —</span> Reading order</h2>
+
+      <div class="why-box">
+        <strong>What it is:</strong> the sequence in which VoiceOver moves through elements as the user swipes right.<br>
+        <strong>Why it matters:</strong> the order comes from the view hierarchy, not from what you see. A price positioned above a product name with a negative offset still reads after it. When visual and reading order diverge, the announcement stops making sense.
+      </div>
+
+<pre><code>// SwiftUI — reorder without changing the layout
+// Higher sortPriority is read first
+Image("product").accessibilitySortPriority(3)
+Text("Wireless Headphones").accessibilitySortPriority(2)
+Text("₹4,999").accessibilitySortPriority(1)
+
+// UIKit — explicit array, full control
+override var accessibilityElements: [Any]? {
+    get { [titleLabel, priceLabel, ratingView, addToCartButton] }
+    set { }
+}</code></pre>
+
+      <span class="comp-lbl">How to test</span>
+      <ol class="test-steps">
+        <li>With VoiceOver on, place focus at the top of the screen and swipe right repeatedly to the end.</li>
+        <li>Write down the announcement order. Compare it against reading the screen visually top to bottom, left to right.</li>
+        <li>Any divergence is a finding. Pay particular attention to overlapping views, <code>ZStack</code> layouts, and anything positioned with <code>.offset</code>.</li>
+        <li>Use a <strong>two-finger swipe down</strong> to read the whole screen continuously — this exposes order problems faster than element-by-element swiping.</li>
+        <li>Rotate to landscape and repeat. Layout changes can reorder elements.</li>
+        <li>Test with the largest Dynamic Type size, where reflow may move elements onto different lines.</li>
+      </ol>
+
+      <span class="comp-lbl">Checkpoints</span>
+      <div class="check-row"><span class="check-icon">☐</span>Reading order matches visual order on every screen</div>
+      <div class="check-row"><span class="check-icon">☐</span>Order holds in both portrait and landscape</div>
+      <div class="check-row"><span class="check-icon">☐</span>Order holds at the largest text size</div>
+      <div class="check-row"><span class="check-icon">☐</span>Related content is adjacent in the sequence</div>
+      <div class="check-row"><span class="check-icon">☐</span>Off-screen content is not focusable until it is visible</div>
+
+      <span class="comp-lbl">Common failures</span>
+      <div class="fail"><strong>ZStack layers read in build order:</strong> a badge declared before the card content is announced before it, so the user hears "3" then "Messages".</div>
+      <div class="fail"><strong>Off-screen carousel items focusable:</strong> VoiceOver swipes into items the user cannot see, with no indication they have moved off-screen.</div>
+      <div class="fail"><strong>Order breaks at large text:</strong> reflow moves a label to a new line and the announcement sequence no longer matches the visual.</div>
+
+      <span class="comp-lbl">WCAG mapping</span>
+      <div class="wcag-ref"><span class="wcag-sc">1.3.2 A</span> Meaningful Sequence — reading order must preserve meaning.</div>
+      <div class="wcag-ref"><span class="wcag-sc">2.4.3 A</span> Focus Order — focus sequence must be logical.</div>
+
+      <hr>
+
+      <h2 id="c-announce" tabindex="-1"><span class="section-num">15 —</span> Announcements and live updates</h2>
+
+      <div class="why-box">
+        <strong>What it is:</strong> speaking a message to VoiceOver without moving focus — the iOS equivalent of an ARIA live region.<br>
+        <strong>Why it matters:</strong> a toast saying "Saved" appears and disappears in three seconds. A sighted user catches it. A VoiceOver user, focused elsewhere, gets nothing unless you announce it explicitly.
+      </div>
+
+<pre><code>// SwiftUI, iOS 17+
+AccessibilityNotification.Announcement("Item added to cart").post()
+
+// SwiftUI, iOS 15/16 and UIKit — universal
+UIAccessibility.post(notification: .announcement, argument: "Item added to cart")
+
+// Announcement priority, iOS 17+
+var announcement = AttributedString("Payment failed")
+announcement.accessibilitySpeechAnnouncementPriority = .high
+AccessibilityNotification.Announcement(announcement).post()</code></pre>
+
+      <div class="callout warn" role="note">
+        <span class="callout-icon" aria-hidden="true">⚠️</span>
+        <p><strong>Identical announcements are suppressed.</strong> Posting the same string twice in a row means the second one is silently dropped. For a repeating event like "3 results", vary the string or include a changing detail so the user actually hears each update.</p>
+      </div>
+
+      <span class="comp-lbl">Frequently updating values</span>
+      <p>A live timer or score that updates every second will flood VoiceOver with speech. The <code>.updatesFrequently</code> trait tells the system to sample the value rather than announce every change.</p>
+<pre><code>Text(timeRemaining)
+    .accessibilityLabel("Time remaining")
+    .accessibilityValue(timeRemaining)
+    .accessibilityAddTraits(.updatesFrequently)</code></pre>
+
+      <span class="comp-lbl">Checking whether VoiceOver is running</span>
+<pre><code>if UIAccessibility.isVoiceOverRunning {
+    // extend a timeout, or announce something extra
+}
+
+NotificationCenter.default.addObserver(
+    forName: UIAccessibility.voiceOverStatusDidChangeNotification,
+    object: nil, queue: .main) { _ in
+        // VoiceOver was turned on or off mid-session
+}</code></pre>
+
+      <span class="comp-lbl">How to test</span>
+      <ol class="test-steps">
+        <li>With VoiceOver on, trigger every toast, snackbar, and inline status message. Each must be spoken.</li>
+        <li>Trigger the same message twice in a row and confirm it is not silently dropped when it matters.</li>
+        <li>Submit a form successfully and confirm the success state is announced, not just displayed.</li>
+        <li>Trigger a background operation — sync, upload — and confirm both start and completion are announced.</li>
+        <li>Watch any live-updating value for thirty seconds. Constant interruption means <code>.updatesFrequently</code> is missing.</li>
+        <li>Confirm announcements do not steal focus. The cursor should stay where the user left it.</li>
+      </ol>
+
+      <span class="comp-lbl">Checkpoints</span>
+      <div class="check-row"><span class="check-icon">☐</span>Toasts and transient messages are announced</div>
+      <div class="check-row"><span class="check-icon">☐</span>Success and failure of user-initiated actions is announced</div>
+      <div class="check-row"><span class="check-icon">☐</span>Loading start and completion are announced</div>
+      <div class="check-row"><span class="check-icon">☐</span>Announcements do not move focus</div>
+      <div class="check-row"><span class="check-icon">☐</span>Frequently updating values carry <code>.updatesFrequently</code></div>
+      <div class="check-row"><span class="check-icon">☐</span>Announcement text is concise and meaningful</div>
+
+      <span class="comp-lbl">Common failures</span>
+      <div class="fail"><strong>Silent toasts:</strong> the most common status-message failure. Visual only, never announced. Fails 4.1.3.</div>
+      <div class="fail"><strong>Suppressed duplicates:</strong> "Added to cart" posted twice, second one dropped, user thinks the tap failed.</div>
+      <div class="fail"><strong>Announcement steals focus:</strong> using <code>.screenChanged</code> where <code>.announcement</code> was correct, yanking the cursor away mid-task.</div>
+      <div class="fail"><strong>Timer spam:</strong> a countdown announced every second with no <code>.updatesFrequently</code>, making the screen unusable.</div>
+
+      <span class="comp-lbl">WCAG mapping</span>
+      <div class="wcag-ref"><span class="wcag-sc">4.1.3 AA</span> Status Messages — status must be programmatically determinable without focus.</div>
+      <div class="wcag-ref"><span class="wcag-sc">3.3.1 A</span> Error Identification — errors must be announced, not only shown.</div>
+
+      <hr>
+
+      <h2 id="c-targets" tabindex="-1"><span class="section-num">16 —</span> Touch targets</h2>
+
+      <div class="why-box">
+        <strong>What it is:</strong> the tappable area of a control, which is often larger or smaller than what is drawn.<br>
+        <strong>Why it matters:</strong> a user with a tremor, limited dexterity, or a prosthetic cannot reliably hit a 16-point icon. Targets that are too small produce mis-taps, and on destructive controls a mis-tap has real consequences.
+      </div>
+
+      <div class="callout warn" role="note">
+        <span class="callout-icon" aria-hidden="true">⚠️</span>
+        <p><strong>Do not confuse the two numbers.</strong> WCAG 2.2 SC 2.5.8 (Level AA) requires <strong>24×24 CSS pixels</strong>, or adequate spacing. Apple's Human Interface Guidelines recommend <strong>44×44 points</strong>. The 44pt figure is a platform recommendation, not the AA compliance threshold. Reporting a 30pt target as a WCAG AA failure is a false positive.</p>
+      </div>
+
+      <div class="table-wrap">
+        <table class="ref-table" aria-label="Touch target standards">
+          <thead><tr><th scope="col">Standard</th><th scope="col">Size</th><th scope="col">Type</th><th scope="col">Level</th></tr></thead>
+          <tbody>
+            <tr><td>WCAG 2.5.8</td><td>24×24 minimum, or 24pt spacing</td><td>Compliance requirement</td><td>AA (WCAG 2.2)</td></tr>
+            <tr><td>WCAG 2.5.5</td><td>44×44</td><td>Enhanced requirement</td><td>AAA (WCAG 2.1)</td></tr>
+            <tr><td>Apple HIG</td><td>44×44 points</td><td>Platform recommendation</td><td>Not a WCAG level</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+<pre><code>// SwiftUI — expand the tap area without changing the visual
+Button(action: close) {
+    Image(systemName: "xmark")
+        .frame(width: 44, height: 44)   // tappable area, not icon size
+        .contentShape(Rectangle())      // makes the whole frame tappable
+}
+.accessibilityLabel("Close")
+
+// UIKit — enlarge the hit area on a small control
+class LargeTapButton: UIButton {
+    override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
+        bounds.insetBy(dx: -10, dy: -10).contains(point)
+    }
+}</code></pre>
+
+      <div class="good"><strong><code>.contentShape(Rectangle())</code> matters.</strong> Without it, a frame around an icon expands the layout but the tappable region stays the size of the glyph. The control looks bigger and behaves the same.</div>
+
+      <span class="comp-lbl">How to test</span>
+      <ol class="test-steps">
+        <li>Open <strong>Accessibility Inspector</strong>, connect to the running app, and inspect each small control. The frame size is shown directly.</li>
+        <li>Turn on <strong>Switch Control</strong> and scan the screen — undersized targets often reveal themselves as hard-to-select items.</li>
+        <li>Tap each small control ten times with a thumb, not an index finger. Count the misses.</li>
+        <li>Check spacing between adjacent controls. Two 24pt targets touching each other still cause mis-taps; SC 2.5.8 allows small targets only when spacing compensates.</li>
+        <li>Pay special attention to close buttons, delete icons, and anything in a toolbar or nav bar — these are usually the smallest.</li>
+      </ol>
+
+      <span class="comp-lbl">Checkpoints</span>
+      <div class="check-row"><span class="check-icon">☐</span>All interactive targets meet at least 24×24pt (WCAG AA)</div>
+      <div class="check-row"><span class="check-icon">☐</span>Primary and destructive actions meet 44×44pt (Apple HIG)</div>
+      <div class="check-row"><span class="check-icon">☐</span>Adjacent targets have adequate spacing between them</div>
+      <div class="check-row"><span class="check-icon">☐</span><code>.contentShape</code> applied where the frame was expanded</div>
+      <div class="check-row"><span class="check-icon">☐</span>Targets do not overlap</div>
+
+      <span class="comp-lbl">Common failures</span>
+      <div class="fail"><strong>Icon-sized close buttons:</strong> a 16pt X in the corner of a modal, frequently mis-tapped.</div>
+      <div class="fail"><strong>Frame without contentShape:</strong> the layout reserves 44pt but only the glyph responds to touch.</div>
+      <div class="fail"><strong>Crowded toolbars:</strong> five icons packed edge to edge with no spacing.</div>
+      <div class="fail"><strong>False positives in reports:</strong> flagging every sub-44pt target as a WCAG AA failure. The AA threshold is 24pt.</div>
+
+      <span class="comp-lbl">WCAG mapping</span>
+      <div class="wcag-ref"><span class="wcag-sc">2.5.8 AA</span> Target Size (Minimum) — 24×24 CSS pixels, or spacing equivalent. WCAG 2.2.</div>
+      <div class="wcag-ref"><span class="wcag-sc">2.5.5 AAA</span> Target Size (Enhanced) — 44×44. WCAG 2.1.</div>
+
+      <hr>
+
+      <h2 id="c-dynamictype" tabindex="-1"><span class="section-num">17 —</span> Dynamic Type</h2>
+
+      <div class="why-box">
+        <strong>What it is:</strong> the system text-size setting, which users can push up to roughly 310% of default through the accessibility sizes.<br>
+        <strong>Why it matters:</strong> this is the single most widely used accessibility feature on iOS, and by a large margin — far more people enlarge text than run VoiceOver. A layout that breaks at large sizes affects a substantial share of real users.
+      </div>
+
+      <div class="code-wrong">
+        <span class="code-tag code-tag-bad">Fixed size — ignores the user's setting</span>
+<pre><code>// SwiftUI
+Text("Account balance").font(.system(size: 15))
+
+// UIKit
+label.font = UIFont.systemFont(ofSize: 15)</code></pre>
+      </div>
+      <div class="code-right">
+        <span class="code-tag code-tag-good">Scales with the user's setting</span>
+<pre><code>// SwiftUI — semantic text styles scale automatically
+Text("Account balance").font(.subheadline)
+
+// SwiftUI — custom font that still scales
+Text("Balance").font(.custom("Inter", size: 15, relativeTo: .subheadline))
+
+// UIKit — both lines are required
+label.font = UIFont.preferredFont(forTextStyle: .body)
+label.adjustsFontForContentSizeCategory = true</code></pre>
+      </div>
+
+      <div class="callout warn" role="note">
+        <span class="callout-icon" aria-hidden="true">⚠️</span>
+        <p>In UIKit, <code>preferredFont(forTextStyle:)</code> alone is not enough. Without <code>adjustsFontForContentSizeCategory = true</code>, the label picks up the size at creation and never updates when the user changes the setting mid-session.</p>
+      </div>
+
+      <span class="comp-lbl">Layouts that survive large text</span>
+<pre><code>// Switch a horizontal layout to vertical at accessibility sizes
+@Environment(\.dynamicTypeSize) var typeSize
+
+var body: some View {
+    if typeSize.isAccessibilitySize {
+        VStack(alignment: .leading) { icon; label; value }
+    } else {
+        HStack { icon; label; Spacer(); value }
+    }
+}
+
+// Or use ViewThatFits to pick automatically
+ViewThatFits {
+    HStack { icon; label; Spacer(); value }
+    VStack(alignment: .leading) { icon; label; value }
+}</code></pre>
+
+      <div class="good"><strong>Never cap text scaling to protect a layout.</strong> <code>.dynamicTypeSize(...DynamicTypeSize.large)</code> limits how far a user can enlarge text. Fix the layout instead — capping the setting is choosing your design over your user's ability to read.</div>
+
+      <span class="comp-lbl">How to test</span>
+      <ol class="test-steps">
+        <li>Go to <strong>Settings → Accessibility → Display &amp; Text Size → Larger Text</strong>, enable <strong>Larger Accessibility Sizes</strong>, and drag the slider to maximum (AX5).</li>
+        <li>Walk every screen of the app. Text must grow — anything that stays the same size is using a fixed font.</li>
+        <li>Look for truncation with an ellipsis where the full string matters, overlapping elements, and text clipped by a fixed-height container.</li>
+        <li>Confirm no horizontal scrolling has been introduced.</li>
+        <li>Check that buttons still show their full label rather than "Contin…".</li>
+        <li>Change the setting while the app is running and confirm the UI updates live rather than requiring a relaunch.</li>
+        <li>Test in landscape at maximum size as well — that combination breaks the most layouts.</li>
+      </ol>
+
+      <span class="comp-lbl">Checkpoints</span>
+      <div class="check-row"><span class="check-icon">☐</span>All text uses semantic text styles or <code>relativeTo:</code> custom fonts</div>
+      <div class="check-row"><span class="check-icon">☐</span>UIKit labels set <code>adjustsFontForContentSizeCategory = true</code></div>
+      <div class="check-row"><span class="check-icon">☐</span>App is fully usable at AX5</div>
+      <div class="check-row"><span class="check-icon">☐</span>No content is truncated or clipped at large sizes</div>
+      <div class="check-row"><span class="check-icon">☐</span>No horizontal scrolling appears</div>
+      <div class="check-row"><span class="check-icon">☐</span>Text size is not capped in code</div>
+      <div class="check-row"><span class="check-icon">☐</span>Layout adapts — horizontal stacks reflow to vertical where needed</div>
+
+      <span class="comp-lbl">Common failures</span>
+      <div class="fail"><strong>Fixed point sizes:</strong> text does not scale at all. Fails 1.4.4.</div>
+      <div class="fail"><strong>Missing adjustsFontForContentSizeCategory:</strong> UIKit text scales on launch but not when the setting changes.</div>
+      <div class="fail"><strong>Clipped text:</strong> a fixed-height container cuts off the second line at large sizes.</div>
+      <div class="fail"><strong>Truncated buttons:</strong> "Continue to payment" becomes "Contin…".</div>
+      <div class="fail"><strong>Capped scaling:</strong> the app refuses to go beyond the default size, overriding an explicit user preference.</div>
+
+      <span class="comp-lbl">WCAG mapping</span>
+      <div class="wcag-ref"><span class="wcag-sc">1.4.4 AA</span> Resize Text — text must resize to 200% without loss of content or function.</div>
+      <div class="wcag-ref"><span class="wcag-sc">1.4.10 AA</span> Reflow — content must reflow without two-dimensional scrolling.</div>
+
+      <hr>
+
+      <h2 id="c-motion" tabindex="-1"><span class="section-num">18 —</span> Motion, contrast, and system settings</h2>
+
+      <div class="why-box">
+        <strong>What it is:</strong> the system accessibility preferences an app is expected to respect — Reduce Motion, Increase Contrast, Reduce Transparency, Bold Text, Differentiate Without Colour.<br>
+        <strong>Why it matters:</strong> the user has already told the system what they need. Ignoring those settings means the app overrides an explicit accessibility choice. For someone with vestibular disorder, an unskippable parallax animation can cause genuine nausea.
+      </div>
+
+<pre><code>// SwiftUI — read every relevant setting from the environment
+@Environment(\.accessibilityReduceMotion)        var reduceMotion
+@Environment(\.accessibilityReduceTransparency)  var reduceTransparency
+@Environment(\.accessibilityDifferentiateWithoutColor) var differentiateWithoutColor
+@Environment(\.legibilityWeight)                 var legibilityWeight   // Bold Text
+
+var body: some View {
+    CardView()
+        .animation(reduceMotion ? nil : .spring(), value: isExpanded)
+        .background(reduceTransparency ? Color(.systemBackground) : .ultraThinMaterial)
+}
+
+// UIKit
+if UIAccessibility.isReduceMotionEnabled       { /* skip the animation */ }
+if UIAccessibility.isReduceTransparencyEnabled { /* use a solid background */ }
+if UIAccessibility.isBoldTextEnabled           { /* heavier weight */ }
+if UIAccessibility.shouldDifferentiateWithoutColor { /* add shapes or labels */ }</code></pre>
+
+      <span class="comp-lbl">Colour contrast on iOS</span>
+      <div class="table-wrap">
+        <table class="ref-table" aria-label="Contrast requirements">
+          <thead><tr><th scope="col">Content</th><th scope="col">AA</th><th scope="col">AAA</th></tr></thead>
+          <tbody>
+            <tr><td>Body text under 18pt</td><td>4.5:1</td><td>7:1</td></tr>
+            <tr><td>Large text 18pt+, or 14pt bold+</td><td>3:1</td><td>4.5:1</td></tr>
+            <tr><td>Icons, borders, focus indicators</td><td>3:1</td><td>—</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="good"><strong>Use semantic system colours.</strong> <code>Color(.label)</code>, <code>Color(.secondaryLabel)</code>, and <code>Color(.systemBackground)</code> adapt automatically to light mode, dark mode, and Increase Contrast. Hardcoded hex values do none of that.</div>
+
+      <span class="comp-lbl">How to test</span>
+      <ol class="test-steps">
+        <li>Enable <strong>Settings → Accessibility → Motion → Reduce Motion</strong>. Walk the app. Parallax, spring animations, and auto-playing transitions should be reduced to cross-fades or removed entirely.</li>
+        <li>Enable <strong>Display &amp; Text Size → Increase Contrast</strong> and confirm borders and text become more distinct rather than staying identical.</li>
+        <li>Enable <strong>Reduce Transparency</strong> and confirm blurred backgrounds become solid and text over them stays readable.</li>
+        <li>Enable <strong>Bold Text</strong> and confirm the app's text weight responds.</li>
+        <li>Enable <strong>Differentiate Without Colour</strong> and check every status indicator — a red-versus-green dot with no shape or label difference is a failure.</li>
+        <li>Measure contrast with the <strong>Colour Contrast Analyser</strong> on screenshots, in both light and dark mode. Dark mode is frequently worse and frequently untested.</li>
+        <li>Enable <strong>Smart Invert</strong> and confirm images and logos are not inverted into unreadable negatives.</li>
+      </ol>
+
+      <span class="comp-lbl">Checkpoints</span>
+      <div class="check-row"><span class="check-icon">☐</span>Reduce Motion removes or replaces non-essential animation</div>
+      <div class="check-row"><span class="check-icon">☐</span>No animation flashes more than three times per second</div>
+      <div class="check-row"><span class="check-icon">☐</span>Auto-playing content can be paused</div>
+      <div class="check-row"><span class="check-icon">☐</span>Text meets 4.5:1 in both light and dark mode</div>
+      <div class="check-row"><span class="check-icon">☐</span>Icons and borders meet 3:1</div>
+      <div class="check-row"><span class="check-icon">☐</span>Status is never conveyed by colour alone</div>
+      <div class="check-row"><span class="check-icon">☐</span>Semantic system colours used rather than hardcoded values</div>
+      <div class="check-row"><span class="check-icon">☐</span>Reduce Transparency produces readable solid backgrounds</div>
+
+      <span class="comp-lbl">Common failures</span>
+      <div class="fail"><strong>Reduce Motion ignored:</strong> full parallax and spring animations regardless of the setting. A vestibular trigger.</div>
+      <div class="fail"><strong>Dark mode contrast untested:</strong> light mode passes, dark mode drops to 3:1 on body text.</div>
+      <div class="fail"><strong>Colour-only status:</strong> a red dot for offline and green for online with no shape, icon, or text difference. Fails 1.4.1.</div>
+      <div class="fail"><strong>Hardcoded colours:</strong> fixed hex values that ignore Increase Contrast entirely.</div>
+      <div class="fail"><strong>Text over a blur:</strong> readable with transparency on, illegible when Reduce Transparency changes the background.</div>
+
+      <span class="comp-lbl">WCAG mapping</span>
+      <div class="wcag-ref"><span class="wcag-sc">1.4.3 AA</span> Contrast (Minimum) — 4.5:1 for body text, 3:1 for large text.</div>
+      <div class="wcag-ref"><span class="wcag-sc">1.4.11 AA</span> Non-text Contrast — 3:1 for UI components and graphics.</div>
+      <div class="wcag-ref"><span class="wcag-sc">1.4.1 A</span> Use of Color — colour must not be the sole carrier of information.</div>
+      <div class="wcag-ref"><span class="wcag-sc">2.3.3 AAA</span> Animation from Interactions — motion animation must be disableable.</div>
+      <div class="wcag-ref"><span class="wcag-sc">2.2.2 A</span> Pause, Stop, Hide — auto-playing motion needs a control.</div>
+
+      <hr>
+
+      <h2 id="gestures" tabindex="-1">VoiceOver gesture reference</h2>
+
+      <p>You cannot audit an iOS app without being able to drive VoiceOver yourself. These are the gestures you will use constantly.</p>
+
+      <div class="table-wrap">
+        <table class="ref-table" aria-label="VoiceOver gestures">
+          <thead><tr><th scope="col">Gesture</th><th scope="col">Action</th><th scope="col">Use it to</th></tr></thead>
+          <tbody>
+            <tr><td>Single tap</td><td>Focus and announce the element</td><td>Inspect a specific control</td></tr>
+            <tr><td>Swipe right</td><td>Next element in reading order</td><td>Walk the reading order</td></tr>
+            <tr><td>Swipe left</td><td>Previous element</td><td>Go back one step</td></tr>
+            <tr><td>Double tap</td><td>Activate the focused element</td><td>Test that buttons actually work</td></tr>
+            <tr><td>Swipe up / down</td><td>Adjust value, or cycle custom actions</td><td>Test sliders and card actions</td></tr>
+            <tr><td>Two-finger swipe down</td><td>Read everything from the top</td><td>Fast check of reading order</td></tr>
+            <tr><td>Two-finger tap</td><td>Pause or resume speech</td><td>Stop a long announcement</td></tr>
+            <tr><td>Two-finger twist</td><td>Open the rotor</td><td>Switch navigation mode</td></tr>
+            <tr><td>Two-finger Z shape</td><td>Escape — dismiss or go back</td><td>Test modal dismissal</td></tr>
+            <tr><td>Three-finger swipe</td><td>Scroll the view</td><td>Reach off-screen content</td></tr>
+            <tr><td>Four-finger tap top</td><td>Jump to the first element</td><td>Reset position quickly</td></tr>
+            <tr><td>Four-finger tap bottom</td><td>Jump to the last element</td><td>Check the end of a screen</td></tr>
+            <tr><td>Three-finger triple tap</td><td>Toggle screen curtain</td><td>Audit with the screen genuinely blank</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout tip" role="note">
+        <span class="callout-icon" aria-hidden="true">💡</span>
+        <p><strong>The rotor</strong> is the feature that makes VoiceOver efficient, and the one most apps break. Two-finger twist to open it, rotate to a category — Headings, Links, Form Controls, Actions — then swipe up and down to jump between items of that type. If the Headings rotor is empty on your app, you have found a real finding before testing anything else.</p>
       </div>
 
       <div class="callout info" role="note">
-        <span class="callout-icon" aria-hidden="true">ℹ️</span>
-        <p>Automated tools typically catch <strong>30–40% of real accessibility failures</strong>. The remaining issues — especially usability problems and context-dependent label quality — require manual testing with VoiceOver.</p>
+        <span class="callout-icon" aria-hidden="true">🎯</span>
+        <p><strong>Screen curtain</strong> — three-finger triple tap — turns the display off while VoiceOver keeps running. It is the fastest way to find out whether your app is genuinely usable without sight, because it removes the temptation to glance at the screen.</p>
       </div>
 
-      <h3>Creating a VPAT/ACR Report for an iOS App</h3>
-      <p>A VPAT (Voluntary Product Accessibility Template) is a standardised disclosure document required for US federal government procurement. Use the <strong>VPAT 2.4REV template</strong> from itic.org. For each WCAG criterion, assign one of four conformance levels:</p>
-      <ul>
-        <li><strong>Supports</strong> — fully meets the requirement with no known exceptions</li>
-        <li><strong>Partially Supports</strong> — meets the requirement in some but not all cases; describe precisely what fails</li>
-        <li><strong>Does Not Support</strong> — does not meet the requirement; describe the specific issue</li>
-        <li><strong>Not Applicable</strong> — criterion does not apply; justify clearly</li>
-      </ul>
-      <blockquote>
-        <p>Inadequate: "Partially Supports — some images may be missing labels."</p>
-      </blockquote>
-      <blockquote>
-        <p>Acceptable: "Partially Supports — product thumbnail images on category listing screens (screens 8–12) are missing descriptive accessibilityLabel values. VoiceOver announces the image file name. Remediation scheduled for version 4.1, targeted Q3 2026."</p>
-      </blockquote>
-
       <hr>
 
-      <h2 id="advanced" tabindex="-1"><span class="section-num">06 — Advanced</span>Patterns and Common Pitfalls</h2>
+      <h2 id="workflow" tabindex="-1">Audit workflow</h2>
 
-      <h3>Modal Focus Trapping</h3>
-      <pre><code>// UIKit — trap VoiceOver focus inside the modal
-class PaymentConfirmViewController: UIViewController {
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        view.accessibilityViewIsModal = true
-    }
-}
+      <p>A repeatable order of operations, roughly fastest-to-slowest, so cheap findings surface before you spend time on deep manual testing.</p>
 
-// SwiftUI — applied to the modal's outermost container
-VStack {
-    Text("Confirm Payment")
-    Text("Are you sure you want to pay £149.99?")
-    HStack {
-        Button("Cancel") { dismiss() }
-        Button("Confirm") { processPayment() }
-    }
-}
-.accessibilityAddTraits(.isModal)</code></pre>
-
-      <h3>Five Pitfalls I Encounter in Nearly Every Audit</h3>
-      <ol>
-        <li><strong>SF Symbol names read verbatim.</strong> <code>Image(systemName: "square.and.arrow.up")</code> announces as "square dot and dot arrow dot up." Always provide contextual labels.</li>
-        <li><strong>Icon and visible text both accessible.</strong> A share button with icon and "Share" text announces both. Hide the icon with <code>.accessibilityHidden(true)</code>.</li>
-        <li><strong>No heading structure on any screen.</strong> Users who navigate by headings find nothing. Add <code>.accessibilityAddTraits(.header)</code> to each screen's primary title.</li>
-        <li><strong>Form errors shown visually but never announced.</strong> Post a <code>.layoutChanged</code> notification directing focus to the error message immediately after it appears.</li>
-        <li><strong>Segmented control selected state not communicated.</strong> Apply the <code>.selected</code> trait dynamically to the active segment.</li>
+      <ol class="test-steps">
+        <li><strong>Accessibility Inspector audit.</strong> Xcode → Open Developer Tool → Accessibility Inspector, target the running app, run the automated audit per screen. Catches missing labels, small hit areas, and contrast issues in seconds. Treat it as a starting point, not a report.</li>
+        <li><strong>Dynamic Type at AX5.</strong> Set text to maximum and walk every screen. Layout breaks show up immediately and affect the largest user group.</li>
+        <li><strong>VoiceOver reading order.</strong> Two-finger swipe down on each screen. Confirm announcement order matches visual order.</li>
+        <li><strong>VoiceOver element-by-element.</strong> Swipe right through every screen. Check label, role, value, and state on each control.</li>
+        <li><strong>Rotor check.</strong> Headings, Links, Form Controls, and Actions on each screen. Empty rotors are findings.</li>
+        <li><strong>Interaction test.</strong> Double tap every button, adjust every slider, flip every toggle. Confirm each one responds and announces the change.</li>
+        <li><strong>Focus management.</strong> Open and dismiss every modal. Submit every form with errors. Confirm focus lands correctly each time.</li>
+        <li><strong>Voice Control.</strong> Turn it on, say "Show names", and verify every control has a name that matches its visible label.</li>
+        <li><strong>Switch Control.</strong> Run one scan cycle per screen. Anything the scanner skips is unreachable.</li>
+        <li><strong>System settings.</strong> Reduce Motion, Increase Contrast, Reduce Transparency, Bold Text, Differentiate Without Colour — one pass each.</li>
+        <li><strong>Contrast measurement.</strong> Colour Contrast Analyser on screenshots in both light and dark mode.</li>
+        <li><strong>Screen curtain run.</strong> Three-finger triple tap, then complete one full user journey without seeing the screen. This is where usability problems that pass every criterion still reveal themselves.</li>
       </ol>
 
+      <div class="callout ok" role="note">
+        <span class="callout-icon" aria-hidden="true">✓</span>
+        <p>Automated tooling catches roughly 30% of real issues on native iOS — and the Accessibility Inspector's audit is narrower than that. Missing labels it will find. A button that announces correctly but does nothing when double-tapped, it will not. Manual testing is the audit; automation is triage.</p>
+      </div>
+
       <hr>
 
-      <h2 id="conclusion" tabindex="-1"><span class="section-num">07 — Conclusion</span>Checklist and Resources</h2>
+      <h2 id="cheatsheet" tabindex="-1">Web ↔ iOS cheatsheet</h2>
+
+      <p>If you already audit for the web, this is the translation layer.</p>
+
+      <div class="table-wrap">
+        <table class="ref-table" aria-label="Web to iOS accessibility mapping">
+          <thead><tr><th scope="col">Web</th><th scope="col">SwiftUI</th><th scope="col">UIKit</th></tr></thead>
+          <tbody>
+            <tr><td><code>role="button"</code></td><td><code>.accessibilityAddTraits(.isButton)</code></td><td><code>accessibilityTraits = .button</code></td></tr>
+            <tr><td><code>role="heading"</code></td><td><code>.accessibilityAddTraits(.isHeader)</code></td><td><code>accessibilityTraits = .header</code></td></tr>
+            <tr><td><code>role="slider"</code></td><td><code>Slider</code> / <code>.accessibilityAdjustableAction</code></td><td><code>UISlider</code> / <code>.adjustable</code></td></tr>
+            <tr><td><code>aria-label</code></td><td><code>.accessibilityLabel()</code></td><td><code>accessibilityLabel</code></td></tr>
+            <tr><td><code>aria-describedby</code></td><td><code>.accessibilityHint()</code></td><td><code>accessibilityHint</code></td></tr>
+            <tr><td><code>aria-valuenow</code></td><td><code>.accessibilityValue()</code></td><td><code>accessibilityValue</code></td></tr>
+            <tr><td><code>aria-hidden="true"</code></td><td><code>.accessibilityHidden(true)</code></td><td><code>isAccessibilityElement = false</code></td></tr>
+            <tr><td><code>aria-selected</code></td><td><code>.accessibilityAddTraits(.isSelected)</code></td><td><code>accessibilityTraits = [.button, .selected]</code></td></tr>
+            <tr><td><code>aria-disabled</code></td><td><code>.disabled(true)</code></td><td><code>isEnabled = false</code></td></tr>
+            <tr><td><code>aria-modal="true"</code></td><td><code>.accessibilityAddTraits(.isModal)</code></td><td><code>accessibilityViewIsModal = true</code></td></tr>
+            <tr><td><code>role="alert"</code> / <code>aria-live</code></td><td><code>AccessibilityNotification.Announcement</code></td><td><code>UIAccessibility.post(.announcement)</code></td></tr>
+            <tr><td><code>element.focus()</code></td><td><code>@AccessibilityFocusState</code></td><td><code>UIAccessibility.post(.screenChanged)</code></td></tr>
+            <tr><td><code>autocomplete</code></td><td><code>.textContentType()</code></td><td><code>textContentType</code></td></tr>
+            <tr><td><code>data-testid</code></td><td><code>.accessibilityIdentifier()</code></td><td><code>accessibilityIdentifier</code></td></tr>
+            <tr><td>Speech-recognition alternatives</td><td><code>.accessibilityInputLabels()</code></td><td><code>accessibilityUserInputLabels</code></td></tr>
+            <tr><td><code>prefers-reduced-motion</code></td><td><code>@Environment(\.accessibilityReduceMotion)</code></td><td><code>UIAccessibility.isReduceMotionEnabled</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <hr>
+
+      <h2 id="closing" tabindex="-1">The pattern behind almost every finding</h2>
+
+      <p>Reading back through eighteen components, the failures rhyme. Almost all of them come from one of four places.</p>
+
+      <div class="fail"><strong>A custom view replaced a native control.</strong> <code>onTapGesture</code> instead of <code>Button</code>, a drawn capsule instead of <code>Toggle</code>, a custom track instead of <code>Slider</code>. The visual is identical and the accessibility is gone.</div>
+      <div class="fail"><strong>State was never exposed.</strong> The toggle knows it is on, the tab knows it is selected, the slider knows its value — and none of that reaches the accessibility layer.</div>
+      <div class="fail"><strong>Something changed and nobody was told.</strong> A modal opened, a form failed, a toast appeared. Focus did not move and nothing was announced.</div>
+      <div class="fail"><strong>An icon had no words.</strong> SF Symbol names read aloud, file names announced, actions with no label at all.</div>
+
+      <p>The corresponding rule is short enough to remember: <strong>use the native control, expose the state, move the focus, name the icon.</strong> Most of an audit is checking those four things eighteen different ways.</p>
 
       <blockquote>
-        <p>Accessibility testing is not a compliance exercise. It is advocacy — for the users who deserve better, and for the products that should serve them well.</p>
+        <p>The Accessibility Inspector will tell you a label is missing. It will not tell you that the label says "Submit" while the button says "Send", or that a VoiceOver user can reach a button they are not allowed to press. That gap is the job.</p>
         <cite>— Sushil Chauhan, IAAP-CPWA | CPACC | WAS</cite>
       </blockquote>
 
-      <div class="checklist-section">
-        <h4>VoiceOver Navigation</h4>
-        <ul class="checklist">
-          <li><span class="check-box" aria-hidden="true"></span>All interactive elements reachable by swiping in order</li>
-          <li><span class="check-box" aria-hidden="true"></span>Focus order logical and matches reading sequence</li>
-          <li><span class="check-box" aria-hidden="true"></span>Modals use .isModal / accessibilityViewIsModal to trap focus</li>
-          <li><span class="check-box" aria-hidden="true"></span>After modal dismissal, focus returns to a logical position</li>
-          <li><span class="check-box" aria-hidden="true"></span>Each screen has at least one .header trait element</li>
-        </ul>
-      </div>
-      <div class="checklist-section">
-        <h4>Labels and Descriptions</h4>
-        <ul class="checklist">
-          <li><span class="check-box" aria-hidden="true"></span>Every button and link has a meaningful accessibilityLabel</li>
-          <li><span class="check-box" aria-hidden="true"></span>Decorative images hidden with .accessibilityHidden(true)</li>
-          <li><span class="check-box" aria-hidden="true"></span>SF Symbol icons have explicit, contextual labels</li>
-          <li><span class="check-box" aria-hidden="true"></span>Form fields have persistent programmatic labels</li>
-        </ul>
-      </div>
-      <div class="checklist-section">
-        <h4>State and Live Regions</h4>
-        <ul class="checklist">
-          <li><span class="check-box" aria-hidden="true"></span>Selected state communicated for tabs and segmented controls</li>
-          <li><span class="check-box" aria-hidden="true"></span>Error messages announced via layoutChanged with focus moved</li>
-          <li><span class="check-box" aria-hidden="true"></span>Success messages announced via .announcement notification</li>
-        </ul>
-      </div>
-      <div class="checklist-section">
-        <h4>Visual and Typography</h4>
-        <ul class="checklist">
-          <li><span class="check-box" aria-hidden="true"></span>All text meets 4.5:1 contrast (3:1 for large text)</li>
-          <li><span class="check-box" aria-hidden="true"></span>App fully usable at maximum Dynamic Type size (AX5)</li>
-          <li><span class="check-box" aria-hidden="true"></span>No horizontal scrolling at large text sizes</li>
-          <li><span class="check-box" aria-hidden="true"></span>Focus indicator visible during Full Keyboard Access</li>
-        </ul>
-      </div>
-
-      <h3>Essential Resources</h3>
+      <h3>References</h3>
       <ul class="resource-list">
-        <li><a href="https://developer.apple.com/accessibility/" rel="noopener" target="_blank">Apple Accessibility Documentation <span class="sr-only">(opens in new tab)</span></a></li>
-        <li><a href="https://developer.apple.com/design/human-interface-guidelines/accessibility" rel="noopener" target="_blank">Apple HIG — Accessibility <span class="sr-only">(opens in new tab)</span></a></li>
-        <li><a href="https://www.w3.org/TR/WCAG22/" rel="noopener" target="_blank">WCAG 2.2 Full Specification <span class="sr-only">(opens in new tab)</span></a></li>
-        <li><a href="https://www.itic.org/policy-resources/accessibility/vpat" rel="noopener" target="_blank">VPAT 2.4REV Templates (ITIC) <span class="sr-only">(opens in new tab)</span></a></li>
-        <li><a href="https://dequeuniversity.com/" rel="noopener" target="_blank">Deque University — Free Accessibility Courses <span class="sr-only">(opens in new tab)</span></a></li>
-        <li><a href="https://www.accessibilityassociation.org/s/cpwa" rel="noopener" target="_blank">IAAP CPWA Certification <span class="sr-only">(opens in new tab)</span></a></li>
+        <li><a href="https://developer.apple.com/documentation/accessibility" rel="noopener" target="_blank">Apple Accessibility Documentation <span class="sr-only">(opens in a new tab)</span></a></li>
+        <li><a href="https://developer.apple.com/design/human-interface-guidelines/accessibility" rel="noopener" target="_blank">Apple Human Interface Guidelines — Accessibility <span class="sr-only">(opens in a new tab)</span></a></li>
+        <li><a href="https://www.w3.org/TR/WCAG22/" rel="noopener" target="_blank">WCAG 2.2 Specification <span class="sr-only">(opens in a new tab)</span></a></li>
+        <li><a href="https://www.w3.org/WAI/standards-guidelines/mobile/" rel="noopener" target="_blank">W3C WAI — Mobile Accessibility <span class="sr-only">(opens in a new tab)</span></a></li>
+        <li><a href="https://www.itic.org/policy-resources/accessibility/vpat" rel="noopener" target="_blank">VPAT 2.4 Templates (ITI) <span class="sr-only">(opens in a new tab)</span></a></li>
       </ul>
 
     </article>
   </div>
 </main>
+
 <footer class="site-footer">
   <div class="footer-inner">
     <div class="footer-top">
@@ -390,9 +1897,9 @@ VStack {
       <fieldset class="scheme-fieldset">
         <legend class="scheme-legend">Color scheme:</legend>
         <div class="scheme-options">
-          <label class="scheme-label is-selected"><input class="scheme-radio" type="radio" name="color-scheme" value="system" checked><span class="scheme-dot" aria-hidden="true"></span>System</label>
-          <label class="scheme-label"><input class="scheme-radio" type="radio" name="color-scheme" value="light"><span class="scheme-dot" aria-hidden="true"></span>Light</label>
-          <label class="scheme-label"><input class="scheme-radio" type="radio" name="color-scheme" value="dark"><span class="scheme-dot" aria-hidden="true"></span>Dark</label>
+          <label class="scheme-label is-selected"><input class="scheme-radio" type="radio" name="cs" value="system" checked><span class="scheme-dot" aria-hidden="true"></span>System</label>
+          <label class="scheme-label"><input class="scheme-radio" type="radio" name="cs" value="light"><span class="scheme-dot" aria-hidden="true"></span>Light</label>
+          <label class="scheme-label"><input class="scheme-radio" type="radio" name="cs" value="dark"><span class="scheme-dot" aria-hidden="true"></span>Dark</label>
         </div>
       </fieldset>
     </div>
