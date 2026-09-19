@@ -1,0 +1,1710 @@
+<!DOCTYPE html>
+<html lang="en" data-scheme="system">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Accessible Forms Playground — WCAG 2.2 Training · Sushil Chauhan</title>
+<meta name="description" content="Interactive WCAG 2.2 training for accessible form design, development and QA. Live accessible and inaccessible examples, a validating demo form, an accessibility inspector, a live checker, a quiz and role-based checklists.">
+<meta name="author" content="Sushil Chauhan">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Playfair+Display:wght@600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="fp-page">
+<svg aria-hidden="true" focusable="false" style="position:absolute;width:0;height:0;overflow:hidden" xmlns="http://www.w3.org/2000/svg">
+  <symbol id="fp-i-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></symbol>
+  <symbol id="fp-i-up" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V5"/><path d="M6 11l6-6 6 6"/></symbol>
+</svg>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<header class="site-header">
+  <div class="header-inner">
+    <div class="site-identity">
+      <a href="index.html" class="site-name-link" aria-label="Sushil Chauhan — homepage">
+        <span class="site-marker" aria-hidden="true">■</span>
+        <span class="site-name">Sushil Chauhan</span>
+      </a>
+      <p class="site-tagline">QA Lead · Senior Accessibility Engineer · IAAP-CPWA | CPACC | WAS</p>
+    </div>
+    <nav class="header-nav" aria-label="Site navigation">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="writing.html" class="nav-link">Writing</a>
+      <a href="was-practice-quiz.html" class="nav-link">WAS Quiz</a>
+      <a href="accessible-forms-playground.html" class="nav-link" aria-current="page">Forms Playground</a>
+      <a href="mailto:csgn2806@gmail.com" class="header-cta">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main-content" tabindex="-1">
+  <div class="wrap">
+
+    <header class="quiz-hero fp-hero">
+      <div class="eyebrow">WCAG 2.2 Training</div>
+      <h1 id="fp-title" tabindex="-1">Accessible Forms Playground</h1>
+      <p class="post-excerpt">Interactive WCAG 2.2 training for accessible form design, development and QA.</p>
+      <p class="fp-lede">A hands-on reference for developers, designers and QA / accessibility professionals. Fill in a real validating form, compare accessible and inaccessible patterns side by side, inspect the accessible name, role and state of any control as you Tab, and run a live checker against the examples. Every pattern is mapped to the WCAG success criteria it satisfies.</p>
+      <dl class="quiz-stats-row stats-row" aria-label="Playground contents">
+        <div class="stat-card"><dt class="stat-lbl">Sections</dt><dd class="stat-num">23</dd></div>
+        <div class="stat-card"><dt class="stat-lbl">WCAG criteria mapped</dt><dd class="stat-num">22</dd></div>
+        <div class="stat-card"><dt class="stat-lbl">Common mistakes</dt><dd class="stat-num">15</dd></div>
+        <div class="stat-card"><dt class="stat-lbl">Quiz questions</dt><dd class="stat-num">7</dd></div>
+      </dl>
+    </header>
+
+    <nav class="toc-block" aria-labelledby="toc-h">
+      <h2 id="toc-h" class="toc-title">On this page</h2>
+      <div class="fp-toc">
+        <div>
+          <p class="fp-toc-group" id="toc-g1">Getting started</p>
+          <ol class="toc-list" aria-labelledby="toc-g1">
+            <li><a href="#introduction">Introduction</a></li>
+            <li><a href="#demo-form">Accessible form demo</a></li>
+            <li><a href="#controls">Choosing the right control</a></li>
+          </ol>
+        </div>
+        <div>
+          <p class="fp-toc-group" id="toc-g2">Core concepts</p>
+          <ol class="toc-list" aria-labelledby="toc-g2">
+            <li><a href="#labels">Labels</a></li>
+            <li><a href="#grouping">Grouping</a></li>
+            <li><a href="#instructions">Instructions</a></li>
+            <li><a href="#validation">Validation</a></li>
+            <li><a href="#error-handling">Error handling</a></li>
+            <li><a href="#autocomplete">Autocomplete</a></li>
+          </ol>
+        </div>
+        <div>
+          <p class="fp-toc-group" id="toc-g3">Keyboard &amp; screen readers</p>
+          <ol class="toc-list" aria-labelledby="toc-g3">
+            <li><a href="#keyboard">Keyboard accessibility</a></li>
+            <li><a href="#screen-readers">Screen reader behaviour</a></li>
+            <li><a href="#sr-shortcuts">Screen reader shortcuts</a></li>
+          </ol>
+        </div>
+        <div>
+          <p class="fp-toc-group" id="toc-g4">Reference</p>
+          <ol class="toc-list" aria-labelledby="toc-g4">
+            <li><a href="#aria-ref">ARIA reference</a></li>
+            <li><a href="#mistakes">Common mistakes</a></li>
+            <li><a href="#dev-checklist">Developer checklist</a></li>
+            <li><a href="#qa-testing">QA testing</a></li>
+            <li><a href="#wcag-mapping">WCAG mapping</a></li>
+          </ol>
+        </div>
+        <div>
+          <p class="fp-toc-group" id="toc-g5">Tools &amp; practice</p>
+          <ol class="toc-list" aria-labelledby="toc-g5">
+            <li><a href="#inspector-section">Accessibility inspector</a></li>
+            <li><a href="#live-checker">Live checker</a></li>
+            <li><a href="#code-examples">Code examples</a></li>
+            <li><a href="#quiz">Quiz</a></li>
+            <li><a href="#final-checklist">Final checklist</a></li>
+            <li><a href="#further-reading">Further reading</a></li>
+          </ol>
+        </div>
+      </div>
+    </nav>
+
+    <div class="post-body">
+
+<!-- ═══════════════ 01 INTRODUCTION ═══════════════ -->
+<section aria-labelledby="introduction">
+  <h2 id="introduction" tabindex="-1"><span class="section-num" aria-hidden="true">01 · Getting started</span>Introduction</h2>
+
+  <h3>What is an accessible form?</h3>
+  <p>An accessible form is one that <strong>all users</strong> — whatever their abilities or the assistive technology they use — can perceive, understand, navigate, complete and submit. That goes well beyond adding labels: it covers semantic markup, keyboard operation, error handling, screen reader support, cognitive load and the WCAG success criteria that apply to user input.</p>
+  <p>In practice, accessible forms use native HTML elements, explicit label associations, ARIA only where HTML falls short, specific error messages, a logical tab order and sufficient contrast. They are verified with keyboard-only testing, screen readers and automated tools.</p>
+
+  <h3>Why forms matter</h3>
+  <p>Login, registration, checkout, search, feedback and settings all depend on forms. When a form is inaccessible, the service behind it is inaccessible. The WebAIM Million report consistently finds missing form labels among the most common failures on home pages.</p>
+  <p>The cost is not limited to disabled users. Accessible forms are more usable for everyone: higher completion rates, fewer support requests and lower legal risk. Inaccessible ones lead to abandoned checkouts, complaints and reputational damage.</p>
+
+  <h3>Why inaccessible forms fail</h3>
+  <p>They are built for one audience: a sighted person using a mouse. The typical failures follow from that — visual-only cues (colour, position, unlabelled icons), placeholder text as the only label, generic "Invalid input" messages, auto-advancing fields, and labels that are not programmatically associated. These are not edge cases. They stop real people finishing real tasks every day.</p>
+
+  <h3>Who benefits?</h3>
+  <div class="fp-cards">
+    <div class="fp-card"><h4><span class="fp-card-emoji" aria-hidden="true">🧑‍🦯</span>Blind users</h4><p>Depend on labels, ARIA and announced errors to understand and complete a form without visual information.</p></div>
+    <div class="fp-card"><h4><span class="fp-card-emoji" aria-hidden="true">⌨️</span>Keyboard users</h4><p>Use Tab, arrow keys, Enter, Space and Escape to reach and operate every control in a logical order.</p></div>
+    <div class="fp-card"><h4><span class="fp-card-emoji" aria-hidden="true">🔍</span>Low vision users</h4><p>Need sufficient contrast, resizable text, reflow and indicators that do not rely on colour alone.</p></div>
+    <div class="fp-card"><h4><span class="fp-card-emoji" aria-hidden="true">🦾</span>Motor disabilities</h4><p>Need large targets, generous spacing and no interactions that demand precise pointer movement.</p></div>
+    <div class="fp-card"><h4><span class="fp-card-emoji" aria-hidden="true">🧠</span>Cognitive disabilities</h4><p>Benefit from clear labels, plain language, predictable behaviour, autofill and generous time limits.</p></div>
+    <div class="fp-card"><h4><span class="fp-card-emoji" aria-hidden="true">🎤</span>Speech input users</h4><p>Need visible labels that match the accessible name, so "click Submit" activates the Submit button.</p></div>
+    <div class="fp-card"><h4><span class="fp-card-emoji" aria-hidden="true">📱</span>Mobile users</h4><p>Get the right on-screen keyboard from the right input type, and labels that stay visible while typing.</p></div>
+    <div class="fp-card"><h4><span class="fp-card-emoji" aria-hidden="true">👴</span>Older users</h4><p>Age-related changes in vision, dexterity and memory mean accessible forms serve a growing share of users.</p></div>
+    <div class="fp-card is-accent"><h4><span class="fp-card-emoji" aria-hidden="true">🌍</span>Everyone</h4><p>Clear labels, good errors, logical order and responsive layout improve the experience for <strong>every</strong> user.</p></div>
+  </div>
+</section>
+
+<hr aria-hidden="true">
+
+<!-- ═══════════════ 02 DEMO FORM ═══════════════ -->
+<section aria-labelledby="demo-form">
+  <h2 id="demo-form" tabindex="-1"><span class="section-num" aria-hidden="true">02 · Getting started</span>Accessible form demo</h2>
+  <p>A realistic form built to WCAG 2.2 Level AA. Every field has a visible label, a required indicator where needed, associated help text and the correct <code>type</code> and <code>autocomplete</code>. Submit it empty to see the error summary, fix a field to watch its error clear, or navigate with Tab only and a screen reader.</p>
+
+  <div class="callout info" role="note">
+    <span class="callout-icon" aria-hidden="true">🔍</span>
+    <p><strong>Try it with the inspector.</strong> Open the accessibility inspector, then Tab through the form. The panel shows each field's accessible name, role, description and state as it receives focus.</p>
+  </div>
+  <div class="fp-btn-row">
+    <button type="button" class="fp-btn fp-btn-sm fp-inspector-toggle" aria-expanded="false" aria-controls="a11yInspector"><span class="fp-toggle-box" aria-hidden="true"></span>Accessibility inspector</button>
+  </div>
+
+  <div id="errorSummary" class="fp-error-summary" tabindex="-1" hidden>
+    <!-- GOV.UK error summary pattern: the container takes focus on a failed submit;
+         the inner alert guarantees the heading is spoken even where a focused
+         generic container is not announced. -->
+    <div role="alert">
+      <h3 id="errorSummaryTitle">There is a problem</h3>
+      <p id="errorSummaryCount" class="fp-hint"></p>
+      <ul id="errorSummaryList"></ul>
+    </div>
+  </div>
+  <div id="formSuccess" class="fp-success" hidden>
+    <h3>Application submitted</h3>
+    <p>Every field passed validation. In a real application the data would now be sent to the server.</p>
+  </div>
+  <p id="formStatus" class="sr-only" role="status"></p>
+
+  <div class="fp-form-card">
+    <h3 id="demo-form-title">Employee registration</h3>
+    <form id="demoForm" novalidate aria-labelledby="demo-form-title">
+      <p class="fp-form-note" id="demo-required-note">Fields marked with an asterisk (<span class="fp-required" aria-hidden="true">*</span>) are required.</p>
+
+      <fieldset class="fp-fieldset">
+        <legend>Personal information</legend>
+        <div class="fp-row">
+          <div class="fp-field">
+            <label for="demo-firstname">First name <span class="fp-required" aria-hidden="true">*</span></label>
+            <p class="fp-hint" id="demo-firstname-help">Your legal first name, as on official documents</p>
+            <p class="fp-error" id="demo-firstname-error" hidden></p>
+            <input type="text" id="demo-firstname" name="firstname" required autocomplete="given-name" aria-describedby="demo-firstname-help">
+          </div>
+          <div class="fp-field">
+            <label for="demo-middlename">Middle name (optional)</label>
+            <p class="fp-hint" id="demo-middlename-help">Leave blank if not applicable</p>
+            <input type="text" id="demo-middlename" name="middlename" autocomplete="additional-name" aria-describedby="demo-middlename-help">
+          </div>
+          <div class="fp-field">
+            <label for="demo-lastname">Last name <span class="fp-required" aria-hidden="true">*</span></label>
+            <p class="fp-hint" id="demo-lastname-help">Your family name or surname</p>
+            <p class="fp-error" id="demo-lastname-error" hidden></p>
+            <input type="text" id="demo-lastname" name="lastname" required autocomplete="family-name" aria-describedby="demo-lastname-help">
+          </div>
+        </div>
+
+        <div class="fp-row">
+          <div class="fp-field">
+            <label for="demo-email">Email address <span class="fp-required" aria-hidden="true">*</span></label>
+            <p class="fp-hint" id="demo-email-help">For account messages only, for example jane.doe@example.com</p>
+            <p class="fp-error" id="demo-email-error" hidden></p>
+            <input type="email" id="demo-email" name="email" required autocomplete="email" spellcheck="false" aria-describedby="demo-email-help">
+          </div>
+          <div class="fp-field">
+            <label for="demo-phone">Phone number <span class="fp-required" aria-hidden="true">*</span></label>
+            <p class="fp-hint" id="demo-phone-help">Include the country code, for example +1 555 123 4567</p>
+            <p class="fp-error" id="demo-phone-error" hidden></p>
+            <input type="tel" id="demo-phone" name="phone" required autocomplete="tel" aria-describedby="demo-phone-help">
+          </div>
+        </div>
+
+        <div class="fp-row">
+          <div class="fp-field">
+            <label for="demo-password">Password <span class="fp-required" aria-hidden="true">*</span></label>
+            <p class="fp-hint" id="demo-password-help">At least 8 characters. Longer is stronger; mixing upper case, numbers and symbols helps. Paste and password managers work here.</p>
+            <p class="fp-error" id="demo-password-error" hidden></p>
+            <div class="fp-input-row">
+              <input type="password" id="demo-password" name="password" required autocomplete="new-password" aria-describedby="demo-password-help demo-pw-strength">
+              <button type="button" class="fp-btn fp-btn-sm fp-reveal" aria-pressed="false" aria-controls="demo-password">Show password</button>
+            </div>
+            <div class="fp-strength">
+              <div class="fp-strength-track" aria-hidden="true"><div class="fp-strength-fill" id="pw-strength-bar"></div></div>
+              <!-- Polite, and only rewritten when the level actually changes, so it
+                   does not talk over every keystroke. -->
+              <span class="fp-strength-text" id="demo-pw-strength" aria-live="polite"></span>
+            </div>
+          </div>
+          <div class="fp-field">
+            <label for="demo-confirm-password">Confirm password <span class="fp-required" aria-hidden="true">*</span></label>
+            <p class="fp-hint" id="demo-cp-help">Enter the same password again</p>
+            <p class="fp-error" id="demo-confirm-password-error" hidden></p>
+            <div class="fp-input-row">
+              <input type="password" id="demo-confirm-password" name="confirm-password" required autocomplete="new-password" aria-describedby="demo-cp-help">
+              <button type="button" class="fp-btn fp-btn-sm fp-reveal" aria-pressed="false" aria-controls="demo-confirm-password">Show password</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="fp-row">
+          <div class="fp-field">
+            <label for="demo-dob">Date of birth</label>
+            <p class="fp-hint" id="demo-dob-help">Type the date or use the date picker</p>
+            <input type="date" id="demo-dob" name="dob" autocomplete="bday" aria-describedby="demo-dob-help">
+          </div>
+          <div class="fp-field">
+            <label for="demo-time">Preferred contact time</label>
+            <p class="fp-hint" id="demo-time-help">When we may call you</p>
+            <input type="time" id="demo-time" name="contact-time" aria-describedby="demo-time-help">
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset class="fp-fieldset">
+        <legend>Demographics</legend>
+        <div class="fp-field">
+          <label for="demo-gender">Gender (optional)</label>
+          <p class="fp-hint" id="demo-gender-help">Used for anonymous diversity reporting only</p>
+          <select id="demo-gender" name="gender" aria-describedby="demo-gender-help">
+            <option value="">Select an option</option>
+            <option value="female">Female</option>
+            <option value="male">Male</option>
+            <option value="nonbinary">Non-binary</option>
+            <option value="other">Prefer to self-describe</option>
+            <option value="na">Prefer not to say</option>
+          </select>
+        </div>
+        <fieldset class="fp-choice-group">
+          <legend>Marital status (optional)</legend>
+          <div class="fp-choices is-inline">
+            <label class="fp-choice"><input type="radio" name="marital-status" value="single">Single</label>
+            <label class="fp-choice"><input type="radio" name="marital-status" value="married">Married</label>
+            <label class="fp-choice"><input type="radio" name="marital-status" value="divorced">Divorced</label>
+            <label class="fp-choice"><input type="radio" name="marital-status" value="widowed">Widowed</label>
+            <label class="fp-choice"><input type="radio" name="marital-status" value="na">Prefer not to say</label>
+          </div>
+        </fieldset>
+      </fieldset>
+
+      <fieldset class="fp-fieldset">
+        <legend>Address</legend>
+        <div class="fp-field">
+          <label for="demo-country">Country <span class="fp-required" aria-hidden="true">*</span></label>
+          <p class="fp-hint" id="demo-country-help">The country where you currently live</p>
+          <p class="fp-error" id="demo-country-error" hidden></p>
+          <select id="demo-country" name="country" required autocomplete="country" aria-describedby="demo-country-help">
+            <option value="">Select a country</option>
+            <option value="US">United States</option>
+            <option value="GB">United Kingdom</option>
+            <option value="IN">India</option>
+            <option value="CA">Canada</option>
+            <option value="AU">Australia</option>
+            <option value="DE">Germany</option>
+            <option value="FR">France</option>
+            <option value="JP">Japan</option>
+          </select>
+        </div>
+        <div class="fp-field">
+          <label for="demo-address">Street address</label>
+          <p class="fp-hint" id="demo-address-help">Include an apartment or suite number if you have one</p>
+          <textarea id="demo-address" name="street-address" rows="2" autocomplete="street-address" maxlength="200" aria-describedby="demo-address-help demo-address-count"></textarea>
+          <p class="fp-count" id="demo-address-count">You can enter up to 200 characters</p>
+        </div>
+        <!-- City, postal code: intentionally no help text, so the live checker's
+             "Missing instructions" check has something to find. -->
+        <div class="fp-row">
+          <div class="fp-field">
+            <label for="demo-city">City</label>
+            <input type="text" id="demo-city" name="city" autocomplete="address-level2">
+          </div>
+          <div class="fp-field">
+            <label for="demo-state">State / province</label>
+            <p class="fp-hint" id="demo-state-help">Your state, province or region</p>
+            <input type="text" id="demo-state" name="state" autocomplete="address-level1" aria-describedby="demo-state-help">
+          </div>
+          <div class="fp-field">
+            <label for="demo-postal">Postal code</label>
+            <input type="text" id="demo-postal" name="postal-code" autocomplete="postal-code">
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset class="fp-fieldset">
+        <legend>Employment</legend>
+        <div class="fp-row">
+          <div class="fp-field">
+            <label for="demo-dept">Department <span class="fp-required" aria-hidden="true">*</span></label>
+            <p class="fp-hint" id="demo-dept-help">Your primary team</p>
+            <p class="fp-error" id="demo-dept-error" hidden></p>
+            <select id="demo-dept" name="department" required aria-describedby="demo-dept-help">
+              <option value="">Select a department</option>
+              <option value="dev">Development</option>
+              <option value="design">Design</option>
+              <option value="qa">Quality assurance</option>
+              <option value="pm">Product management</option>
+              <option value="hr">Human resources</option>
+              <option value="finance">Finance</option>
+            </select>
+          </div>
+          <div class="fp-field">
+            <label for="demo-experience">Years of experience</label>
+            <p class="fp-hint" id="demo-exp-help">Whole years, 0 to 50</p>
+            <input type="number" id="demo-experience" name="experience" min="0" max="50" aria-describedby="demo-exp-help">
+          </div>
+        </div>
+        <div class="fp-field">
+          <label for="demo-salary">Expected salary (annual, USD)</label>
+          <input type="text" id="demo-salary" name="salary" inputmode="numeric">
+        </div>
+      </fieldset>
+
+      <fieldset class="fp-fieldset">
+        <legend>Preferences and additional information</legend>
+        <div class="fp-row">
+          <div class="fp-field">
+            <label for="demo-color">Favourite colour</label>
+            <p class="fp-hint" id="demo-color-help">Used to personalise your dashboard</p>
+            <input type="color" id="demo-color" name="fav-color" value="#3730a3" aria-describedby="demo-color-help">
+          </div>
+          <div class="fp-field">
+            <label for="demo-search">Search skills</label>
+            <p class="fp-hint" id="demo-search-help">For example: WCAG, Playwright, NVDA</p>
+            <input type="search" id="demo-search" name="skills-search" aria-describedby="demo-search-help">
+          </div>
+        </div>
+        <div class="fp-field">
+          <label for="demo-file">Upload résumé</label>
+          <p class="fp-hint" id="demo-file-help">PDF, DOC or DOCX, up to 5 MB</p>
+          <input type="file" id="demo-file" name="resume" accept=".pdf,.doc,.docx" aria-describedby="demo-file-help">
+        </div>
+        <div class="fp-field">
+          <label for="demo-bio">Additional notes (optional)</label>
+          <p class="fp-hint" id="demo-bio-help">Anything else you would like us to know</p>
+          <textarea id="demo-bio" name="bio" rows="3" maxlength="500" aria-describedby="demo-bio-help demo-bio-count"></textarea>
+          <p class="fp-count" id="demo-bio-count">You can enter up to 500 characters</p>
+        </div>
+        <fieldset class="fp-choice-group">
+          <legend>Type of disability (optional, select all that apply)</legend>
+          <div class="fp-choices">
+            <label class="fp-choice"><input type="checkbox" name="disability" value="autistic">Autistic</label>
+            <label class="fp-choice"><input type="checkbox" name="disability" value="visual">Blind or low vision</label>
+            <label class="fp-choice"><input type="checkbox" name="disability" value="hearing">Deaf, hard of hearing or speech impaired</label>
+            <label class="fp-choice"><input type="checkbox" name="disability" value="mobility">Mobility or dexterity impairment</label>
+            <label class="fp-choice"><input type="checkbox" name="disability" value="none">None of these</label>
+          </div>
+        </fieldset>
+        <div class="fp-field">
+          <div class="fp-switch-row">
+            <!-- role="switch" on a native checkbox: it looks and acts like an
+                 on/off setting, so it should be announced as one. The name stays
+                 fixed; only the state changes. -->
+            <input type="checkbox" role="switch" class="fp-switch" id="demo-newsletter" name="newsletter" aria-describedby="demo-newsletter-help">
+            <label for="demo-newsletter" class="fp-label">Monthly newsletter</label>
+            <span class="fp-switch-state" aria-hidden="true"></span>
+          </div>
+          <p class="fp-hint" id="demo-newsletter-help">Accessibility best practice and product updates, once a month</p>
+        </div>
+        <div class="fp-field">
+          <p class="fp-error" id="demo-terms-error" hidden></p>
+          <label class="fp-choice" for="demo-terms"><input type="checkbox" id="demo-terms" name="terms" required>I agree to the Terms of Service and Privacy Policy <span class="fp-required" aria-hidden="true">*</span></label>
+        </div>
+      </fieldset>
+
+      <div class="fp-btn-row">
+        <button type="submit" class="fp-btn fp-btn-primary">Submit application</button>
+        <button type="button" class="fp-btn" id="demoClear">Clear form</button>
+      </div>
+    </form>
+  </div>
+</section>
+
+<hr aria-hidden="true">
+
+<!-- ═══════════════ 03 CONTROLS ═══════════════ -->
+<section aria-labelledby="controls">
+  <h2 id="controls" tabindex="-1"><span class="section-num" aria-hidden="true">03 · Getting started</span>Choosing the right control</h2>
+  <p>Most form accessibility is decided the moment you pick an element. Native controls come with keyboard support, focus handling, a role and state for free; a styled <code>&lt;div&gt;</code> comes with none of it. Every control in the demo above follows this table.</p>
+
+  <div class="table-wrap"><table>
+    <caption class="sr-only">Form controls, the native element to use, the key rule for each, and the WCAG criteria involved</caption>
+    <thead><tr><th scope="col">Need</th><th scope="col">Use</th><th scope="col">Key rule</th><th scope="col">WCAG</th></tr></thead>
+    <tbody>
+      <tr><td>Short text</td><td><code>&lt;input type="text|email|tel|url"&gt;</code></td><td>Pick the most specific <code>type</code> and add <code>autocomplete</code>. Use <code>inputmode</code> only when no type fits (e.g. a numeric ID).</td><td>1.3.5, 4.1.2</td></tr>
+      <tr><td>Password</td><td><code>&lt;input type="password"&gt;</code></td><td>Allow paste and password managers (<code>autocomplete="new-password"</code> / <code>current-password</code>). Offer a show-password toggle. State the rules up front.</td><td>3.3.8, 3.3.2</td></tr>
+      <tr><td>Long text</td><td><code>&lt;textarea&gt;</code></td><td>Show the limit; describe the counter with <code>aria-describedby</code>; announce it only near the limit.</td><td>3.3.2, 4.1.3</td></tr>
+      <tr><td>One of many</td><td><code>&lt;select&gt;</code></td><td>Never navigate or submit on change. Put the prompt in the label, not in a disabled first option.</td><td>3.2.2</td></tr>
+      <tr><td>One of a few</td><td><code>&lt;input type="radio"&gt;</code> in a <code>&lt;fieldset&gt;</code></td><td>Tab enters the group once; arrow keys move and select. The legend is the question.</td><td>1.3.1, 2.1.1</td></tr>
+      <tr><td>Independent yes/no</td><td><code>&lt;input type="checkbox"&gt;</code></td><td>Related checkboxes share a fieldset and legend. The whole label is the click target.</td><td>1.3.1, 2.5.8</td></tr>
+      <tr><td>Immediate on/off</td><td><code>&lt;input type="checkbox" role="switch"&gt;</code></td><td>The name never changes with state ("Newsletter", not "Turn newsletter off"). Show state by position, not colour alone.</td><td>4.1.2, 1.4.1</td></tr>
+      <tr><td>Action</td><td><code>&lt;button type="submit|button"&gt;</code></td><td>Visible text is the accessible name. Keep submit enabled and report problems instead. At least 24 × 24 px.</td><td>2.5.3, 2.5.8</td></tr>
+      <tr><td>Date</td><td><code>&lt;input type="date"&gt;</code> or three text fields</td><td>Allow typing, never picker-only. State the format when using text fields.</td><td>2.1.1, 3.3.2</td></tr>
+      <tr><td>File</td><td><code>&lt;input type="file" accept&gt;</code></td><td>State accepted types and the size limit in associated help text.</td><td>3.3.2</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Focus management in forms</h3>
+  <ul>
+    <li><strong>Failed submit:</strong> move focus to the error summary. Each summary link moves focus to its field.</li>
+    <li><strong>Successful submit:</strong> leave focus where it is and announce the result in a status message, or navigate to a confirmation page with a clear heading.</li>
+    <li><strong>Revealed fields:</strong> when a choice reveals follow-up questions, do not move focus; put them straight after the control that revealed them.</li>
+    <li><strong>Dialogs:</strong> move focus into the dialog on open, keep it there, and return it to the control that opened it on close.</li>
+    <li><strong>Never</strong> auto-advance focus when a field is "full" (e.g. after the 4th digit of a PIN) — it breaks corrections and surprises keyboard and screen reader users (3.2.2).</li>
+  </ul>
+</section>
+
+<hr aria-hidden="true">
+
+<!-- ═══════════════ 04 LABELS ═══════════════ -->
+<section aria-labelledby="labels">
+  <h2 id="labels" tabindex="-1"><span class="section-num" aria-hidden="true">04 · Core concepts</span>Labels</h2>
+  <p>Every form control needs a programmatically associated label. It tells users what to enter, gives the screen reader something to announce, and — for checkboxes and radios — makes the text a larger click target. Without one, assistive technology users are guessing.</p>
+
+  <div class="callout info" role="note">
+    <span class="callout-icon" aria-hidden="true">📏</span>
+    <p><strong>WCAG:</strong> 1.3.1 Info and Relationships, 2.4.6 Headings and Labels, 3.3.2 Labels or Instructions, 4.1.2 Name, Role, Value, and 2.5.3 Label in Name. Missing labels are among the most common failures in automated audits.</p>
+  </div>
+
+  <h3>Explicit labels (<code>for</code> / <code>id</code>)</h3>
+  <p>A <code>&lt;label&gt;</code> whose <code>for</code> matches the input's <code>id</code> is the gold standard. Clicking the label focuses the input, and screen readers announce the label when the input receives focus. It works for every input type in every browser and assistive technology.</p>
+<pre><code>&lt;label for=&quot;firstname&quot;&gt;First name&lt;/label&gt;
+&lt;input type=&quot;text&quot; id=&quot;firstname&quot; name=&quot;firstname&quot; autocomplete=&quot;given-name&quot;&gt;</code></pre>
+
+  <h3>Implicit labels (wrapping)</h3>
+  <p>Wrapping the input inside the label also creates an association, and it is the natural choice for checkboxes and radios. Some older assistive technology and voice control software handled it less reliably, so for text fields prefer <code>for</code>/<code>id</code> — or use both.</p>
+<pre><code>&lt;label&gt;&lt;input type=&quot;checkbox&quot; name=&quot;terms&quot;&gt; I agree to the terms&lt;/label&gt;</code></pre>
+
+  <h3><code>aria-labelledby</code></h3>
+  <p>Use it when the label text already exists elsewhere — a heading, or several pieces of text combined. The value is a space-separated list of IDs, concatenated in order, and it <strong>overrides</strong> any <code>&lt;label&gt;</code>.</p>
+<pre><code>&lt;h3 id=&quot;contact-heading&quot;&gt;Contact information&lt;/h3&gt;
+&lt;!-- Name = &quot;Contact information Your work email address&quot; --&gt;
+&lt;input type=&quot;email&quot; id=&quot;email&quot; aria-labelledby=&quot;contact-heading email-label&quot;&gt;
+&lt;span id=&quot;email-label&quot;&gt;Your work email address&lt;/span&gt;</code></pre>
+
+  <h3><code>aria-label</code></h3>
+  <p><code>aria-label</code> gives an invisible name. It is a last resort for when no visible text can serve — a search field next to a magnifier button, for example. Overusing it splits the experience: sighted users see one thing, screen reader users hear another, and speech input users cannot say a name they cannot see.</p>
+
+  <div class="callout warn" role="note">
+    <span class="callout-icon" aria-hidden="true">⚠️</span>
+    <p><strong>When not to use <code>aria-label</code>:</strong> when visible text could be the label; to repeat visible text; or when a <code>&lt;label for&gt;</code> would work. If the information matters, make it visible.</p>
+  </div>
+
+  <div class="issue-fix">
+    <div class="fix-box">
+      <h4 class="box-lbl">✓ Accessible — visible label with for / id</h4>
+<pre><code>&lt;label for=&quot;email&quot;&gt;Email address&lt;/label&gt;
+&lt;input type=&quot;email&quot; id=&quot;email&quot; name=&quot;email&quot;
+  autocomplete=&quot;email&quot; required
+  aria-describedby=&quot;email-help&quot;&gt;
+&lt;span id=&quot;email-help&quot;&gt;We will never share your email&lt;/span&gt;</code></pre>
+      <p class="fp-sr-says"><strong>Screen reader:</strong> "Email address, edit, required, We will never share your email"</p>
+    </div>
+    <div class="issue-box">
+      <h4 class="box-lbl">✗ Inaccessible — placeholder as the only label</h4>
+<pre><code>&lt;input type=&quot;email&quot; name=&quot;email&quot;
+  placeholder=&quot;Enter your email&quot;&gt;
+&lt;!-- No visible label once typing starts --&gt;
+&lt;!-- No programmatic label --&gt;</code></pre>
+      <p class="fp-sr-says"><strong>Screen reader:</strong> often just "edit, blank" — the placeholder is an unreliable fallback name and disappears visually as soon as the user types.</p>
+    </div>
+  </div>
+
+  <div class="callout tip" role="note">
+    <span class="callout-icon" aria-hidden="true">🧪</span>
+    <p><strong>QA tip:</strong> In Chrome DevTools, open Elements → Accessibility and check every input's computed <em>Name</em>. "(no name)" means the label is missing or broken. In NVDA, <kbd>Insert</kbd>+<kbd>F7</kbd> opens the Elements List, which can be filtered to form fields.</p>
+  </div>
+</section>
+
+<hr aria-hidden="true">
+
+<!-- ═══════════════ 05 GROUPING ═══════════════ -->
+<section aria-labelledby="grouping">
+  <h2 id="grouping" tabindex="-1"><span class="section-num" aria-hidden="true">05 · Core concepts</span>Grouping</h2>
+  <p>Related controls belong in a <code>&lt;fieldset&gt;</code> with a <code>&lt;legend&gt;</code>. The legend is the question; the labels are the answers. Without it, a screen reader user hears "Email, radio button" with no idea what the options are for.</p>
+
+  <div class="callout info" role="note">
+    <span class="callout-icon" aria-hidden="true">📏</span>
+    <p><strong>WCAG:</strong> 1.3.1 Info and Relationships requires groups and relationships to be available programmatically. A radio group without a fieldset and legend (or an equivalent <code>role="radiogroup"</code> with a name) fails it.</p>
+  </div>
+
+  <h3>Radio group: with and without a fieldset</h3>
+  <div class="issue-fix">
+    <div class="fix-box">
+      <h4 class="box-lbl">✓ Accessible — grouped</h4>
+      <fieldset class="fp-choice-group">
+        <legend>Contact preference</legend>
+        <div class="fp-choices">
+          <label class="fp-choice"><input type="radio" name="contact-pref-good" value="email">Email</label>
+          <label class="fp-choice"><input type="radio" name="contact-pref-good" value="phone">Phone</label>
+          <label class="fp-choice"><input type="radio" name="contact-pref-good" value="sms">SMS</label>
+        </div>
+      </fieldset>
+      <p class="fp-sr-says"><strong>Screen reader:</strong> "Contact preference, grouping, Email, radio button, not checked, 1 of 3"</p>
+    </div>
+    <div class="issue-box">
+      <h4 class="box-lbl">✗ Inaccessible — no grouping</h4>
+      <p class="fp-hint" id="bad-group-q">Contact preference</p>
+      <div class="fp-choices" data-fp-example="bad-grouping">
+        <label class="fp-choice"><input type="radio" name="contact-pref-bad" value="email">Email</label>
+        <label class="fp-choice"><input type="radio" name="contact-pref-bad" value="phone">Phone</label>
+        <label class="fp-choice"><input type="radio" name="contact-pref-bad" value="sms">SMS</label>
+      </div>
+      <p class="fp-sr-says"><strong>Screen reader:</strong> "Email, radio button, not checked, 1 of 3" — the question is never announced.</p>
+    </div>
+  </div>
+
+  <h3>Checkbox group</h3>
+  <fieldset class="fp-fieldset">
+    <legend>Interests (select all that apply)</legend>
+    <div class="fp-choices">
+      <label class="fp-choice"><input type="checkbox" name="interest" value="a11y">Accessibility</label>
+      <label class="fp-choice"><input type="checkbox" name="interest" value="ux">UX design</label>
+      <label class="fp-choice"><input type="checkbox" name="interest" value="dev">Front-end development</label>
+      <label class="fp-choice"><input type="checkbox" name="interest" value="test">QA testing</label>
+    </div>
+  </fieldset>
+<pre><code>&lt;fieldset&gt;
+  &lt;legend&gt;Interests (select all that apply)&lt;/legend&gt;
+  &lt;label&gt;&lt;input type=&quot;checkbox&quot; name=&quot;interest&quot; value=&quot;a11y&quot;&gt; Accessibility&lt;/label&gt;
+  &lt;label&gt;&lt;input type=&quot;checkbox&quot; name=&quot;interest&quot; value=&quot;ux&quot;&gt; UX design&lt;/label&gt;
+  &lt;!-- fieldset + legend already expose the group and its name: no role or aria-label needed --&gt;
+&lt;/fieldset&gt;</code></pre>
+
+  <h3>Nested groups</h3>
+  <p>Fieldsets can nest to express a hierarchy. Most desktop screen readers announce each level, though support varies and some flatten deep nesting — two levels is a sensible maximum.</p>
+<pre><code>&lt;fieldset&gt;
+  &lt;legend&gt;Shipping address&lt;/legend&gt;
+  &lt;label for=&quot;ship-street&quot;&gt;Street&lt;/label&gt;
+  &lt;input type=&quot;text&quot; id=&quot;ship-street&quot; autocomplete=&quot;shipping street-address&quot;&gt;
+
+  &lt;fieldset&gt;
+    &lt;legend&gt;City and region&lt;/legend&gt;
+    &lt;label for=&quot;ship-city&quot;&gt;City&lt;/label&gt;
+    &lt;input type=&quot;text&quot; id=&quot;ship-city&quot; autocomplete=&quot;shipping address-level2&quot;&gt;
+    &lt;label for=&quot;ship-state&quot;&gt;State&lt;/label&gt;
+    &lt;input type=&quot;text&quot; id=&quot;ship-state&quot; autocomplete=&quot;shipping address-level1&quot;&gt;
+  &lt;/fieldset&gt;
+&lt;/fieldset&gt;</code></pre>
+
+  <div class="callout tip" role="note">
+    <span class="callout-icon" aria-hidden="true">💡</span>
+    <p><strong>Developer note:</strong> Always use <code>&lt;fieldset&gt;</code>/<code>&lt;legend&gt;</code> for radios and related checkboxes. For other groupings where a fieldset is awkward, <code>role="group"</code> with <code>aria-labelledby</code> is the alternative. Do not add <code>role="radiogroup"</code> to a fieldset that already has a legend.</p>
+  </div>
+</section>
+
+<hr aria-hidden="true">
+
+<!-- ═══════════════ 06 INSTRUCTIONS ═══════════════ -->
+<section aria-labelledby="instructions">
+  <h2 id="instructions" tabindex="-1"><span class="section-num" aria-hidden="true">06 · Core concepts</span>Instructions</h2>
+  <p>Instructions say <em>how</em> to fill in a field. They are different from labels (<em>what</em> the field is) and errors (<em>what went wrong</em>). Put them before or next to the field, associate them with <code>aria-describedby</code>, and keep them short.</p>
+
+  <div class="callout info" role="note">
+    <span class="callout-icon" aria-hidden="true">📏</span>
+    <p><strong>WCAG:</strong> 3.3.2 Labels or Instructions (Level A) requires instructions when content needs user input. Missing format rules for passwords, dates or file uploads is a Level A failure.</p>
+  </div>
+
+  <div class="fp-cards">
+    <div class="fp-card"><h3>Required fields</h3><p>State "Fields marked with * are required" before the first field. Native <code>required</code> already exposes the state, so you do not need <code>aria-required</code> as well — keep that for custom widgets.</p></div>
+    <div class="fp-card"><h3>Password rules</h3><p>Be specific: "At least 8 characters". Associate the rules with <code>aria-describedby</code> and consider a strength indicator with a text value.</p></div>
+    <div class="fp-card"><h3>Date format</h3><p>"03/04/2026" means different days in different locales. State the expected format, or use separate day, month and year fields.</p></div>
+    <div class="fp-card"><h3>Phone format</h3><p>Give an example: "+1 555 123 4567". <code>type="tel"</code> brings up the phone keypad on mobile. Accept spaces, brackets and dashes rather than rejecting them.</p></div>
+    <div class="fp-card"><h3>File uploads</h3><p>State accepted formats and the size limit ("PDF, DOC or DOCX, up to 5 MB"). The <code>accept</code> attribute filters the file dialog but does not replace the instruction.</p></div>
+    <div class="fp-card"><h3>Character limits</h3><p>Show the count and maximum. Announce it through a polite live region only near the limit — announcing every keystroke talks over the user.</p></div>
+  </div>
+
+  <h3>Where should instructions appear?</h3>
+  <p><strong>Before the input</strong>, between label and field, so they are seen before typing starts and are not hidden by browser autofill menus. Associate them with <code>aria-describedby</code> so screen readers announce them on focus. Form-wide instructions go at the top of the form.</p>
+<pre><code>&lt;label for=&quot;password&quot;&gt;Password &lt;span aria-hidden=&quot;true&quot;&gt;*&lt;/span&gt;&lt;/label&gt;
+&lt;span id=&quot;pw-rules&quot;&gt;At least 8 characters.&lt;/span&gt;
+&lt;input type=&quot;password&quot; id=&quot;password&quot; name=&quot;password&quot; required
+  autocomplete=&quot;new-password&quot; aria-describedby=&quot;pw-rules&quot;&gt;</code></pre>
+
+  <div class="callout tip" role="note">
+    <span class="callout-icon" aria-hidden="true">🔊</span>
+    <p><strong>Screen reader behaviour:</strong> NVDA announces something like <em>"Password, protected, edit, required, At least 8 characters."</em> The description follows the name, role and state, so the user has the full context before typing.</p>
+  </div>
+</section>
+
+<hr aria-hidden="true">
+
+<!-- ═══════════════ 07 VALIDATION ═══════════════ -->
+<section aria-labelledby="validation">
+  <h2 id="validation" tabindex="-1"><span class="section-num" aria-hidden="true">07 · Core concepts</span>Validation</h2>
+  <p>Accessible validation gives <strong>clear, specific and actionable</strong> feedback that every user can perceive. Timing matters: validate the whole form on submit, and a single field on blur only once the user has typed in it — errors that fire as someone simply Tabs past a field are noise.</p>
+
+  <div class="callout info" role="note">
+    <span class="callout-icon" aria-hidden="true">📏</span>
+    <p><strong>WCAG:</strong> 3.3.1 Error Identification (A), 3.3.3 Error Suggestion (AA), and 3.3.4 Error Prevention (AA) for legal, financial or data-changing submissions.</p>
+  </div>
+
+  <h3>Types of validation</h3>
+  <div class="fp-cards">
+    <div class="fp-card"><h4>Required</h4><p>Native <code>required</code> is announced on focus. The message names the field: "Enter your first name", not "Required".</p></div>
+    <div class="fp-card"><h4>Email format</h4><p><code>type="email"</code> helps, but validate on the server too. "Enter an email address in the correct format, like name@example.com".</p></div>
+    <div class="fp-card"><h4>Password strength</h4><p>A strength bar needs a text equivalent. Announce level changes politely, not every keystroke.</p></div>
+    <div class="fp-card"><h4>Length</h4><p><code>minlength</code> / <code>maxlength</code> set the limits; show the count and describe it for screen readers.</p></div>
+    <div class="fp-card"><h4>Pattern</h4><p>For phone numbers, postcodes or IDs, always explain the expected format in words — a regex is not an instruction.</p></div>
+    <div class="fp-card"><h4>Mismatch</h4><p>Confirm-password needs JavaScript. Say exactly what is wrong: "Passwords do not match".</p></div>
+  </div>
+
+  <h3>Live validation demo</h3>
+  <p>The <a href="#demo-form">accessible form demo</a> shows required-field checks, email and phone format checks, a password strength meter, password matching and a form-level error summary.</p>
+
+  <div class="issue-fix">
+    <div class="fix-box">
+      <h4 class="box-lbl">✓ Accessible — specific, associated error</h4>
+      <div class="fp-field">
+        <label for="val-good-email">Email <span class="fp-required" aria-hidden="true">*</span></label>
+        <p class="fp-error" id="val-good-err"><span class="fp-error-icon" aria-hidden="true">!</span><span><span class="sr-only">Error: </span>Enter an email address in the correct format, like jane@company.com</span></p>
+        <input type="email" id="val-good-email" value="jane.company.com" aria-invalid="true" aria-describedby="val-good-err">
+      </div>
+    </div>
+    <div class="issue-box">
+      <h4 class="box-lbl">✗ Inaccessible — generic, unassociated error</h4>
+      <div class="fp-field">
+        <label for="val-bad-email">Email <span class="fp-required" aria-hidden="true">*</span></label>
+        <input type="email" id="val-bad-email" value="jane.company.com" aria-invalid="true">
+        <p class="fp-error">Error</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout tip" role="note">
+    <span class="callout-icon" aria-hidden="true">🧪</span>
+    <p><strong>QA:</strong> (1) Tab through without typing, then submit. (2) Enter invalid data in each field. (3) Listen with NVDA for the error summary. (4) Check focus moves to the summary on failure. (5) Check each error is referenced by its field's <code>aria-describedby</code>.</p>
+  </div>
+</section>
+
+<hr aria-hidden="true">
+
+<!-- ═══════════════ 08 ERROR HANDLING ═══════════════ -->
+<section aria-labelledby="error-handling">
+  <h2 id="error-handling" tabindex="-1"><span class="section-num" aria-hidden="true">08 · Core concepts</span>Error handling</h2>
+  <p>A red border is not error handling. Errors must be <strong>identified</strong> in text, <strong>descriptive</strong>, <strong>associated</strong> with their field and <strong>announced</strong> to screen reader users. Never communicate an error through colour or an icon alone.</p>
+
+  <h3>ARIA for errors</h3>
+  <div class="fp-cards">
+    <div class="fp-card"><h4><code>aria-invalid="true"</code></h4><p>Set on the field while it has an error; remove it once fixed. Screen readers add "invalid entry".</p></div>
+    <div class="fp-card"><h4><code>aria-describedby</code></h4><p>Points at the error message so it is read with the field on focus. The most widely supported association.</p></div>
+    <div class="fp-card"><h4><code>aria-errormessage</code></h4><p>Points at the error, but is <strong>only exposed when <code>aria-invalid="true"</code></strong> is also set. Support is still less consistent than <code>aria-describedby</code>.</p></div>
+    <div class="fp-card"><h4><code>role="alert"</code></h4><p>An assertive live region: interrupts current speech. Reserve it for one form-level message, not every field.</p></div>
+    <div class="fp-card"><h4><code>role="status"</code></h4><p>A polite live region, read after current speech. Right for "Saved" or "3 results".</p></div>
+    <div class="fp-card"><h4><code>aria-live="assertive"</code></h4><p>Interrupts immediately. Use sparingly — overuse makes a form exhausting to complete.</p></div>
+  </div>
+
+  <h3>Client-side and server-side validation</h3>
+  <div class="fp-cards">
+    <div class="fp-card"><h4>Client-side</h4><p>Immediate feedback without a round trip. Associate each error with <code>aria-invalid</code> + <code>aria-describedby</code> and let one error summary provide the announcement, rather than firing <code>role="alert"</code> on every field.</p></div>
+    <div class="fp-card"><h4>Server-side</h4><p>Always needed — client checks can be bypassed. Re-render the form with messages in place, <code>aria-invalid</code> set, values preserved, and focus on the error summary. Prefix the page title with "Error:".</p></div>
+  </div>
+
+  <h3>Error summary pattern</h3>
+  <p>When submission fails, show a summary above the form listing every error as a link to its field, and move focus to it. Focus is what gets it announced. The GOV.UK pattern also wraps the content in <code>role="alert"</code> as a safety net; do not add <code>aria-live</code> on top.</p>
+<pre><code>&lt;div id=&quot;error-summary&quot; tabindex=&quot;-1&quot;&gt;
+  &lt;div role=&quot;alert&quot;&gt;
+    &lt;h2&gt;There is a problem&lt;/h2&gt;
+    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#firstname&quot;&gt;Enter your first name&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#email&quot;&gt;Enter an email address in the correct format&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;script&gt;
+  // after a failed submit
+  document.getElementById('error-summary').focus();
+&lt;/script&gt;</code></pre>
+
+  <div class="callout warn" role="note">
+    <span class="callout-icon" aria-hidden="true">⚠️</span>
+    <p><strong>Common mistake:</strong> using <code>alert()</code>. It steals focus, is not tied to any field, cannot be styled, and disappears before the user reaches the field they need to fix.</p>
+  </div>
+</section>
+
+<hr aria-hidden="true">
+
+<!-- ═══════════════ 09 AUTOCOMPLETE ═══════════════ -->
+<section aria-labelledby="autocomplete">
+  <h2 id="autocomplete" tabindex="-1"><span class="section-num" aria-hidden="true">09 · Core concepts</span>Autocomplete</h2>
+  <p>The <code>autocomplete</code> attribute tells the browser what data a field expects, so it can fill it from saved details and password managers. Every keystroke saved matters for people with motor impairments; not having to recall details matters for people with memory or cognitive impairments; and everyone finishes faster.</p>
+
+  <div class="callout info" role="note">
+    <span class="callout-icon" aria-hidden="true">📏</span>
+    <p><strong>WCAG:</strong> 1.3.5 Identify Input Purpose (AA) requires the purpose of fields collecting information about the user to be programmatically determinable. <code>autocomplete</code> is how you meet it. 3.3.7 Redundant Entry (A, new in 2.2) also benefits: autofill avoids re-typing.</p>
+  </div>
+
+  <h3>Common values</h3>
+  <div class="table-wrap"><table>
+    <caption class="sr-only">Common autocomplete values</caption>
+    <thead><tr><th scope="col">Value</th><th scope="col">Purpose</th><th scope="col">Typical use</th></tr></thead>
+    <tbody>
+      <tr><td><code>name</code></td><td>Full name</td><td>Single name field</td></tr>
+      <tr><td><code>given-name</code></td><td>First name</td><td>Registration, profiles</td></tr>
+      <tr><td><code>family-name</code></td><td>Last name</td><td>Registration, profiles</td></tr>
+      <tr><td><code>email</code></td><td>Email address</td><td>Login, sign-up, contact</td></tr>
+      <tr><td><code>username</code></td><td>Username</td><td>Login</td></tr>
+      <tr><td><code>new-password</code></td><td>New password</td><td>Sign-up, password change</td></tr>
+      <tr><td><code>current-password</code></td><td>Existing password</td><td>Login</td></tr>
+      <tr><td><code>one-time-code</code></td><td>SMS / authenticator code</td><td>Two-factor sign-in</td></tr>
+      <tr><td><code>tel</code></td><td>Phone number</td><td>Contact, profiles</td></tr>
+      <tr><td><code>street-address</code></td><td>Street address</td><td>Shipping, billing</td></tr>
+      <tr><td><code>address-level2</code></td><td>City</td><td>Address forms</td></tr>
+      <tr><td><code>address-level1</code></td><td>State / province</td><td>Address forms</td></tr>
+      <tr><td><code>postal-code</code></td><td>Postal code</td><td>Address forms</td></tr>
+      <tr><td><code>country</code></td><td>Country code</td><td>Address, billing</td></tr>
+      <tr><td><code>organization</code></td><td>Company</td><td>Business forms</td></tr>
+      <tr><td><code>bday</code></td><td>Date of birth</td><td>Registration, age checks</td></tr>
+      <tr><td><code>off</code></td><td>Disable autofill</td><td>Fields not about the user, e.g. a search box</td></tr>
+    </tbody>
+  </table></div>
+
+<pre><code>&lt;label for=&quot;fname&quot;&gt;First name&lt;/label&gt;
+&lt;input type=&quot;text&quot; id=&quot;fname&quot; name=&quot;fname&quot; autocomplete=&quot;given-name&quot; required&gt;
+
+&lt;label for=&quot;email&quot;&gt;Email&lt;/label&gt;
+&lt;input type=&quot;email&quot; id=&quot;email&quot; name=&quot;email&quot; autocomplete=&quot;email&quot; required&gt;</code></pre>
+
+  <div class="callout tip" role="note">
+    <span class="callout-icon" aria-hidden="true">💡</span>
+    <p><strong>Developer note:</strong> Pair <code>autocomplete</code> with the matching <code>type</code> — <code>type="email"</code> with <code>autocomplete="email"</code>, <code>type="tel"</code> with <code>autocomplete="tel"</code>. You get the right mobile keyboard and reliable autofill.</p>
+  </div>
+</section>
+
+<hr aria-hidden="true">
+
+<!-- ═══════════════ 10 KEYBOARD ═══════════════ -->
+<section aria-labelledby="keyboard">
+  <h2 id="keyboard" tabindex="-1"><span class="section-num" aria-hidden="true">10 · Keyboard &amp; screen readers</span>Keyboard accessibility</h2>
+  <p>Every control must be operable with a keyboard alone. Screen reader users, switch users, many people with motor impairments and plenty of power users never touch a mouse. This is Level A — not optional.</p>
+
+  <div class="callout info" role="note">
+    <span class="callout-icon" aria-hidden="true">📏</span>
+    <p><strong>WCAG:</strong> 2.1.1 Keyboard (A), 2.1.2 No Keyboard Trap (A), 2.4.3 Focus Order (A), 2.4.7 Focus Visible (AA) and 2.4.11 Focus Not Obscured (Minimum) (AA, new in 2.2).</p>
+  </div>
+
+  <h3>Essential keyboard interactions</h3>
+  <div class="table-wrap"><table>
+    <caption class="sr-only">Keyboard interactions in forms</caption>
+    <thead><tr><th scope="col">Key</th><th scope="col">Action</th><th scope="col">Where</th></tr></thead>
+    <tbody>
+      <tr><td><kbd>Tab</kbd></td><td>Next focusable element</td><td>Everywhere, in DOM order</td></tr>
+      <tr><td><kbd>Shift</kbd>+<kbd>Tab</kbd></td><td>Previous focusable element</td><td>Everywhere</td></tr>
+      <tr><td><kbd>Space</kbd></td><td>Toggle / activate</td><td>Checkboxes, switches, buttons, radios</td></tr>
+      <tr><td><kbd>Enter</kbd></td><td>Activate / submit</td><td>Buttons, links, implicit form submission from a text field</td></tr>
+      <tr><td>Arrow keys</td><td>Move and select within a group</td><td>Radio groups, selects, listboxes, menus</td></tr>
+      <tr><td><kbd>Escape</kbd></td><td>Dismiss</td><td>Dialogs, popups, date pickers, autocomplete lists</td></tr>
+      <tr><td><kbd>Home</kbd> / <kbd>End</kbd></td><td>First / last</td><td>Text fields (caret), listboxes, sliders</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Focus indicator</h3>
+  <p>Every focusable element needs a visible focus indicator. If you remove the browser default, you must provide a clearly visible replacement — that is all 2.4.7 Focus Visible (AA) requires. The measurable targets (3:1 contrast against the unfocused state and an area at least a 2px perimeter) belong to 2.4.13 Focus Appearance (AAA), and are good practice to follow.</p>
+
+  <div class="issue-fix">
+    <div class="fix-box">
+      <h4 class="box-lbl">✓ Accessible — clear focus ring</h4>
+      <div class="fp-field">
+        <label for="focus-good">Focus me</label>
+        <input type="text" id="focus-good" class="fp-focus-good" aria-describedby="focus-good-help">
+        <p class="fp-hint" id="focus-good-help">3px indigo outline with a 2px offset, like every control on this page.</p>
+      </div>
+    </div>
+    <div class="issue-box">
+      <h4 class="box-lbl">✗ Inaccessible — no focus indicator</h4>
+      <div class="fp-field">
+        <label for="focus-bad">Focus me</label>
+        <input type="text" id="focus-bad" class="fp-focus-bad" aria-describedby="focus-bad-help">
+        <p class="fp-hint" id="focus-bad-help">Deliberate 2.4.7 failure: <code>outline: none</code> with no replacement. Only the text caret shows where you are.</p>
+      </div>
+    </div>
+  </div>
+
+  <h3>Logical tab order</h3>
+  <p>Tab order should follow the visual reading order. Never use a positive <code>tabindex</code> to reorder — fix the DOM instead, and do not let CSS (grid <code>order</code>, flex <code>row-reverse</code>, absolute positioning) move things away from their source position.</p>
+
+  <div class="callout warn" role="note">
+    <span class="callout-icon" aria-hidden="true">⚠️</span>
+    <p><strong>Keyboard traps:</strong> a user can Tab into a component but not out. Common causes: custom dropdowns that capture Tab, modals that never release focus, and <code>keydown</code> handlers that call <code>preventDefault()</code> on Tab. Test by Tabbing through the entire form and out the other side.</p>
+  </div>
+</section>
+
+<hr aria-hidden="true">
+
+<!-- ═══════════════ 11 SCREEN READERS ═══════════════ -->
+<section aria-labelledby="screen-readers">
+  <h2 id="screen-readers" tabindex="-1"><span class="section-num" aria-hidden="true">11 · Keyboard &amp; screen readers</span>Screen reader behaviour</h2>
+  <p>Screen readers turn the accessibility tree into speech or braille. What they say depends on the screen reader, browser, platform and verbosity settings, but it follows the accessible name and description computation defined alongside WAI-ARIA.</p>
+
+  <h3>What gets announced</h3>
+  <p>When a control receives focus, screen readers typically announce <strong>the accessible name</strong> (label), <strong>the role</strong> (edit, combo box, radio button), <strong>the states</strong> (required, checked, invalid) and <strong>the description</strong> (help or error text via <code>aria-describedby</code>). The order varies.</p>
+
+  <div class="callout warn" role="note">
+    <span class="callout-icon" aria-hidden="true">⚠️</span>
+    <p><strong>These announcements are illustrative.</strong> Exact wording depends on the screen reader, browser and verbosity. VoiceOver says "edit text" where NVDA says "edit"; JAWS may drop "required" at low verbosity. Always verify on real assistive technology.</p>
+  </div>
+
+  <h3>Example announcements</h3>
+  <div class="table-wrap"><table>
+    <caption class="sr-only">Approximate screen reader announcements for common form controls</caption>
+    <thead><tr><th scope="col">Element</th><th scope="col">NVDA + Chrome</th><th scope="col">JAWS + Chrome</th><th scope="col">VoiceOver + Safari</th></tr></thead>
+    <tbody>
+      <tr><td>Required text input</td><td>"First name, edit, required"</td><td>"First name, edit, required, type in text"</td><td>"First name, required, edit text"</td></tr>
+      <tr><td>Email with error</td><td>"Email, edit, invalid entry, required, Error: Enter an email address…"</td><td>"Email, edit, invalid entry, Error: Enter an email address…"</td><td>"Email, invalid data, edit text, Error: Enter an email address…"</td></tr>
+      <tr><td>Radio (checked)</td><td>"Contact preference, grouping, Phone, radio button, checked, 2 of 3"</td><td>"Contact preference group, Phone, radio button, checked, 2 of 3"</td><td>"Phone, selected, radio button, 2 of 3, Contact preference, group"</td></tr>
+      <tr><td>Checkbox (checked)</td><td>"Accessibility, check box, checked"</td><td>"Accessibility, check box, checked"</td><td>"Accessibility, checked, checkbox"</td></tr>
+      <tr><td>Switch (on)</td><td>"Monthly newsletter, toggle button, pressed" or "switch, on"</td><td>"Monthly newsletter, switch, on"</td><td>"Monthly newsletter, on, switch"</td></tr>
+      <tr><td>Select</td><td>"Country, combo box, United States, collapsed"</td><td>"Country, combo box, United States, to change the selection use the arrow keys"</td><td>"Country, United States, pop-up button"</td></tr>
+      <tr><td>Error summary (focused)</td><td>"Alert, There is a problem…"</td><td>"Alert, There is a problem…"</td><td>"There is a problem, heading level 2…"</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>NVDA</h3>
+  <p>Free and open source, for Windows; works best with Firefox and Chrome. <kbd>Insert</kbd>+<kbd>F7</kbd> opens the Elements List (links, headings, landmarks, form fields). NVDA switches to <em>focus mode</em> automatically when a form field receives focus and back to <em>browse mode</em> with <kbd>Escape</kbd>. It has no separate forms dialog — that is JAWS (<kbd>Insert</kbd>+<kbd>F5</kbd>).</p>
+  <h3>JAWS</h3>
+  <p>Commercial, for Windows, with very thorough forms support. <kbd>Insert</kbd>+<kbd>F5</kbd> lists form fields. Its verbose defaults add hints such as "type in text" and "to change the selection use the arrow keys".</p>
+  <h3>VoiceOver</h3>
+  <p>Built into macOS and iOS. <kbd>Cmd</kbd>+<kbd>F5</kbd> toggles it on the Mac; the Rotor (<kbd>Ctrl</kbd>+<kbd>Option</kbd>+<kbd>U</kbd>) lists form controls. On iOS it is the primary assistive technology for millions of people.</p>
+  <h3>TalkBack</h3>
+  <p>Android's built-in screen reader, driven by swipe gestures. Test on a real device: mobile keyboards, zoom and touch targets all behave differently from desktop emulation.</p>
+
+  <div class="callout tip" role="note">
+    <span class="callout-icon" aria-hidden="true">🧪</span>
+    <p><strong>No screen reader to hand?</strong> DevTools → Elements → Accessibility shows the computed Name, Role and Description of any element — the same data a screen reader reads. The <a href="#inspector-section">inspector on this page</a> shows a simplified version live.</p>
+  </div>
+</section>
+
+<hr aria-hidden="true">
+
+<!-- ═══════════════ 12 SR SHORTCUTS ═══════════════ -->
+<section aria-labelledby="sr-shortcuts">
+  <h2 id="sr-shortcuts" tabindex="-1"><span class="section-num" aria-hidden="true">12 · Keyboard &amp; screen readers</span>Screen reader shortcuts</h2>
+  <p>Screen reader users rarely Tab through every field. They jump by control type. Knowing these keys shows how your form is actually navigated — and why a missing role or label makes a control invisible to those jumps.</p>
+
+  <h3>NVDA (browse mode)</h3>
+  <div class="table-wrap"><table>
+    <caption class="sr-only">NVDA shortcuts for forms</caption>
+    <thead><tr><th scope="col">Keys</th><th scope="col">Action</th></tr></thead>
+    <tbody>
+      <tr><td><kbd>Insert</kbd>+<kbd>F7</kbd></td><td>Elements List (links, headings, landmarks, form fields)</td></tr>
+      <tr><td><kbd>F</kbd> / <kbd>Shift</kbd>+<kbd>F</kbd></td><td>Next / previous form field</td></tr>
+      <tr><td><kbd>E</kbd></td><td>Next edit field</td></tr>
+      <tr><td><kbd>B</kbd></td><td>Next button</td></tr>
+      <tr><td><kbd>C</kbd></td><td>Next combo box</td></tr>
+      <tr><td><kbd>R</kbd></td><td>Next radio button</td></tr>
+      <tr><td><kbd>X</kbd></td><td>Next check box</td></tr>
+      <tr><td><kbd>H</kbd> / <kbd>D</kbd></td><td>Next heading / landmark</td></tr>
+      <tr><td><kbd>Insert</kbd>+<kbd>Space</kbd></td><td>Toggle browse / focus mode</td></tr>
+      <tr><td><kbd>Enter</kbd></td><td>On a field: switch to focus mode to type</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>JAWS (virtual cursor)</h3>
+  <div class="table-wrap"><table>
+    <caption class="sr-only">JAWS shortcuts for forms</caption>
+    <thead><tr><th scope="col">Keys</th><th scope="col">Action</th></tr></thead>
+    <tbody>
+      <tr><td><kbd>Insert</kbd>+<kbd>F5</kbd></td><td>List form fields</td></tr>
+      <tr><td><kbd>F</kbd> / <kbd>Shift</kbd>+<kbd>F</kbd></td><td>Next / previous form field</td></tr>
+      <tr><td><kbd>E</kbd></td><td>Next edit field</td></tr>
+      <tr><td><kbd>B</kbd></td><td>Next button</td></tr>
+      <tr><td><kbd>C</kbd></td><td>Next combo box</td></tr>
+      <tr><td><kbd>A</kbd></td><td>Next radio button</td></tr>
+      <tr><td><kbd>X</kbd></td><td>Next check box</td></tr>
+      <tr><td><kbd>Insert</kbd>+<kbd>F6</kbd> / <kbd>Insert</kbd>+<kbd>F7</kbd></td><td>Headings list / links list</td></tr>
+      <tr><td><kbd>Insert</kbd>+<kbd>F3</kbd></td><td>Virtual HTML Features dialog</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>VoiceOver (macOS)</h3>
+  <div class="table-wrap"><table>
+    <caption class="sr-only">VoiceOver for macOS shortcuts for forms. VO means Control plus Option.</caption>
+    <thead><tr><th scope="col">Keys</th><th scope="col">Action</th></tr></thead>
+    <tbody>
+      <tr><td><kbd>Ctrl</kbd>+<kbd>Option</kbd>+<kbd>U</kbd></td><td>Open the Rotor; <kbd>←</kbd>/<kbd>→</kbd> to the Form Controls list</td></tr>
+      <tr><td><kbd>Ctrl</kbd>+<kbd>Option</kbd>+<kbd>→</kbd> / <kbd>←</kbd></td><td>Next / previous item</td></tr>
+      <tr><td><kbd>Ctrl</kbd>+<kbd>Option</kbd>+<kbd>Space</kbd></td><td>Activate / toggle</td></tr>
+      <tr><td><kbd>Ctrl</kbd>+<kbd>Option</kbd>+<kbd>Cmd</kbd>+<kbd>J</kbd></td><td>Next form control</td></tr>
+      <tr><td><kbd>Ctrl</kbd>+<kbd>Option</kbd>+<kbd>Cmd</kbd>+<kbd>H</kbd></td><td>Next heading</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>TalkBack (Android)</h3>
+  <div class="table-wrap"><table>
+    <caption class="sr-only">TalkBack gestures for forms</caption>
+    <thead><tr><th scope="col">Gesture</th><th scope="col">Action</th></tr></thead>
+    <tbody>
+      <tr><td>Swipe right / left</td><td>Next / previous item</td></tr>
+      <tr><td>Double-tap</td><td>Activate / toggle</td></tr>
+      <tr><td>Swipe up / down</td><td>Move by the selected reading control (e.g. Controls, Headings)</td></tr>
+      <tr><td>Three-finger tap, or swipe down then right</td><td>TalkBack menu</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<hr aria-hidden="true">
+
+<!-- ═══════════════ 13 ARIA ═══════════════ -->
+<section aria-labelledby="aria-ref">
+  <h2 id="aria-ref" tabindex="-1"><span class="section-num" aria-hidden="true">13 · Reference</span>ARIA reference</h2>
+  <p>ARIA adds state, properties and relationships where HTML has no native equivalent. For forms, only a handful of attributes matter.</p>
+
+  <div class="table-wrap"><table>
+    <caption class="sr-only">ARIA attributes relevant to forms</caption>
+    <thead><tr><th scope="col">Attribute</th><th scope="col">Purpose</th><th scope="col">When to use</th><th scope="col">Example</th></tr></thead>
+    <tbody>
+      <tr><td><code>aria-required="true"</code></td><td>Field must be filled</td><td>Custom widgets only — native <code>required</code> already maps to it</td><td><code>&lt;div role="combobox" aria-required="true"&gt;</code></td></tr>
+      <tr><td><code>aria-invalid="true"</code></td><td>Value failed validation</td><td>Set on error, remove when fixed</td><td><code>&lt;input aria-invalid="true" aria-describedby="e1"&gt;</code></td></tr>
+      <tr><td><code>aria-describedby</code></td><td>Associates help or error text</td><td>Hints, format rules, errors</td><td><code>&lt;input aria-describedby="pw-help"&gt;</code></td></tr>
+      <tr><td><code>aria-labelledby</code></td><td>Names from other element(s)</td><td>Label text lives elsewhere, or is composed</td><td><code>&lt;input aria-labelledby="l1 l2"&gt;</code></td></tr>
+      <tr><td><code>aria-label</code></td><td>Invisible name</td><td>Last resort when no visible label is possible</td><td><code>&lt;input type="search" aria-label="Search site"&gt;</code></td></tr>
+      <tr><td><code>aria-live="polite"</code></td><td>Announce when idle</td><td>Counts, "Saved", result totals</td><td><code>&lt;p aria-live="polite"&gt;15 characters remaining&lt;/p&gt;</code></td></tr>
+      <tr><td><code>aria-live="assertive"</code></td><td>Announce immediately</td><td>Rarely — genuinely urgent messages</td><td><code>&lt;div aria-live="assertive"&gt;Session expires in 1 minute&lt;/div&gt;</code></td></tr>
+      <tr><td><code>aria-atomic="true"</code></td><td>Read the whole region</td><td>When a partial update would be meaningless</td><td><code>&lt;p aria-live="polite" aria-atomic="true"&gt;</code></td></tr>
+      <tr><td><code>aria-errormessage</code></td><td>Points to the error</td><td>Only read while <code>aria-invalid="true"</code></td><td><code>&lt;input aria-invalid="true" aria-errormessage="e1"&gt;</code></td></tr>
+      <tr><td><code>role="alert"</code></td><td>Assertive + atomic live region</td><td>One form-level failure message</td><td><code>&lt;div role="alert"&gt;There is a problem&lt;/div&gt;</code></td></tr>
+      <tr><td><code>role="status"</code></td><td>Polite live region</td><td>Success and progress messages</td><td><code>&lt;p role="status"&gt;Application submitted&lt;/p&gt;</code></td></tr>
+      <tr><td><code>role="group"</code></td><td>Groups related controls</td><td>When a fieldset is not practical</td><td><code>&lt;div role="group" aria-labelledby="g1"&gt;</code></td></tr>
+      <tr><td><code>role="switch"</code></td><td>On/off semantics</td><td>A checkbox that looks and acts like a switch</td><td><code>&lt;input type="checkbox" role="switch"&gt;</code></td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="callout warn" role="note">
+    <span class="callout-icon" aria-hidden="true">⚠️</span>
+    <p><strong>First rule of ARIA:</strong> if a native element or attribute gives you the semantics you need, use it. <code>&lt;label for&gt;</code> beats <code>aria-label</code>; <code>&lt;fieldset&gt;</code>/<code>&lt;legend&gt;</code> beats <code>role="group"</code>; <code>required</code> beats <code>aria-required</code>.</p>
+  </div>
+</section>
+
+<hr aria-hidden="true">
+
+<!-- ═══════════════ 14 MISTAKES ═══════════════ -->
+<section aria-labelledby="mistakes">
+  <h2 id="mistakes" tabindex="-1"><span class="section-num" aria-hidden="true">14 · Reference</span>Common accessibility mistakes</h2>
+  <p>The failures that turn up most often in WebAIM data and real audits. Each shows the problem, its impact and the fix — use it as a debugging guide when reviewing a form.</p>
+
+  <div class="fp-disclosure">
+    <h3><button type="button" class="fp-disclosure-btn" aria-expanded="true" aria-controls="mistake-1"><span class="fp-title">Missing labels</span><svg class="fp-chevron" aria-hidden="true" focusable="false"><use href="#fp-i-chevron"/></svg></button></h3>
+    <div class="fp-disclosure-panel" id="mistake-1">
+      <p><strong>Problem:</strong> no <code>&lt;label&gt;</code> associated with the input.</p>
+      <p><strong>Impact:</strong> the screen reader says "edit, blank" — the user cannot know what to enter. Fails 1.3.1, 3.3.2 and 4.1.2.</p>
+<pre><code>&lt;label for=&quot;name&quot;&gt;Name&lt;/label&gt;
+&lt;input type=&quot;text&quot; id=&quot;name&quot; autocomplete=&quot;name&quot;&gt;</code></pre>
+    </div>
+  </div>
+  <div class="fp-disclosure">
+    <h3><button type="button" class="fp-disclosure-btn" aria-expanded="true" aria-controls="mistake-2"><span class="fp-title">Placeholder as the only label</span><svg class="fp-chevron" aria-hidden="true" focusable="false"><use href="#fp-i-chevron"/></svg></button></h3>
+    <div class="fp-disclosure-panel" id="mistake-2">
+      <p><strong>Problem:</strong> placeholder text used instead of a visible label.</p>
+      <p><strong>Impact:</strong> it vanishes on typing (a memory burden), is an unreliable accessible name, and is usually low contrast.</p>
+<pre><code>&lt;label for=&quot;name&quot;&gt;Full name&lt;/label&gt;
+&lt;input type=&quot;text&quot; id=&quot;name&quot; autocomplete=&quot;name&quot;&gt;</code></pre>
+    </div>
+  </div>
+  <div class="fp-disclosure">
+    <h3><button type="button" class="fp-disclosure-btn" aria-expanded="true" aria-controls="mistake-3"><span class="fp-title">Missing fieldset and legend</span><svg class="fp-chevron" aria-hidden="true" focusable="false"><use href="#fp-i-chevron"/></svg></button></h3>
+    <div class="fp-disclosure-panel" id="mistake-3">
+      <p><strong>Problem:</strong> radios or related checkboxes not grouped.</p>
+      <p><strong>Impact:</strong> each option is announced without the question it answers. Fails 1.3.1.</p>
+<pre><code>&lt;fieldset&gt;
+  &lt;legend&gt;Payment method&lt;/legend&gt;
+  &lt;label&gt;&lt;input type=&quot;radio&quot; name=&quot;pm&quot; value=&quot;card&quot;&gt; Card&lt;/label&gt;
+  &lt;label&gt;&lt;input type=&quot;radio&quot; name=&quot;pm&quot; value=&quot;paypal&quot;&gt; PayPal&lt;/label&gt;
+&lt;/fieldset&gt;</code></pre>
+    </div>
+  </div>
+  <div class="fp-disclosure">
+    <h3><button type="button" class="fp-disclosure-btn" aria-expanded="true" aria-controls="mistake-4"><span class="fp-title">No instructions</span><svg class="fp-chevron" aria-hidden="true" focusable="false"><use href="#fp-i-chevron"/></svg></button></h3>
+    <div class="fp-disclosure-panel" id="mistake-4">
+      <p><strong>Problem:</strong> password, date or file fields with no guidance.</p>
+      <p><strong>Impact:</strong> users have to guess the rules and fail repeatedly. Fails 3.3.2.</p>
+<pre><code>&lt;span id=&quot;pw-help&quot;&gt;At least 8 characters&lt;/span&gt;
+&lt;input type=&quot;password&quot; aria-describedby=&quot;pw-help&quot;&gt;</code></pre>
+    </div>
+  </div>
+  <div class="fp-disclosure">
+    <h3><button type="button" class="fp-disclosure-btn" aria-expanded="true" aria-controls="mistake-5"><span class="fp-title">Wrong focus order</span><svg class="fp-chevron" aria-hidden="true" focusable="false"><use href="#fp-i-chevron"/></svg></button></h3>
+    <div class="fp-disclosure-panel" id="mistake-5">
+      <p><strong>Problem:</strong> Tab order does not match the visual layout.</p>
+      <p><strong>Impact:</strong> disorienting for keyboard and screen magnifier users. Usually caused by CSS reordering. Fails 2.4.3.</p>
+      <p><strong>Fix:</strong> make the DOM order match the visual order. Never use <code>tabindex</code> greater than 0.</p>
+    </div>
+  </div>
+  <div class="fp-disclosure">
+    <h3><button type="button" class="fp-disclosure-btn" aria-expanded="true" aria-controls="mistake-6"><span class="fp-title">Colour-only errors</span><svg class="fp-chevron" aria-hidden="true" focusable="false"><use href="#fp-i-chevron"/></svg></button></h3>
+    <div class="fp-disclosure-panel" id="mistake-6">
+      <p><strong>Problem:</strong> errors shown only by a red border or red text.</p>
+      <p><strong>Impact:</strong> invisible to many colour-blind users and to everyone using forced colours. Fails 1.4.1 and 3.3.1.</p>
+      <p><strong>Fix:</strong> pair colour with a text message, an icon, a thicker border, <code>aria-invalid</code> and <code>aria-describedby</code>.</p>
+    </div>
+  </div>
+  <div class="fp-disclosure">
+    <h3><button type="button" class="fp-disclosure-btn" aria-expanded="true" aria-controls="mistake-7"><span class="fp-title">Generic error messages</span><svg class="fp-chevron" aria-hidden="true" focusable="false"><use href="#fp-i-chevron"/></svg></button></h3>
+    <div class="fp-disclosure-panel" id="mistake-7">
+      <p><strong>Problem:</strong> "Invalid input" or "Error" with no specifics.</p>
+      <p><strong>Impact:</strong> the user cannot work out what is wrong or how to fix it. Fails 3.3.1 and 3.3.3.</p>
+      <p><strong>Fix:</strong> say what happened and what to do: "Enter an email address in the correct format, like name@example.com".</p>
+    </div>
+  </div>
+  <div class="fp-disclosure">
+    <h3><button type="button" class="fp-disclosure-btn" aria-expanded="true" aria-controls="mistake-8"><span class="fp-title">Unannounced dynamic changes</span><svg class="fp-chevron" aria-hidden="true" focusable="false"><use href="#fp-i-chevron"/></svg></button></h3>
+    <div class="fp-disclosure-panel" id="mistake-8">
+      <p><strong>Problem:</strong> choosing an option silently changes other fields, e.g. the city list updates when a country is chosen.</p>
+      <p><strong>Impact:</strong> screen reader users do not know anything changed. Fails 4.1.3 Status Messages.</p>
+      <p><strong>Fix:</strong> announce it through a polite live region: "City options updated for Canada".</p>
+    </div>
+  </div>
+  <div class="fp-disclosure">
+    <h3><button type="button" class="fp-disclosure-btn" aria-expanded="true" aria-controls="mistake-9"><span class="fp-title">Time limits without warning</span><svg class="fp-chevron" aria-hidden="true" focusable="false"><use href="#fp-i-chevron"/></svg></button></h3>
+    <div class="fp-disclosure-panel" id="mistake-9">
+      <p><strong>Problem:</strong> the session expires mid-form without notice.</p>
+      <p><strong>Impact:</strong> people who need more time lose their work. Fails 2.2.1 Timing Adjustable.</p>
+      <p><strong>Fix:</strong> warn at least 20 seconds before expiry and let the user extend with a simple action (up to at least ten times).</p>
+    </div>
+  </div>
+  <div class="fp-disclosure">
+    <h3><button type="button" class="fp-disclosure-btn" aria-expanded="true" aria-controls="mistake-10"><span class="fp-title">Missing autocomplete</span><svg class="fp-chevron" aria-hidden="true" focusable="false"><use href="#fp-i-chevron"/></svg></button></h3>
+    <div class="fp-disclosure-panel" id="mistake-10">
+      <p><strong>Problem:</strong> no <code>autocomplete</code> on fields about the user.</p>
+      <p><strong>Impact:</strong> no reliable autofill; everyone types everything. Fails 1.3.5 (AA).</p>
+      <p><strong>Fix:</strong> <code>autocomplete="given-name"</code>, <code>autocomplete="email"</code> and so on.</p>
+    </div>
+  </div>
+  <div class="fp-disclosure">
+    <h3><button type="button" class="fp-disclosure-btn" aria-expanded="true" aria-controls="mistake-11"><span class="fp-title">Poor contrast</span><svg class="fp-chevron" aria-hidden="true" focusable="false"><use href="#fp-i-chevron"/></svg></button></h3>
+    <div class="fp-disclosure-panel" id="mistake-11">
+      <p><strong>Problem:</strong> pale labels, hints, placeholders or input borders.</p>
+      <p><strong>Impact:</strong> low vision users cannot read the text or find the field. Text needs 4.5:1 (1.4.3); input borders and focus indicators need 3:1 (1.4.11).</p>
+      <p><strong>Fix:</strong> check every pair with a contrast analyser, including the input border against the page background.</p>
+    </div>
+  </div>
+  <div class="fp-disclosure">
+    <h3><button type="button" class="fp-disclosure-btn" aria-expanded="true" aria-controls="mistake-12"><span class="fp-title">Small targets</span><svg class="fp-chevron" aria-hidden="true" focusable="false"><use href="#fp-i-chevron"/></svg></button></h3>
+    <div class="fp-disclosure-panel" id="mistake-12">
+      <p><strong>Problem:</strong> checkboxes, radios or buttons smaller than 24 × 24 CSS pixels with no spacing.</p>
+      <p><strong>Impact:</strong> hard to hit for people with tremors or limited dexterity. Fails 2.5.8 Target Size (Minimum) (AA, new in 2.2).</p>
+      <p><strong>Fix:</strong> make the whole label clickable and pad targets to at least 24 × 24 px (44 × 44 is better).</p>
+    </div>
+  </div>
+  <div class="fp-disclosure">
+    <h3><button type="button" class="fp-disclosure-btn" aria-expanded="true" aria-controls="mistake-13"><span class="fp-title">Disabled submit button</span><svg class="fp-chevron" aria-hidden="true" focusable="false"><use href="#fp-i-chevron"/></svg></button></h3>
+    <div class="fp-disclosure-panel" id="mistake-13">
+      <p><strong>Problem:</strong> submit stays disabled until every field is valid.</p>
+      <p><strong>Impact:</strong> users cannot find out what is blocking them; disabled buttons are skipped by Tab and often low contrast.</p>
+      <p><strong>Fix:</strong> keep submit enabled and show errors when it is pressed. If a disabled look is unavoidable, use <code>aria-disabled="true"</code> (not <code>disabled</code>) so it stays focusable, and block activation in script.</p>
+    </div>
+  </div>
+  <div class="fp-disclosure">
+    <h3><button type="button" class="fp-disclosure-btn" aria-expanded="true" aria-controls="mistake-14"><span class="fp-title">Required fields shown by colour only</span><svg class="fp-chevron" aria-hidden="true" focusable="false"><use href="#fp-i-chevron"/></svg></button></h3>
+    <div class="fp-disclosure-panel" id="mistake-14">
+      <p><strong>Problem:</strong> a red asterisk (or red label) is the only indication, with no explanation.</p>
+      <p><strong>Impact:</strong> colour-blind users miss it, and nobody is told what the asterisk means.</p>
+      <p><strong>Fix:</strong> explain the asterisk at the start of the form, hide the symbol from screen readers, and use native <code>required</code> so "required" is announced.</p>
+    </div>
+  </div>
+  <div class="fp-disclosure">
+    <h3><button type="button" class="fp-disclosure-btn" aria-expanded="true" aria-controls="mistake-15"><span class="fp-title">Blocking paste in password fields</span><svg class="fp-chevron" aria-hidden="true" focusable="false"><use href="#fp-i-chevron"/></svg></button></h3>
+    <div class="fp-disclosure-panel" id="mistake-15">
+      <p><strong>Problem:</strong> <code>onpaste="return false"</code> on password or code fields, or <code>autocomplete="off"</code> to defeat password managers.</p>
+      <p><strong>Impact:</strong> forces people to memorise and transcribe credentials — a cognitive function test. Fails 3.3.8 Accessible Authentication (Minimum) (AA, new in 2.2).</p>
+      <p><strong>Fix:</strong> allow paste, use <code>autocomplete="current-password"</code> / <code>new-password</code> / <code>one-time-code</code>.</p>
+    </div>
+  </div>
+</section>
+
+<hr aria-hidden="true">
+
+<!-- ═══════════════ 15 DEV CHECKLIST ═══════════════ -->
+<section aria-labelledby="dev-checklist">
+  <h2 id="dev-checklist" tabindex="-1"><span class="section-num" aria-hidden="true">15 · Reference</span>Developer checklist</h2>
+  <p>Use during code review and before merging any form change. Every item has a concrete do and don't.</p>
+
+  <ol class="fp-devlist">
+    <li><h3>Visible label for every control</h3><p>Every input, select and textarea has a visible <code>&lt;label&gt;</code>.</p><p class="fp-do"><strong>Do:</strong> <code>&lt;label for="email"&gt;Email&lt;/label&gt;</code></p><p class="fp-dont"><strong>Don't:</strong> <code>&lt;input placeholder="Email"&gt;</code> with no label</p></li>
+    <li><h3>Programmatic label association</h3><p><code>for</code> matches the input's <code>id</code>, or <code>aria-labelledby</code> references IDs that exist.</p><p class="fp-do"><strong>Do:</strong> <code>for="fname"</code> + <code>id="fname"</code></p><p class="fp-dont"><strong>Don't:</strong> <code>for="name"</code> + <code>id="username"</code></p></li>
+    <li><h3>Required fields marked programmatically</h3><p>Native <code>required</code> plus a visible, explained indicator.</p><p class="fp-do"><strong>Do:</strong> <code>&lt;input required&gt;</code> + "Fields marked with * are required"</p><p class="fp-dont"><strong>Don't:</strong> a red border as the only indication</p></li>
+    <li><h3>Help text via aria-describedby</h3><p>Formats, constraints and examples are associated with the input.</p><p class="fp-do"><strong>Do:</strong> <code>aria-describedby="help1"</code> + <code>&lt;span id="help1"&gt;DD/MM/YYYY&lt;/span&gt;</code></p><p class="fp-dont"><strong>Don't:</strong> help text that exists visually but is not associated</p></li>
+    <li><h3>Radio and checkbox groups use fieldset</h3><p>Related options are wrapped in <code>&lt;fieldset&gt;</code> with a <code>&lt;legend&gt;</code>.</p><p class="fp-do"><strong>Do:</strong> <code>&lt;fieldset&gt;&lt;legend&gt;Size&lt;/legend&gt;…&lt;/fieldset&gt;</code></p><p class="fp-dont"><strong>Don't:</strong> a heading or paragraph as a visual-only group title</p></li>
+    <li><h3>Errors are descriptive and associated</h3><p>Messages say what is wrong and how to fix it, linked with <code>aria-describedby</code>.</p><p class="fp-do"><strong>Do:</strong> "Enter an email address in the correct format" + <code>aria-describedby="email-error"</code></p><p class="fp-dont"><strong>Don't:</strong> "Invalid" with no association</p></li>
+    <li><h3>aria-invalid set dynamically</h3><p><code>aria-invalid="true"</code> when validation fails; removed when corrected.</p><p class="fp-do"><strong>Do:</strong> <code>input.setAttribute('aria-invalid', 'true')</code> on error, <code>removeAttribute</code> on fix</p><p class="fp-dont"><strong>Don't:</strong> never set, or hard-coded <code>"true"</code> in the markup</p></li>
+    <li><h3>Error summary on failed submit</h3><p>Lists every error, each linking to its field; receives focus.</p><p class="fp-do"><strong>Do:</strong> <code>tabindex="-1"</code> container, links to field IDs, <code>.focus()</code> after submit</p><p class="fp-dont"><strong>Don't:</strong> <code>alert("Please fix the errors")</code></p></li>
+    <li><h3>Correct type and autocomplete</h3><p>Each field has the right <code>type</code> and <code>autocomplete</code> token.</p><p class="fp-do"><strong>Do:</strong> <code>type="email" autocomplete="email"</code></p><p class="fp-dont"><strong>Don't:</strong> <code>type="text" autocomplete="off"</code> on an email field</p></li>
+    <li><h3>Keyboard operable</h3><p>Every control reachable with Tab and operable with Enter / Space / arrows; no traps.</p><p class="fp-do"><strong>Do:</strong> native controls, or custom widgets built to the APG pattern</p><p class="fp-dont"><strong>Don't:</strong> <code>&lt;div tabindex="0" onclick&gt;</code> with no key handling</p></li>
+    <li><h3>Visible focus indicator</h3><p>A focus ring with at least 3:1 contrast on every background.</p><p class="fp-do"><strong>Do:</strong> <code>:focus-visible { outline: 3px solid; outline-offset: 2px; }</code></p><p class="fp-dont"><strong>Don't:</strong> <code>* { outline: none; }</code> with no replacement</p></li>
+    <li><h3>Sufficient contrast</h3><p>Labels, hints and errors reach 4.5:1; input borders reach 3:1.</p><p class="fp-do"><strong>Do:</strong> <code>#1a1a1a</code> on <code>#faf9f6</code> (over 16:1), borders <code>#52606f</code> on white (6.3:1)</p><p class="fp-dont"><strong>Don't:</strong> light grey hints and <code>#ddd</code> input borders on white</p></li>
+  </ol>
+</section>
+
+<hr aria-hidden="true">
+
+<!-- ═══════════════ 16 QA TESTING ═══════════════ -->
+<section aria-labelledby="qa-testing">
+  <h2 id="qa-testing" tabindex="-1"><span class="section-num" aria-hidden="true">16 · Reference</span>QA accessibility testing</h2>
+  <p>No single tool catches everything. Thorough coverage combines automated scans, keyboard testing, screen reader testing and visual inspection.</p>
+
+  <h3>1. Keyboard testing</h3>
+  <ol class="steps">
+    <li><p>Start before the form, then Tab into it.</p></li>
+    <li><p>Tab through every field and confirm the order matches the visual layout.</p></li>
+    <li><p>Confirm every control shows a clearly visible focus indicator.</p></li>
+    <li><p>Press Space on checkboxes and switches — they toggle.</p></li>
+    <li><p>Use arrow keys in radio groups — selection moves within the group.</p></li>
+    <li><p>Press Escape in any popup or date picker — it closes and focus returns.</p></li>
+    <li><p>Submit with Enter and confirm focus goes to the error summary or a clear result.</p></li>
+    <li><p>Tab past the last control and out of the form — no traps.</p></li>
+  </ol>
+
+  <h3>2. Screen reader testing (NVDA)</h3>
+  <ol class="steps">
+    <li><p>Open the page in Chrome or Firefox with NVDA running.</p></li>
+    <li><p>Open the Elements List (<kbd>Insert</kbd>+<kbd>F7</kbd>), filter to form fields, and check every field has a sensible name.</p></li>
+    <li><p>Tab to each field and listen for label, role, state and description.</p></li>
+    <li><p>Confirm "required" is announced on required fields.</p></li>
+    <li><p>Submit with errors and confirm the summary is announced.</p></li>
+    <li><p>Follow a summary link and confirm focus lands in the field with its error read out.</p></li>
+    <li><p>Fix the error and confirm "invalid entry" is no longer announced.</p></li>
+    <li><p>In a radio group, confirm the group name and position ("2 of 3") are announced.</p></li>
+  </ol>
+
+  <h3>3. Visual inspection</h3>
+  <ol class="steps">
+    <li><p>Every label is visible and next to its field.</p></li>
+    <li><p>Required indicators are present and explained.</p></li>
+    <li><p>Errors are shown in text, not just colour or an icon.</p></li>
+    <li><p>Complex fields (password, date, phone, file) have help text.</p></li>
+    <li><p>All text meets 4.5:1 and input borders 3:1.</p></li>
+    <li><p>At 400% zoom (320 CSS px) the form reflows with no horizontal scrolling.</p></li>
+    <li><p>On a phone, labels stay visible, targets are easy to hit and the right keyboards appear.</p></li>
+  </ol>
+
+  <h3>Testing tools</h3>
+  <div class="fp-cards">
+    <div class="fp-card"><h4>Browser DevTools</h4><p>Elements → Accessibility shows the computed Name, Role and Description of anything. Built in, free, always available.</p></div>
+    <div class="fp-card"><h4>axe DevTools</h4><p>Deque's extension and the engine behind many CI checks. Deque reports it finds around 57% of issues by volume.</p></div>
+    <div class="fp-card"><h4>WAVE</h4><p>WebAIM's extension overlays errors, alerts and structure on the page. Good for a fast visual overview.</p></div>
+    <div class="fp-card"><h4>Lighthouse</h4><p>Built into Chrome. Its accessibility score is largely axe-core rules — useful as a gate, not a verdict.</p></div>
+    <div class="fp-card"><h4>ARC Toolkit</h4><p>TPGi's extension; results grouped by WCAG criterion with element-level detail for manual review.</p></div>
+    <div class="fp-card"><h4>Accessibility Insights</h4><p>Microsoft's FastPass for automated checks and Assessment for guided manual WCAG testing.</p></div>
+    <div class="fp-card"><h4>ANDI</h4><p>The U.S. SSA's bookmarklet. Its forms module (fANDI) shows each field's computed name and description.</p></div>
+    <div class="fp-card"><h4>Colour Contrast Analyser</h4><p>TPGi's free desktop app with an eyedropper for any pixel on screen — including input borders and focus rings.</p></div>
+  </div>
+</section>
+
+<hr aria-hidden="true">
+
+<!-- ═══════════════ 17 WCAG MAPPING ═══════════════ -->
+<section aria-labelledby="wcag-mapping">
+  <h2 id="wcag-mapping" tabindex="-1"><span class="section-num" aria-hidden="true">17 · Reference</span>WCAG mapping</h2>
+  <p>The WCAG 2.2 success criteria that matter most for forms, in plain language. Use it in design reviews, code reviews and test planning.</p>
+
+  <div class="table-wrap"><table>
+    <caption class="sr-only">WCAG 2.2 success criteria relevant to forms</caption>
+    <thead><tr><th scope="col">Criterion</th><th scope="col">Level</th><th scope="col">What it means for forms</th></tr></thead>
+    <tbody>
+      <tr><td><strong>1.3.1</strong> Info and Relationships</td><td><span class="level-badge badge-a">A</span></td><td>Labels are associated, groups use fieldset/legend, sections use headings. Structure seen is structure exposed.</td></tr>
+      <tr><td><strong>1.3.5</strong> Identify Input Purpose</td><td><span class="level-badge badge-aa">AA</span></td><td>Fields collecting information about the user carry the right <code>autocomplete</code> token.</td></tr>
+      <tr><td><strong>1.4.1</strong> Use of Color</td><td><span class="level-badge badge-a">A</span></td><td>Errors, required fields and selected states are not shown by colour alone.</td></tr>
+      <tr><td><strong>1.4.3</strong> Contrast (Minimum)</td><td><span class="level-badge badge-aa">AA</span></td><td>Labels, hints, errors and entered text reach 4.5:1 (3:1 for large text).</td></tr>
+      <tr><td><strong>1.4.11</strong> Non-text Contrast</td><td><span class="level-badge badge-aa">AA</span></td><td>Input borders, checkbox outlines and focus indicators reach 3:1 against adjacent colours.</td></tr>
+      <tr><td><strong>2.1.1</strong> Keyboard</td><td><span class="level-badge badge-a">A</span></td><td>Every control, including custom widgets, date pickers and file uploads, works from the keyboard.</td></tr>
+      <tr><td><strong>2.1.2</strong> No Keyboard Trap</td><td><span class="level-badge badge-a">A</span></td><td>Focus can always leave a component with standard keys.</td></tr>
+      <tr><td><strong>2.2.1</strong> Timing Adjustable</td><td><span class="level-badge badge-a">A</span></td><td>Session time-outs can be turned off, adjusted or extended, with warning.</td></tr>
+      <tr><td><strong>2.4.3</strong> Focus Order</td><td><span class="level-badge badge-a">A</span></td><td>Tab order follows a meaningful sequence; no positive <code>tabindex</code>.</td></tr>
+      <tr><td><strong>2.4.6</strong> Headings and Labels</td><td><span class="level-badge badge-aa">AA</span></td><td>Labels and section headings describe their purpose ("Company name", not "Name").</td></tr>
+      <tr><td><strong>2.4.7</strong> Focus Visible</td><td><span class="level-badge badge-aa">AA</span></td><td>Every focusable control shows a visible focus indicator.</td></tr>
+      <tr><td><strong>2.4.11</strong> Focus Not Obscured (Minimum) <em>— new in 2.2</em></td><td><span class="level-badge badge-aa">AA</span></td><td>A focused field is never entirely hidden by sticky headers, cookie banners or chat widgets.</td></tr>
+      <tr><td><strong>2.5.3</strong> Label in Name</td><td><span class="level-badge badge-a">A</span></td><td>The accessible name contains the visible label, so speech users can say what they see.</td></tr>
+      <tr><td><strong>2.5.8</strong> Target Size (Minimum) <em>— new in 2.2</em></td><td><span class="level-badge badge-aa">AA</span></td><td>Targets are at least 24 × 24 CSS px, or spaced so a 24 px circle around each does not overlap another.</td></tr>
+      <tr><td><strong>3.2.2</strong> On Input</td><td><span class="level-badge badge-a">A</span></td><td>Changing a value does not submit, navigate or move focus unless the user was told first.</td></tr>
+      <tr><td><strong>3.3.1</strong> Error Identification</td><td><span class="level-badge badge-a">A</span></td><td>Errors are identified in text and the field in error is identified.</td></tr>
+      <tr><td><strong>3.3.2</strong> Labels or Instructions</td><td><span class="level-badge badge-a">A</span></td><td>Labels, required indicators and format instructions are provided.</td></tr>
+      <tr><td><strong>3.3.3</strong> Error Suggestion</td><td><span class="level-badge badge-aa">AA</span></td><td>Errors suggest a fix: "Enter a date in the past", not "Invalid date".</td></tr>
+      <tr><td><strong>3.3.4</strong> Error Prevention (Legal, Financial, Data)</td><td><span class="level-badge badge-aa">AA</span></td><td>Important submissions are reversible, checked, or confirmed after a review step.</td></tr>
+      <tr><td><strong>3.3.7</strong> Redundant Entry <em>— new in 2.2</em></td><td><span class="level-badge badge-a">A</span></td><td>Information already given in the same process is auto-filled or selectable ("Same as billing address").</td></tr>
+      <tr><td><strong>3.3.8</strong> Accessible Authentication (Minimum) <em>— new in 2.2</em></td><td><span class="level-badge badge-aa">AA</span></td><td>No memorising or transcribing to log in: allow paste and password managers, or offer another method.</td></tr>
+      <tr><td><strong>4.1.2</strong> Name, Role, Value</td><td><span class="level-badge badge-a">A</span></td><td>Every control exposes a name, role and current state/value; custom widgets do it through ARIA.</td></tr>
+      <tr><td><strong>4.1.3</strong> Status Messages</td><td><span class="level-badge badge-aa">AA</span></td><td>"Saved", result counts and similar updates are announced without moving focus.</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<hr aria-hidden="true">
+
+<!-- ═══════════════ 18 INSPECTOR ═══════════════ -->
+<section aria-labelledby="inspector-section">
+  <h2 id="inspector-section" tabindex="-1"><span class="section-num" aria-hidden="true">18 · Tools &amp; practice</span>Accessibility inspector</h2>
+  <p>The inspector is a small floating panel that shows what the accessibility tree roughly exposes for whichever element has focus: its tag, accessible name, role, description, required and invalid state, autocomplete token and every <code>aria-*</code> attribute.</p>
+  <div class="fp-btn-row">
+    <button type="button" class="fp-btn fp-inspector-toggle" aria-expanded="false" aria-controls="a11yInspector"><span class="fp-toggle-box" aria-hidden="true"></span>Accessibility inspector</button>
+  </div>
+
+  <div class="callout tip" role="note">
+    <span class="callout-icon" aria-hidden="true">💡</span>
+    <p><strong>How to use it:</strong> open the inspector, then Tab to any control on the page — the <a href="#demo-form">demo form</a> is the best place to start. The panel updates on every focus change. Close it with its Close button, or press <kbd>Escape</kbd> while focus is inside it.</p>
+  </div>
+
+  <div class="table-wrap"><table>
+    <caption class="sr-only">What the inspector shows</caption>
+    <thead><tr><th scope="col">Property</th><th scope="col">Source</th><th scope="col">Why it matters</th></tr></thead>
+    <tbody>
+      <tr><td>Element</td><td><code>tagName</code> and <code>type</code></td><td>What the control really is, under the styling</td></tr>
+      <tr><td>Accessible name</td><td><code>aria-labelledby</code> → <code>aria-label</code> → <code>&lt;label&gt;</code> → content → <code>title</code> / placeholder</td><td>What screen readers announce; should contain the visible label</td></tr>
+      <tr><td>Role</td><td><code>role</code> attribute or the implicit role of the element</td><td>Textbox, combobox, radio, checkbox, switch, button…</td></tr>
+      <tr><td>Description</td><td><code>aria-describedby</code></td><td>Help text, format hints and error messages</td></tr>
+      <tr><td>Required</td><td><code>required</code> / <code>aria-required</code></td><td>Announced as "required"</td></tr>
+      <tr><td>Invalid</td><td><code>aria-invalid</code></td><td>Announced as "invalid entry"; should change with validation</td></tr>
+      <tr><td>Autocomplete</td><td><code>autocomplete</code></td><td>Autofill and WCAG 1.3.5</td></tr>
+      <tr><td>ARIA attributes</td><td>Every <code>aria-*</code> on the element</td><td>The full picture, for spotting conflicts</td></tr>
+    </tbody>
+  </table></div>
+  <p class="fp-hint">The inspector approximates the accessible name computation for common form markup. The browser's own DevTools accessibility pane remains the source of truth.</p>
+</section>
+
+<hr aria-hidden="true">
+
+<!-- ═══════════════ 19 LIVE CHECKER ═══════════════ -->
+<section aria-labelledby="live-checker">
+  <h2 id="live-checker" tabindex="-1"><span class="section-num" aria-hidden="true">19 · Tools &amp; practice</span>Live accessibility checker</h2>
+  <p>Turn on a check to scan either the demo form or every example on this page. Each finding is listed below as text with a link to the element, and the element gets a dashed outline.</p>
+
+  <div class="fp-scope">
+    <label for="checkerScope" class="fp-label">Scan</label>
+    <select id="checkerScope" class="fp-control">
+      <option value="form">The demo form</option>
+      <option value="page">Every example on this page</option>
+    </select>
+  </div>
+  <div class="fp-toolbar" role="group" aria-label="Checks">
+    <button type="button" class="fp-btn fp-btn-sm" aria-pressed="false" data-check="labels"><span class="fp-toggle-box" aria-hidden="true"></span>Missing labels</button>
+    <button type="button" class="fp-btn fp-btn-sm" aria-pressed="false" data-check="instructions"><span class="fp-toggle-box" aria-hidden="true"></span>Missing instructions</button>
+    <button type="button" class="fp-btn fp-btn-sm" aria-pressed="false" data-check="grouping"><span class="fp-toggle-box" aria-hidden="true"></span>Missing grouping</button>
+    <button type="button" class="fp-btn fp-btn-sm" aria-pressed="false" data-check="aria"><span class="fp-toggle-box" aria-hidden="true"></span>ARIA problems</button>
+    <button type="button" class="fp-btn fp-btn-sm" aria-pressed="false" data-check="errors"><span class="fp-toggle-box" aria-hidden="true"></span>Current errors</button>
+  </div>
+  <p id="checkerStatus" class="sr-only" role="status"></p>
+  <div id="checkerResults" class="fp-checker-results"></div>
+
+  <div class="callout info" role="note">
+    <span class="callout-icon" aria-hidden="true">💡</span>
+    <p><strong>What each check looks for.</strong> <em>Missing labels:</em> controls with no accessible name from a label or ARIA. <em>Missing instructions:</em> text fields and selects with no <code>aria-describedby</code> help. <em>Missing grouping:</em> radio or checkbox sets outside a fieldset or named group. <em>ARIA problems:</em> references to IDs that do not exist, <code>aria-invalid</code> with no message, redundant <code>aria-required</code>, and <code>aria-label</code> overriding a visible label. <em>Current errors:</em> fields with <code>aria-invalid="true"</code>. The demo form is clean apart from three fields deliberately left without help text — switch the scan to "every example" to catch the inaccessible examples too.</p>
+  </div>
+</section>
+
+<hr aria-hidden="true">
+
+<!-- ═══════════════ 20 CODE EXAMPLES ═══════════════ -->
+<section aria-labelledby="code-examples">
+  <h2 id="code-examples" tabindex="-1"><span class="section-num" aria-hidden="true">20 · Tools &amp; practice</span>Code examples</h2>
+  <p>Complete snippets for common patterns, with every accessibility attribute in place. Adapt the class names to your own design system.</p>
+
+  <div class="fp-disclosure">
+    <h3><button type="button" class="fp-disclosure-btn" aria-expanded="true" aria-controls="code-good"><span class="fp-title"><span class="fp-tag-ok">Accessible</span>Complete contact form</span><svg class="fp-chevron" aria-hidden="true" focusable="false"><use href="#fp-i-chevron"/></svg></button></h3>
+    <div class="fp-disclosure-panel" id="code-good">
+<pre><code>&lt;form action=&quot;/contact&quot; method=&quot;post&quot; novalidate aria-labelledby=&quot;contact-h&quot;&gt;
+  &lt;h2 id=&quot;contact-h&quot;&gt;Contact us&lt;/h2&gt;
+  &lt;p&gt;Fields marked with an asterisk (&lt;span aria-hidden=&quot;true&quot;&gt;*&lt;/span&gt;) are required.&lt;/p&gt;
+
+  &lt;label for=&quot;name&quot;&gt;Full name &lt;span aria-hidden=&quot;true&quot;&gt;*&lt;/span&gt;&lt;/label&gt;
+  &lt;input type=&quot;text&quot; id=&quot;name&quot; name=&quot;name&quot; required autocomplete=&quot;name&quot;&gt;
+
+  &lt;label for=&quot;email&quot;&gt;Email address &lt;span aria-hidden=&quot;true&quot;&gt;*&lt;/span&gt;&lt;/label&gt;
+  &lt;span id=&quot;email-help&quot;&gt;We only use this to reply to you&lt;/span&gt;
+  &lt;input type=&quot;email&quot; id=&quot;email&quot; name=&quot;email&quot; required
+    autocomplete=&quot;email&quot; aria-describedby=&quot;email-help&quot;&gt;
+
+  &lt;fieldset&gt;
+    &lt;legend&gt;How should we contact you?&lt;/legend&gt;
+    &lt;label&gt;&lt;input type=&quot;radio&quot; name=&quot;contact&quot; value=&quot;email&quot;&gt; Email&lt;/label&gt;
+    &lt;label&gt;&lt;input type=&quot;radio&quot; name=&quot;contact&quot; value=&quot;phone&quot;&gt; Phone&lt;/label&gt;
+  &lt;/fieldset&gt;
+
+  &lt;button type=&quot;submit&quot;&gt;Send message&lt;/button&gt;
+&lt;/form&gt;</code></pre>
+    </div>
+  </div>
+
+  <div class="fp-disclosure">
+    <h3><button type="button" class="fp-disclosure-btn" aria-expanded="true" aria-controls="code-bad"><span class="fp-title"><span class="fp-tag-no">Inaccessible</span>What not to do</span><svg class="fp-chevron" aria-hidden="true" focusable="false"><use href="#fp-i-chevron"/></svg></button></h3>
+    <div class="fp-disclosure-panel" id="code-bad">
+<pre><code>&lt;!-- Every line here is a failure --&gt;
+&lt;form&gt;
+  &lt;input type=&quot;text&quot; placeholder=&quot;Name&quot;&gt;
+  &lt;input type=&quot;text&quot; placeholder=&quot;Email&quot;&gt;
+  &lt;input type=&quot;password&quot; placeholder=&quot;Password&quot; onpaste=&quot;return false&quot;&gt;
+  &lt;input type=&quot;radio&quot; name=&quot;contact&quot; value=&quot;email&quot;&gt; Email
+  &lt;input type=&quot;radio&quot; name=&quot;contact&quot; value=&quot;phone&quot;&gt; Phone
+  &lt;div style=&quot;color:red&quot;&gt;Error&lt;/div&gt;
+  &lt;div class=&quot;btn&quot; onclick=&quot;submit()&quot;&gt;Submit&lt;/div&gt;
+&lt;/form&gt;
+
+&lt;!-- 1. No labels — placeholders only
+     2. No required state or indication
+     3. No autocomplete; email field is type=&quot;text&quot;
+     4. Paste blocked on the password (3.3.8)
+     5. Radio text not in labels; no fieldset/legend
+     6. Error is colour-only and not associated
+     7. &quot;Button&quot; is a div: not focusable, no role, no keyboard --&gt;</code></pre>
+    </div>
+  </div>
+
+  <div class="fp-disclosure">
+    <h3><button type="button" class="fp-disclosure-btn" aria-expanded="true" aria-controls="code-fieldset"><span class="fp-title"><span class="fp-tag-ok">Accessible</span>Fieldset and legend</span><svg class="fp-chevron" aria-hidden="true" focusable="false"><use href="#fp-i-chevron"/></svg></button></h3>
+    <div class="fp-disclosure-panel" id="code-fieldset">
+<pre><code>&lt;fieldset&gt;
+  &lt;legend&gt;Shipping address&lt;/legend&gt;
+
+  &lt;label for=&quot;street&quot;&gt;Street address&lt;/label&gt;
+  &lt;input type=&quot;text&quot; id=&quot;street&quot; name=&quot;street&quot; autocomplete=&quot;shipping street-address&quot;&gt;
+
+  &lt;label for=&quot;city&quot;&gt;City&lt;/label&gt;
+  &lt;input type=&quot;text&quot; id=&quot;city&quot; name=&quot;city&quot; autocomplete=&quot;shipping address-level2&quot;&gt;
+
+  &lt;label for=&quot;zip&quot;&gt;ZIP or postal code&lt;/label&gt;
+  &lt;!-- no inputmode=&quot;numeric&quot;: postcodes are alphanumeric in many countries --&gt;
+  &lt;input type=&quot;text&quot; id=&quot;zip&quot; name=&quot;zip&quot; autocomplete=&quot;shipping postal-code&quot;&gt;
+&lt;/fieldset&gt;</code></pre>
+    </div>
+  </div>
+
+  <div class="fp-disclosure">
+    <h3><button type="button" class="fp-disclosure-btn" aria-expanded="true" aria-controls="code-autocomplete"><span class="fp-title"><span class="fp-tag-ok">Accessible</span>Autocomplete</span><svg class="fp-chevron" aria-hidden="true" focusable="false"><use href="#fp-i-chevron"/></svg></button></h3>
+    <div class="fp-disclosure-panel" id="code-autocomplete">
+<pre><code>&lt;label for=&quot;given-name&quot;&gt;First name&lt;/label&gt;
+&lt;input type=&quot;text&quot; id=&quot;given-name&quot; name=&quot;given-name&quot; autocomplete=&quot;given-name&quot;&gt;
+
+&lt;label for=&quot;family-name&quot;&gt;Last name&lt;/label&gt;
+&lt;input type=&quot;text&quot; id=&quot;family-name&quot; name=&quot;family-name&quot; autocomplete=&quot;family-name&quot;&gt;
+
+&lt;label for=&quot;email&quot;&gt;Email&lt;/label&gt;
+&lt;input type=&quot;email&quot; id=&quot;email&quot; name=&quot;email&quot; autocomplete=&quot;email&quot;&gt;
+
+&lt;label for=&quot;phone&quot;&gt;Phone&lt;/label&gt;
+&lt;input type=&quot;tel&quot; id=&quot;phone&quot; name=&quot;phone&quot; autocomplete=&quot;tel&quot;&gt;
+
+&lt;label for=&quot;bday&quot;&gt;Date of birth&lt;/label&gt;
+&lt;input type=&quot;date&quot; id=&quot;bday&quot; name=&quot;bday&quot; autocomplete=&quot;bday&quot;&gt;
+
+&lt;label for=&quot;pw&quot;&gt;New password&lt;/label&gt;
+&lt;input type=&quot;password&quot; id=&quot;pw&quot; name=&quot;pw&quot; autocomplete=&quot;new-password&quot;&gt;
+
+&lt;label for=&quot;otp&quot;&gt;Verification code&lt;/label&gt;
+&lt;input type=&quot;text&quot; id=&quot;otp&quot; name=&quot;otp&quot; inputmode=&quot;numeric&quot; autocomplete=&quot;one-time-code&quot;&gt;</code></pre>
+    </div>
+  </div>
+
+  <div class="fp-disclosure">
+    <h3><button type="button" class="fp-disclosure-btn" aria-expanded="true" aria-controls="code-validation"><span class="fp-title"><span class="fp-tag-ok">Accessible</span>Validation and error summary</span><svg class="fp-chevron" aria-hidden="true" focusable="false"><use href="#fp-i-chevron"/></svg></button></h3>
+    <div class="fp-disclosure-panel" id="code-validation">
+<pre><code>&lt;div id=&quot;error-summary&quot; tabindex=&quot;-1&quot; hidden&gt;
+  &lt;div role=&quot;alert&quot;&gt;
+    &lt;h2&gt;There is a problem&lt;/h2&gt;
+    &lt;ul id=&quot;error-list&quot;&gt;&lt;/ul&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;label for=&quot;v-email&quot;&gt;Email &lt;span aria-hidden=&quot;true&quot;&gt;*&lt;/span&gt;&lt;/label&gt;
+&lt;span id=&quot;v-email-help&quot;&gt;Your work email address&lt;/span&gt;
+&lt;span id=&quot;v-email-error&quot; hidden&gt;&lt;/span&gt;
+&lt;input type=&quot;email&quot; id=&quot;v-email&quot; name=&quot;email&quot; required
+  autocomplete=&quot;email&quot; aria-describedby=&quot;v-email-help&quot;&gt;
+
+&lt;script&gt;
+function validate(form) {
+  const email   = form.querySelector('#v-email');
+  const errorEl = form.querySelector('#v-email-error');
+  const summary = document.getElementById('error-summary');
+  const errors  = [];
+
+  const ok = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim());
+  if (!ok) {
+    const msg = 'Enter an email address in the correct format, like name@company.com';
+    errorEl.textContent = 'Error: ' + msg;
+    errorEl.hidden = false;
+    email.setAttribute('aria-invalid', 'true');
+    email.setAttribute('aria-describedby', 'v-email-help v-email-error');
+    errors.push({ id: 'v-email', msg });
+  } else {
+    errorEl.hidden = true;
+    email.removeAttribute('aria-invalid');
+    email.setAttribute('aria-describedby', 'v-email-help');
+  }
+
+  const list = document.getElementById('error-list');
+  list.replaceChildren(...errors.map(({ id, msg }) =&gt; {
+    const li = document.createElement('li');
+    const a  = document.createElement('a');
+    a.href = '#' + id;
+    a.textContent = msg;               // textContent: never inject HTML
+    li.append(a);
+    return li;
+  }));
+
+  summary.hidden = errors.length === 0;
+  if (errors.length) summary.focus();
+  return errors.length === 0;
+}
+&lt;/script&gt;</code></pre>
+    </div>
+  </div>
+</section>
+
+<hr aria-hidden="true">
+
+<!-- ═══════════════ 21 QUIZ ═══════════════ -->
+<section aria-labelledby="quiz">
+  <h2 id="quiz" tabindex="-1"><span class="section-num" aria-hidden="true">21 · Tools &amp; practice</span>Quiz</h2>
+  <p>Check your understanding. Choose an answer, then select <strong>Check answer</strong> to see whether it is right and why. You can change your answer and check again.</p>
+
+  <div class="q-list">
+    <div class="q-card fp-quiz-card" data-correct="a">
+      <fieldset class="fp-quiz-set">
+        <legend><span class="q-num">Question 1 of 7</span><span class="q-text">An input has no &lt;label&gt;, only <code>placeholder="First name"</code>. What is wrong?</span></legend>
+        <div class="fp-opts">
+          <label class="fp-opt"><input type="radio" name="quiz-1" value="a"><span>A placeholder is not a label: it disappears on typing and is not reliably announced</span></label>
+          <label class="fp-opt"><input type="radio" name="quiz-1" value="b"><span>Nothing — placeholders serve as labels</span></label>
+          <label class="fp-opt"><input type="radio" name="quiz-1" value="c"><span>The placeholder should be in a different language</span></label>
+          <label class="fp-opt"><input type="radio" name="quiz-1" value="d"><span>It should use <code>aria-placeholder</code> instead</span></label>
+        </div>
+        <div class="fp-quiz-actions"><button type="button" class="fp-btn fp-btn-sm fp-quiz-check">Check answer</button></div>
+        <p class="fp-quiz-explain" hidden>Placeholder text vanishes when the user types and is not a dependable accessible name. A visible, programmatically associated label is required (3.3.2, 4.1.2).</p>
+        <div class="fp-quiz-feedback" role="status"></div>
+      </fieldset>
+    </div>
+
+    <div class="q-card fp-quiz-card" data-correct="b">
+      <fieldset class="fp-quiz-set">
+        <legend><span class="q-num">Question 2 of 7</span><span class="q-text">Payment-method radio buttons are not wrapped in a <code>&lt;fieldset&gt;</code>. Which criterion does this fail?</span></legend>
+        <div class="fp-opts">
+          <label class="fp-opt"><input type="radio" name="quiz-2" value="a"><span>2.1.1 Keyboard</span></label>
+          <label class="fp-opt"><input type="radio" name="quiz-2" value="b"><span>1.3.1 Info and Relationships</span></label>
+          <label class="fp-opt"><input type="radio" name="quiz-2" value="c"><span>1.4.3 Contrast (Minimum)</span></label>
+          <label class="fp-opt"><input type="radio" name="quiz-2" value="d"><span>2.4.7 Focus Visible</span></label>
+        </div>
+        <div class="fp-quiz-actions"><button type="button" class="fp-btn fp-btn-sm fp-quiz-check">Check answer</button></div>
+        <p class="fp-quiz-explain" hidden>1.3.1 requires relationships to be programmatically determinable. Without a fieldset and legend, the options lose the question they answer.</p>
+        <div class="fp-quiz-feedback" role="status"></div>
+      </fieldset>
+    </div>
+
+    <div class="q-card fp-quiz-card" data-correct="c">
+      <fieldset class="fp-quiz-set">
+        <legend><span class="q-num">Question 3 of 7</span><span class="q-text">An error is shown only by a red border around the field. What must be added?</span></legend>
+        <div class="fp-opts">
+          <label class="fp-opt"><input type="radio" name="quiz-3" value="a"><span>A thicker red border</span></label>
+          <label class="fp-opt"><input type="radio" name="quiz-3" value="b"><span>An error icon</span></label>
+          <label class="fp-opt"><input type="radio" name="quiz-3" value="c"><span>A text message describing the error, associated with the field via <code>aria-describedby</code></span></label>
+          <label class="fp-opt"><input type="radio" name="quiz-3" value="d"><span>A tooltip on hover</span></label>
+        </div>
+        <div class="fp-quiz-actions"><button type="button" class="fp-btn fp-btn-sm fp-quiz-check">Check answer</button></div>
+        <p class="fp-quiz-explain" hidden>1.4.1 Use of Color and 3.3.1 Error Identification require errors to be described in text. An icon helps, but is not enough on its own, and a hover tooltip is unreachable for keyboard and touch users.</p>
+        <div class="fp-quiz-feedback" role="status"></div>
+      </fieldset>
+    </div>
+
+    <div class="q-card fp-quiz-card" data-correct="a">
+      <fieldset class="fp-quiz-set">
+        <legend><span class="q-num">Question 4 of 7</span><span class="q-text">Which attribute enables browser autofill and satisfies 1.3.5 Identify Input Purpose?</span></legend>
+        <div class="fp-opts">
+          <label class="fp-opt"><input type="radio" name="quiz-4" value="a"><span><code>autocomplete</code></span></label>
+          <label class="fp-opt"><input type="radio" name="quiz-4" value="b"><span><code>aria-autocomplete</code></span></label>
+          <label class="fp-opt"><input type="radio" name="quiz-4" value="c"><span><code>autofill</code></span></label>
+          <label class="fp-opt"><input type="radio" name="quiz-4" value="d"><span><code>data-autofill</code></span></label>
+        </div>
+        <div class="fp-quiz-actions"><button type="button" class="fp-btn fp-btn-sm fp-quiz-check">Check answer</button></div>
+        <p class="fp-quiz-explain" hidden>The HTML autocomplete attribute declares each field's purpose. aria-autocomplete is unrelated: it describes how a combobox suggests values.</p>
+        <div class="fp-quiz-feedback" role="status"></div>
+      </fieldset>
+    </div>
+
+    <div class="q-card fp-quiz-card" data-correct="b">
+      <fieldset class="fp-quiz-set">
+        <legend><span class="q-num">Question 5 of 7</span><span class="q-text">A custom dropdown traps keyboard focus — the user cannot Tab out. Which criterion does this fail?</span></legend>
+        <div class="fp-opts">
+          <label class="fp-opt"><input type="radio" name="quiz-5" value="a"><span>2.4.3 Focus Order</span></label>
+          <label class="fp-opt"><input type="radio" name="quiz-5" value="b"><span>2.1.2 No Keyboard Trap</span></label>
+          <label class="fp-opt"><input type="radio" name="quiz-5" value="c"><span>2.4.7 Focus Visible</span></label>
+          <label class="fp-opt"><input type="radio" name="quiz-5" value="d"><span>4.1.2 Name, Role, Value</span></label>
+        </div>
+        <div class="fp-quiz-actions"><button type="button" class="fp-btn fp-btn-sm fp-quiz-check">Check answer</button></div>
+        <p class="fp-quiz-explain" hidden>2.1.2 requires that focus can always be moved away from a component using standard keys (or that the user is told how).</p>
+        <div class="fp-quiz-feedback" role="status"></div>
+      </fieldset>
+    </div>
+
+    <div class="q-card fp-quiz-card" data-correct="c">
+      <fieldset class="fp-quiz-set">
+        <legend><span class="q-num">Question 6 of 7</span><span class="q-text">Under 2.5.8 Target Size (Minimum), what is the minimum size for a checkbox target without extra spacing?</span></legend>
+        <div class="fp-opts">
+          <label class="fp-opt"><input type="radio" name="quiz-6" value="a"><span>16 × 16 CSS pixels</span></label>
+          <label class="fp-opt"><input type="radio" name="quiz-6" value="b"><span>20 × 20 CSS pixels</span></label>
+          <label class="fp-opt"><input type="radio" name="quiz-6" value="c"><span>24 × 24 CSS pixels</span></label>
+          <label class="fp-opt"><input type="radio" name="quiz-6" value="d"><span>48 × 48 CSS pixels</span></label>
+        </div>
+        <div class="fp-quiz-actions"><button type="button" class="fp-btn fp-btn-sm fp-quiz-check">Check answer</button></div>
+        <p class="fp-quiz-explain" hidden>2.5.8 (AA, new in WCAG 2.2) requires 24 × 24 CSS pixels, unless undersized targets are spaced so a 24 px circle centred on each does not overlap another. The easiest way to meet it for checkboxes is to make the whole label clickable.</p>
+        <div class="fp-quiz-feedback" role="status"></div>
+      </fieldset>
+    </div>
+
+    <div class="q-card fp-quiz-card" data-correct="d">
+      <fieldset class="fp-quiz-set">
+        <legend><span class="q-num">Question 7 of 7</span><span class="q-text">Which login practice fails 3.3.8 Accessible Authentication (Minimum)?</span></legend>
+        <div class="fp-opts">
+          <label class="fp-opt"><input type="radio" name="quiz-7" value="a"><span>Using <code>autocomplete="current-password"</code></span></label>
+          <label class="fp-opt"><input type="radio" name="quiz-7" value="b"><span>Offering a "Show password" toggle</span></label>
+          <label class="fp-opt"><input type="radio" name="quiz-7" value="c"><span>Offering a passkey or email magic link as an alternative</span></label>
+          <label class="fp-opt"><input type="radio" name="quiz-7" value="d"><span>Blocking paste into the password field</span></label>
+        </div>
+        <div class="fp-quiz-actions"><button type="button" class="fp-btn fp-btn-sm fp-quiz-check">Check answer</button></div>
+        <p class="fp-quiz-explain" hidden>Blocking paste forces users to transcribe a password from memory or another device — a cognitive function test with no alternative. The other three all help.</p>
+        <div class="fp-quiz-feedback" role="status"></div>
+      </fieldset>
+    </div>
+  </div>
+
+  <div class="fp-quiz-bar">
+    <p class="prog-text" id="quizScore">0 of 7 answered · 0 correct</p>
+    <button type="button" class="reset-btn" id="quizReset">Reset quiz</button>
+  </div>
+</section>
+
+<hr aria-hidden="true">
+
+<!-- ═══════════════ 22 FINAL CHECKLIST ═══════════════ -->
+<section aria-labelledby="final-checklist">
+  <h2 id="final-checklist" tabindex="-1"><span class="section-num" aria-hidden="true">22 · Tools &amp; practice</span>Final checklist</h2>
+  <p>Sign-off lists by role. Tick items as you verify them — your ticks are saved in this browser only.</p>
+
+  <fieldset class="fp-checkgroup" data-group="dev">
+    <legend>Developer</legend>
+    <p class="fp-check-progress"></p>
+    <ul class="fp-checks">
+      <li><label class="fp-choice"><input type="checkbox" data-key="dev-1">Every input has a visible <code>&lt;label for&gt;</code> with a matching <code>id</code></label></li>
+      <li><label class="fp-choice"><input type="checkbox" data-key="dev-2">Required fields use native <code>required</code> plus an explained visible indicator</label></li>
+      <li><label class="fp-choice"><input type="checkbox" data-key="dev-3">Help text is associated with <code>aria-describedby</code></label></li>
+      <li><label class="fp-choice"><input type="checkbox" data-key="dev-4">Radio and checkbox groups use <code>&lt;fieldset&gt;</code> / <code>&lt;legend&gt;</code></label></li>
+      <li><label class="fp-choice"><input type="checkbox" data-key="dev-5">Errors are specific, inline and linked with <code>aria-describedby</code></label></li>
+      <li><label class="fp-choice"><input type="checkbox" data-key="dev-6"><code>aria-invalid</code> is set on failure and removed on fix</label></li>
+      <li><label class="fp-choice"><input type="checkbox" data-key="dev-7">An error summary receives focus on a failed submit and links to each field</label></li>
+      <li><label class="fp-choice"><input type="checkbox" data-key="dev-8">Correct <code>type</code> and <code>autocomplete</code> on every field</label></li>
+      <li><label class="fp-choice"><input type="checkbox" data-key="dev-9">The whole form is keyboard operable in a logical order, with no traps</label></li>
+      <li><label class="fp-choice"><input type="checkbox" data-key="dev-10">A visible focus indicator with 3:1 contrast on every control</label></li>
+      <li><label class="fp-choice"><input type="checkbox" data-key="dev-11">Paste and password managers work on authentication fields</label></li>
+      <li><label class="fp-choice"><input type="checkbox" data-key="dev-12">Dynamic changes are announced through live regions</label></li>
+    </ul>
+  </fieldset>
+
+  <fieldset class="fp-checkgroup" data-group="design">
+    <legend>Designer</legend>
+    <p class="fp-check-progress"></p>
+    <ul class="fp-checks">
+      <li><label class="fp-choice"><input type="checkbox" data-key="design-1">Text meets 4.5:1 (3:1 large); input borders and focus rings meet 3:1</label></li>
+      <li><label class="fp-choice"><input type="checkbox" data-key="design-2">Required indicators are explained, not colour-only</label></li>
+      <li><label class="fp-choice"><input type="checkbox" data-key="design-3">Error states combine text, icon and colour</label></li>
+      <li><label class="fp-choice"><input type="checkbox" data-key="design-4">Targets are at least 24 × 24 CSS px</label></li>
+      <li><label class="fp-choice"><input type="checkbox" data-key="design-5">The layout reflows at 320 px wide / 400% zoom</label></li>
+      <li><label class="fp-choice"><input type="checkbox" data-key="design-6">Labels sit close to their inputs; hints sit between label and input</label></li>
+      <li><label class="fp-choice"><input type="checkbox" data-key="design-7">Groups are visually apparent (border, spacing or background)</label></li>
+      <li><label class="fp-choice"><input type="checkbox" data-key="design-8">Focus indicator design is specified and documented</label></li>
+    </ul>
+  </fieldset>
+
+  <fieldset class="fp-checkgroup" data-group="qa">
+    <legend>QA / tester</legend>
+    <p class="fp-check-progress"></p>
+    <ul class="fp-checks">
+      <li><label class="fp-choice"><input type="checkbox" data-key="qa-1">Keyboard: Tab order is logical with no traps</label></li>
+      <li><label class="fp-choice"><input type="checkbox" data-key="qa-2">Keyboard: Space toggles, Enter activates, arrows work in radio groups</label></li>
+      <li><label class="fp-choice"><input type="checkbox" data-key="qa-3">Screen reader: every field has a correct accessible name</label></li>
+      <li><label class="fp-choice"><input type="checkbox" data-key="qa-4">Screen reader: errors are announced and read with their field</label></li>
+      <li><label class="fp-choice"><input type="checkbox" data-key="qa-5">Screen reader: the error summary takes focus and its links reach each field</label></li>
+      <li><label class="fp-choice"><input type="checkbox" data-key="qa-6">Automated: axe / WAVE / Lighthouse show no critical issues</label></li>
+      <li><label class="fp-choice"><input type="checkbox" data-key="qa-7">Visual: contrast verified with the Colour Contrast Analyser</label></li>
+      <li><label class="fp-choice"><input type="checkbox" data-key="qa-8">Visual: usable at 400% zoom without horizontal scrolling</label></li>
+      <li><label class="fp-choice"><input type="checkbox" data-key="qa-9">Mobile: every field usable on a touch device with a screen reader</label></li>
+      <li><label class="fp-choice"><input type="checkbox" data-key="qa-10">Mobile: the right keyboard appears for each <code>type</code> / <code>inputmode</code></label></li>
+    </ul>
+  </fieldset>
+
+  <fieldset class="fp-checkgroup" data-group="po">
+    <legend>Product owner</legend>
+    <p class="fp-check-progress"></p>
+    <ul class="fp-checks">
+      <li><label class="fp-choice"><input type="checkbox" data-key="po-1">Accessibility is in the acceptance criteria of every form story</label></li>
+      <li><label class="fp-choice"><input type="checkbox" data-key="po-2">The form has been tested with at least one screen reader</label></li>
+      <li><label class="fp-choice"><input type="checkbox" data-key="po-3">Automated accessibility checks run in CI</label></li>
+      <li><label class="fp-choice"><input type="checkbox" data-key="po-4">Disabled users have tested it, or a plan is in place</label></li>
+      <li><label class="fp-choice"><input type="checkbox" data-key="po-5">Remediation time is budgeted before launch</label></li>
+      <li><label class="fp-choice"><input type="checkbox" data-key="po-6">Legal / compliance has reviewed WCAG coverage</label></li>
+    </ul>
+  </fieldset>
+
+  <div class="fp-btn-row">
+    <button type="button" class="reset-btn" id="checklistReset" aria-describedby="checklistResetNote">Clear all ticks</button>
+    <p id="checklistResetNote" class="fp-hint">Removes every tick in all four lists.</p>
+  </div>
+  <p id="checklistStatus" class="sr-only" role="status"></p>
+</section>
+
+<hr aria-hidden="true">
+
+<!-- ═══════════════ 23 FURTHER READING ═══════════════ -->
+<section aria-labelledby="further-reading">
+  <h2 id="further-reading" tabindex="-1"><span class="section-num" aria-hidden="true">23 · Tools &amp; practice</span>Further reading</h2>
+  <ul class="resource-list">
+    <li><a href="https://www.w3.org/WAI/WCAG22/Understanding/" target="_blank" rel="noopener">Understanding WCAG 2.2 <span class="sr-only">(opens in new tab)</span></a> — W3C</li>
+    <li><a href="https://www.w3.org/WAI/tutorials/forms/" target="_blank" rel="noopener">Forms Tutorial <span class="sr-only">(opens in new tab)</span></a> — W3C Web Accessibility Initiative</li>
+    <li><a href="https://www.w3.org/WAI/ARIA/apg/" target="_blank" rel="noopener">ARIA Authoring Practices Guide <span class="sr-only">(opens in new tab)</span></a> — W3C</li>
+    <li><a href="https://design-system.service.gov.uk/components/error-summary/" target="_blank" rel="noopener">Error summary component <span class="sr-only">(opens in new tab)</span></a> — GOV.UK Design System</li>
+    <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/autocomplete" target="_blank" rel="noopener">HTML autocomplete attribute <span class="sr-only">(opens in new tab)</span></a> — MDN</li>
+  </ul>
+  <p>Preparing for the IAAP WAS exam? Try the <a href="was-practice-quiz.html">WAS practice quiz</a> — it has a full Forms &amp; Inputs topic.</p>
+</section>
+
+    </div><!-- /.post-body -->
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-top">
+      <nav class="footer-nav" aria-label="Footer navigation">
+        <a href="index.html">Home</a>
+        <span class="footer-sep" aria-hidden="true">■</span>
+        <a href="writing.html">Writing</a>
+        <span class="footer-sep" aria-hidden="true">■</span>
+        <a href="was-practice-quiz.html">WAS Quiz</a>
+        <span class="footer-sep" aria-hidden="true">■</span>
+        <a href="accessible-forms-playground.html">Forms Playground</a>
+        <span class="footer-sep" aria-hidden="true">■</span>
+        <a href="accessibility-statement.html">Accessibility</a>
+      </nav>
+      <fieldset class="scheme-fieldset">
+        <legend class="scheme-legend">Color scheme:</legend>
+        <div class="scheme-options">
+          <label class="scheme-label is-selected"><input class="scheme-radio" type="radio" name="cs" value="system" checked><span class="scheme-dot" aria-hidden="true"></span>System</label>
+          <label class="scheme-label"><input class="scheme-radio" type="radio" name="cs" value="light"><span class="scheme-dot" aria-hidden="true"></span>Light</label>
+          <label class="scheme-label"><input class="scheme-radio" type="radio" name="cs" value="dark"><span class="scheme-dot" aria-hidden="true"></span>Dark</label>
+        </div>
+      </fieldset>
+    </div>
+    <p class="footer-copy">© 2026 Sushil Chauhan · IAAP-CPWA | CPACC | WAS</p>
+  </div>
+</footer>
+
+<!-- Non-modal inspector: a complementary landmark after the footer, so opening it
+     never changes the tab order of the form being inspected. -->
+<aside id="a11yInspector" class="fp-inspector" aria-labelledby="insp-title" hidden>
+  <div class="fp-inspector-head">
+    <h2 id="insp-title">Accessibility inspector</h2>
+    <button type="button" class="fp-btn fp-btn-sm" id="inspectorClose">Close</button>
+  </div>
+  <p class="fp-inspector-note">Shows the element that has focus. Tab to any control.</p>
+  <dl>
+    <dt>Element</dt><dd id="insp-tag">—</dd>
+    <dt>Accessible name</dt><dd id="insp-name">—</dd>
+    <dt>Role</dt><dd id="insp-role">—</dd>
+    <dt>Description</dt><dd id="insp-desc">—</dd>
+    <dt>Required</dt><dd id="insp-required">—</dd>
+    <dt>Invalid</dt><dd id="insp-invalid">—</dd>
+    <dt>Autocomplete</dt><dd id="insp-autocomplete">—</dd>
+    <dt>ARIA attributes</dt><dd id="insp-aria">—</dd>
+  </dl>
+</aside>
+
+<button type="button" class="fp-back-top" id="backToTop" hidden><svg aria-hidden="true" focusable="false"><use href="#fp-i-up"/></svg>Back to top</button>
+
+<script src="script.js"></script>
+<script src="forms-playground.js"></script>
+</body>
+</html>
