@@ -1167,6 +1167,8 @@ html:has(.fp-page) { scroll-padding-top: 5.5rem; scroll-padding-bottom: 4.5rem; 
   .header-inner { flex-wrap: wrap; row-gap: .6rem; }
   .header-nav   { flex-wrap: wrap; row-gap: .4rem; }
   /* Playground */
+  /* Long article titles were squeezed into a narrow column beside the date tag */
+  .writing-item { flex-direction: column; gap: .15rem; }
   .fp-form-card { padding: 1.1rem; }
   .fp-fieldset  { padding: .9rem .9rem .25rem; }
   .fp-quiz-set  { padding: 1rem 1.1rem; }
