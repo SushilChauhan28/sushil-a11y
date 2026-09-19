@@ -200,8 +200,11 @@ main   { padding: 0 0 5rem; }
   display: flex; align-items: flex-start;
   justify-content: space-between; flex-wrap: wrap; gap: 1.25rem;
 }
-.footer-nav { display: flex; align-items: center; flex-wrap: wrap; }
+.footer-nav { display: flex; align-items: center; flex-wrap: wrap; row-gap: .35rem; }
 .footer-nav a {
+  /* Links were 21.8px tall; once the nav wraps on phones, stacked rows fell
+     under 2.5.8's 24px. Block padding lifts each target to ~27px. */
+  display: inline-block; padding-block: .15rem;
   font-size: .8rem; color: var(--accent-text);
   text-decoration: underline; text-underline-offset: 3px;
   text-decoration-thickness: 1px;
@@ -805,6 +808,327 @@ main   { padding: 0 0 5rem; }
 }
 
 /* ═══════════════════════════════════════════════════════════════
+   ACCESSIBLE FORMS PLAYGROUND — accessible-forms-playground.html
+   Everything is scoped to .fp-page and built from the shared tokens.
+   The only new tokens are error / success / input-border, because
+   the shared --border (#d4d8e0) is ~1.4:1 on white — fine for a
+   decorative rule, a WCAG 1.4.11 failure as the only edge of an input.
+   ═══════════════════════════════════════════════════════════════ */
+.fp-page {
+  --fp-error:        #b91c1c;   /* 6.2:1 on --bg ✅ */
+  --fp-error-bg:     #fef2f2;
+  --fp-ok:           #166534;   /* 6.9:1 on --bg, 6.2:1 on --bg-alt ✅ */
+  --fp-ok-bg:        #f0fdf4;
+  --fp-input-border: #52606f;   /* 6.3:1 on white — 1.4.11 ✅ */
+  color-scheme: light;          /* native date/select/file UI follows the scheme */
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-scheme="light"]) .fp-page {
+    --fp-error: #f87171; --fp-error-bg: rgba(239,68,68,.1);
+    --fp-ok:    #4ade80; --fp-ok-bg:    rgba(34,197,94,.1);
+    --fp-input-border: #848f9c;
+    color-scheme: dark;
+  }
+}
+[data-scheme="dark"] .fp-page {
+  --fp-error: #f87171; --fp-error-bg: rgba(239,68,68,.1);
+  --fp-ok:    #4ade80; --fp-ok-bg:    rgba(34,197,94,.1);
+  --fp-input-border: #848f9c;
+  color-scheme: dark;
+}
+/* Sticky header is ~70px: keep a Shift+Tabbed-to field from sliding under it (2.4.11) */
+html:has(.fp-page) { scroll-padding-top: 5.5rem; scroll-padding-bottom: 4.5rem; } /* bottom: clears the fixed back-to-top button */
+
+/* Baseline ring for everything in the page body; component rules refine it */
+.fp-page main :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.fp-page [tabindex="-1"]:focus:not(:focus-visible) { outline: none; }
+
+/* Hero */
+.fp-hero .post-excerpt { margin-bottom: 1rem; }
+.fp-hero .fp-lede { font-size: .96rem; color: var(--text-muted); line-height: 1.8; max-width: 660px; margin-bottom: 0; }
+.fp-page .quiz-stats-row { margin-bottom: 0; }
+
+/* On-this-page index — numbering continues across groups to match section numbers */
+.fp-toc          { counter-reset: toc; display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1.25rem 1.5rem; }
+.fp-toc .toc-list { counter-reset: none; }
+.fp-toc-group    { font-size: .8rem; font-weight: 700; color: var(--text); margin-bottom: .35rem; }
+
+/* Section rhythm inside .post-body */
+.fp-page .post-body { padding-top: 0; }
+.fp-page .post-body > section > h2:first-child { margin-top: 3rem; }
+.fp-page .post-body h3 { scroll-margin-top: 5.5rem; }
+.fp-page .post-body h4:not(.box-lbl) { font-family: var(--font-body); font-size: .95rem; text-transform: none; letter-spacing: 0; color: var(--text); margin: 0 0 .35rem; }
+
+/* Card grid (bg-alt tiles, same treatment as .pour-card) */
+.fp-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: .85rem; margin: 1rem 0 1.5rem; }
+.fp-card  { background: var(--bg-alt); border: 1px solid var(--border); border-radius: 6px; padding: 1.1rem 1.25rem; min-width: 0; }
+.fp-card.is-accent { background: var(--accent-bg); border-color: var(--accent); }
+.fp-page .post-body .fp-card p { font-size: .87rem; line-height: 1.65; margin: 0; }
+.fp-card-emoji { margin-right: .35rem; }
+
+/* Good / bad pairs — reuse .issue-fix; stop <pre> blowing out grid columns */
+.fp-page .issue-fix > * { min-width: 0; }
+.fp-page .post-body .box-lbl { margin: 0 0 .75rem; font-family: var(--font-mono); font-size: .62rem; }
+.fp-page .fix-box .box-lbl   { color: var(--fp-ok); }
+.fp-page .issue-box .box-lbl { color: var(--fp-error); }
+.fp-page .issue-box pre, .fp-page .fix-box pre { margin: .5rem 0; }
+.fp-sr-says { margin-top: .75rem !important; font-size: .82rem !important; }
+
+/* Syntax colouring — token colours from the palette, all ≥ 4.5:1 on --bg-alt */
+.fp-page .hl-tag     { color: var(--accent-text); font-weight: 500; }
+.fp-page .hl-attr    { color: var(--text); }
+.fp-page .hl-comment { color: var(--text-subtle); font-style: italic; }
+
+/* Scrollable table / code regions get focus only when they actually overflow (JS) */
+.fp-page .table-wrap[tabindex]:focus-visible,
+.fp-page pre[tabindex]:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.fp-page .post-body table code { white-space: nowrap; }
+
+/* ── Form primitives (demo form and live examples) ──────────── */
+.fp-form-card { background: var(--bg-card); border: 1.5px solid var(--border-strong); border-radius: 6px; padding: 1.75rem; margin: 1.5rem 0; }
+.fp-form-card > h3:first-child { margin-top: 0; }
+.fp-fieldset { border: 1px solid var(--border); border-radius: 6px; padding: 1.1rem 1.25rem .5rem; margin: 0 0 1.25rem; min-width: 0; }
+.fp-fieldset > legend { font-weight: 700; font-size: 1rem; color: var(--text); padding: 0 .4rem; }
+.fp-choice-group { border: none; padding: 0; margin: 0; min-width: 0; }
+.fp-choice-group > legend { font-weight: 700; font-size: .9rem; color: var(--text); padding: 0; margin-bottom: .35rem; }
+
+.fp-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); column-gap: 1.25rem; }
+.fp-field { display: flex; flex-direction: column; gap: .3rem; margin-bottom: 1.15rem; min-width: 0; }
+.fp-field > label, .fp-label { font-weight: 700; font-size: .9rem; color: var(--text); }
+.fp-required { color: var(--fp-error); margin-left: .15rem; }
+.fp-page .post-body p.fp-hint, .fp-hint { font-size: .82rem; color: var(--text-muted); line-height: 1.5; margin: 0; }
+.fp-page .post-body p.fp-form-note { font-size: .87rem; color: var(--text-muted); margin-bottom: 1rem; }
+
+.fp-control,
+.fp-field :is(input:not([type="checkbox"]):not([type="radio"]):not([type="color"]):not([type="file"]), select, textarea) {
+  width: 100%; min-height: 2.75rem;               /* 44px: comfortable touch target */
+  font: inherit; font-size: 1rem;                 /* ≥16px stops iOS zooming on focus */
+  color: var(--text); background: var(--bg-card);
+  border: 1.5px solid var(--fp-input-border); border-radius: 4px;
+  padding: .55rem .75rem; line-height: 1.4;
+}
+.fp-field textarea { resize: vertical; min-height: 5rem; }
+.fp-field select { cursor: pointer; }
+.fp-field ::placeholder, .fp-control::placeholder { color: var(--text-subtle); opacity: 1; }
+.fp-field :is(input, select, textarea):focus-visible,
+.fp-control:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+/* Invalid = thicker border + message with icon and "Error:" text; never colour alone */
+/* Same :is() list as the base rule — :is() takes its most specific argument, so a
+   shorter list here (0,2,1) would lose to the base rule's (0,5,1) and never apply. */
+.fp-field :is(input:not([type="checkbox"]):not([type="radio"]):not([type="color"]):not([type="file"]), select, textarea)[aria-invalid="true"] { border-color: var(--fp-error); border-width: 2px; }
+.fp-field input[type="color"] { width: 4.5rem; height: 2.75rem; padding: .2rem; border: 1.5px solid var(--fp-input-border); border-radius: 4px; background: var(--bg-card); cursor: pointer; }
+.fp-field input[type="file"] { font: inherit; font-size: .88rem; color: var(--text-body); max-width: 100%; }
+.fp-field input[type="file"]::file-selector-button {
+  font: inherit; font-weight: 700; font-size: .82rem; margin-right: .75rem;
+  padding: .5rem .9rem; border: 1.5px solid var(--border-strong); border-radius: 4px;
+  background: var(--bg-alt); color: var(--text); cursor: pointer;
+}
+
+.fp-error { display: flex; align-items: flex-start; gap: .4rem; font-size: .85rem; font-weight: 700; color: var(--fp-error); margin: 0; line-height: 1.45; }
+.fp-error[hidden] { display: none; }
+.fp-error-icon {
+  flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center;
+  width: 1.1rem; height: 1.1rem; margin-top: .1rem; border-radius: 50%;
+  background: var(--fp-error); color: var(--bg-card); font-size: .72rem; font-weight: 700; line-height: 1;
+}
+.fp-page .post-body p.fp-error { font-size: .85rem; color: var(--fp-error); margin: 0; line-height: 1.45; }
+
+/* Radios / checkboxes: whole label is the target (≥24px, 2.5.8) */
+.fp-choices { display: flex; flex-direction: column; gap: .15rem; margin-bottom: .75rem; }
+.fp-choices.is-inline { flex-direction: row; flex-wrap: wrap; column-gap: 1rem; }
+.fp-choice { display: inline-flex; align-items: center; gap: .6rem; min-height: 2.25rem; padding: .2rem .45rem .2rem .2rem; border-radius: 4px; font-size: .92rem; color: var(--text-body); cursor: pointer; }
+.fp-choice:hover { background: var(--bg-alt); }
+.fp-page input[type="checkbox"], .fp-page input[type="radio"] { width: 1.2rem; height: 1.2rem; margin: 0; flex-shrink: 0; accent-color: var(--accent); cursor: pointer; }
+.fp-page input[type="checkbox"]:focus-visible, .fp-page input[type="radio"]:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+/* Switch — native checkbox exposing role="switch"; knob position carries state, not colour */
+.fp-switch-row { display: flex; align-items: center; gap: .75rem; flex-wrap: wrap; }
+.fp-page input.fp-switch {
+  appearance: none; -webkit-appearance: none; position: relative;
+  width: 2.9rem; height: 1.6rem; border-radius: 100px;
+  border: 2px solid var(--fp-input-border); background: var(--bg-card);
+  transition: background var(--ease), border-color var(--ease);
+}
+.fp-page input.fp-switch::before {
+  content: ''; position: absolute; top: 2px; left: 2px;
+  width: calc(1.6rem - 8px); height: calc(1.6rem - 8px); border-radius: 50%;
+  background: var(--fp-input-border); transition: transform var(--ease), background var(--ease);
+}
+.fp-page input.fp-switch:checked { background: var(--accent); border-color: var(--accent); }
+.fp-page input.fp-switch:checked::before { transform: translateX(1.3rem); background: var(--bg-card); }
+.fp-switch-state { font-family: var(--font-mono); font-size: .7rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: .08em; }
+.fp-switch-state::after { content: 'Off'; }
+.fp-switch:checked ~ .fp-switch-state::after { content: 'On'; }
+
+/* Password: inline show/hide + strength meter */
+.fp-input-row { display: flex; gap: .5rem; align-items: stretch; }
+.fp-input-row > input { flex: 1; min-width: 0; }
+.fp-strength { display: flex; align-items: center; gap: .6rem; min-height: 1.3rem; }
+.fp-strength-track { flex: 1; max-width: 10rem; height: 6px; border-radius: 100px; background: var(--border); overflow: hidden; }
+.fp-strength-fill  { height: 100%; width: 0; border-radius: 100px; background: var(--fp-error); transition: width .2s ease; }
+.fp-strength-fill[data-level="2"] { background: #b45309; }
+.fp-strength-fill[data-level="3"], .fp-strength-fill[data-level="4"] { background: var(--fp-ok); }
+.fp-strength-text { font-size: .8rem; font-weight: 700; color: var(--text-muted); }
+
+/* Character count */
+.fp-count { font-family: var(--font-mono); font-size: .72rem; color: var(--text-muted); margin: 0; }
+.fp-count.is-near { color: var(--text); font-weight: 700; }
+
+/* Buttons — same weight and radius as the header CTA / reset button */
+.fp-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: .5rem;
+  min-height: 2.75rem; padding: .55rem 1.2rem;
+  font-family: var(--font-body); font-size: .88rem; font-weight: 700; line-height: 1.2;
+  border-radius: 4px; border: 2px solid var(--border-strong); cursor: pointer;
+  background: transparent; color: var(--text); text-decoration: none;
+  transition: background var(--ease), color var(--ease), border-color var(--ease);
+}
+.fp-btn:hover { background: var(--bg-alt); }
+.fp-btn:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+/* --bg-card on --accent: 10:1 light, 5.9:1 dark (white on the dark accent would be 2.9:1) */
+.fp-btn-primary { background: var(--accent); border-color: var(--accent); color: var(--bg-card); }
+.fp-btn-primary:hover { background: var(--accent-text); border-color: var(--accent-text); }
+.fp-btn-sm { min-height: 2.25rem; padding: .35rem .85rem; font-size: .8rem; }
+.fp-btn-row { display: flex; flex-wrap: wrap; gap: .6rem; align-items: center; margin-top: 1.25rem; }
+
+/* Toggle buttons (aria-pressed): filled box mirrors the scheme-dot pattern */
+.fp-toggle-box { width: 14px; height: 14px; border: 2px solid currentColor; border-radius: 3px; flex-shrink: 0; }
+.fp-btn[aria-pressed="true"], .fp-btn[aria-expanded="true"].fp-inspector-toggle { background: var(--accent-bg); border-color: var(--accent); color: var(--accent-text); }
+.fp-btn[aria-pressed="true"] .fp-toggle-box { background: currentColor; box-shadow: inset 0 0 0 2px var(--accent-bg); }
+.fp-inspector-toggle .fp-toggle-box { border-radius: 50%; }
+.fp-btn[aria-expanded="true"] .fp-toggle-box { background: currentColor; box-shadow: inset 0 0 0 2px var(--accent-bg); }
+
+/* Error summary + success banner */
+.fp-error-summary { border: 3px solid var(--fp-error); background: var(--fp-error-bg); border-radius: 4px; padding: 1.1rem 1.35rem; margin: 1.25rem 0; }
+.fp-page .post-body .fp-error-summary h3 { font-size: 1.05rem; margin: 0 0 .5rem; color: var(--text); }
+.fp-page .post-body .fp-error-summary ul { list-style: disc; margin: .25rem 0 0 1.25rem; }
+.fp-page .post-body .fp-error-summary a { color: var(--fp-error); font-weight: 700; text-decoration-thickness: 1.5px; }
+.fp-error-summary:focus { outline: 3px solid var(--accent); outline-offset: 3px; }
+.fp-success { border: 3px solid var(--fp-ok); background: var(--fp-ok-bg); border-radius: 4px; padding: 1rem 1.35rem; margin: 1.25rem 0; }
+.fp-page .post-body .fp-success h3 { margin: 0 0 .3rem; }
+.fp-page .post-body .fp-success p { margin: 0; font-size: .9rem; }
+
+/* Focus-indicator demo — the bad input is intentionally ringless */
+.fp-page .fp-focus-good:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.fp-page .fp-focus-bad:focus, .fp-page .fp-focus-bad:focus-visible { outline: none; box-shadow: none; }
+
+/* Disclosure (mistakes, code examples) — heading > button, APG accordion shape */
+.fp-disclosure { border: 1px solid var(--border); border-radius: 6px; margin: .5rem 0; background: var(--bg-card); }
+.fp-page .post-body .fp-disclosure h3 { margin: 0; font-size: 1rem; }
+.fp-disclosure-btn {
+  width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+  min-height: 3rem; padding: .75rem 1rem; text-align: left;
+  font: inherit; font-weight: 700; font-size: .95rem; color: var(--text);
+  background: transparent; border: 0; border-radius: 6px; cursor: pointer;
+}
+.fp-disclosure-btn:hover { background: var(--bg-alt); }
+.fp-page .fp-disclosure-btn:focus-visible { outline: 3px solid var(--accent); outline-offset: -3px; }
+.fp-chevron { width: 1rem; height: 1rem; flex-shrink: 0; transition: transform var(--ease); }
+.fp-disclosure-btn[aria-expanded="true"] .fp-chevron { transform: rotate(180deg); }
+.fp-disclosure-btn[aria-expanded="true"] { border-bottom: 1px solid var(--border); border-radius: 6px 6px 0 0; }
+.fp-disclosure-panel { padding: 1rem 1.25rem .5rem; }
+.fp-page .post-body .fp-disclosure-panel p { font-size: .9rem; margin-bottom: .6rem; }
+.fp-tag-ok, .fp-tag-no { font-family: var(--font-mono); font-size: .6rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; padding: .15rem .45rem; border-radius: 3px; border: 1px solid currentColor; margin-right: .6rem; white-space: nowrap; }
+.fp-tag-ok { color: var(--fp-ok); }
+.fp-tag-no { color: var(--fp-error); }
+.fp-disclosure-btn .fp-title { display: flex; align-items: center; flex-wrap: wrap; row-gap: .25rem; }
+
+/* Developer checklist with do / don't examples */
+.fp-devlist { list-style: none !important; margin-left: 0 !important; counter-reset: dev; gap: .6rem !important; }
+.fp-devlist > li { counter-increment: dev; border: 1px solid var(--border); border-radius: 6px; padding: 1rem 1.25rem; background: var(--bg-card); }
+.fp-page .post-body .fp-devlist h3 { margin: 0 0 .3rem; font-size: 1rem; }
+.fp-page .post-body .fp-devlist h3::before { content: counter(dev, decimal-leading-zero) ' '; font-family: var(--font-mono); font-size: .7rem; color: var(--text-subtle); margin-right: .35rem; }
+.fp-page .post-body .fp-devlist p { margin-bottom: .4rem; font-size: .9rem; }
+.fp-page .post-body .fp-devlist p:last-child { margin-bottom: 0; }
+.fp-do, .fp-dont { padding-left: .75rem; border-left: 3px solid; }
+.fp-do   { border-color: var(--fp-ok); }
+.fp-dont { border-color: var(--fp-error); }
+.fp-do strong   { color: var(--fp-ok) !important; }
+.fp-dont strong { color: var(--fp-error) !important; }
+
+/* Live checker */
+.fp-toolbar { display: flex; flex-wrap: wrap; gap: .5rem; margin: 1rem 0; }
+.fp-scope { display: flex; flex-wrap: wrap; align-items: center; gap: .6rem 1rem; margin: 1rem 0 .5rem; }
+.fp-scope .fp-control { width: auto; min-width: 12rem; }
+.fp-checker-results { margin-top: 1rem; }
+.fp-checker-results:empty { display: none; }
+.fp-result { border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 0 4px 4px 0; background: var(--bg-alt); padding: .9rem 1.15rem; margin-bottom: .6rem; }
+.fp-result.has-issues { border-left-color: var(--fp-error); }
+.fp-page .post-body .fp-result h4 { margin: 0 0 .25rem; }
+.fp-page .post-body .fp-result p, .fp-page .post-body .fp-result li { font-size: .87rem; margin-bottom: .3rem; }
+.fp-page .post-body .fp-result ul { list-style: disc; margin: .25rem 0 0 1.1rem; gap: .2rem; }
+/* Flag = dashed outline + text result above; the dash pattern survives colour-blindness and forced colours */
+.fp-page .fp-flag { outline: 3px dashed var(--fp-error) !important; outline-offset: 3px; }
+
+/* Quiz — native radios in fieldsets, styled like the WAS quiz */
+.fp-quiz-set { border: 0; margin: 0; padding: 1.25rem 1.5rem; min-width: 0; }
+.fp-quiz-set > legend { float: left; width: 100%; padding: 0; margin-bottom: .85rem; }
+.fp-quiz-set > legend + * { clear: both; }
+.fp-quiz-set .q-text { display: block; margin-top: .3rem; }
+.fp-opts { display: flex; flex-direction: column; gap: .4rem; }
+.fp-opt {
+  display: flex; align-items: flex-start; gap: .7rem;
+  padding: .62rem 1rem; background: var(--bg-alt); border: 1px solid var(--border); border-radius: 4px;
+  font-size: .9rem; color: var(--text-body); line-height: 1.5; cursor: pointer;
+  transition: background var(--ease), border-color var(--ease);
+}
+.fp-opt input { margin-top: .15rem !important; }
+.fp-opt:hover { background: var(--accent-bg); border-color: var(--accent-text); }
+.fp-opt:has(input:checked) { border-color: var(--accent); border-width: 2px; padding: calc(.62rem - 1px) calc(1rem - 1px); }
+.fp-opt.is-correct { background: var(--fp-ok-bg); border-color: var(--fp-ok); color: var(--text); }
+.fp-opt.is-wrong   { background: var(--fp-error-bg); border-color: var(--fp-error); color: var(--text); }
+.fp-opt-tag { display: inline-block; margin-left: .5rem; font-family: var(--font-mono); font-size: .6rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; padding: .1rem .4rem; border-radius: 3px; border: 1px solid currentColor; }
+.fp-opt.is-correct .fp-opt-tag { color: var(--fp-ok); }
+.fp-opt.is-wrong .fp-opt-tag   { color: var(--fp-error); }
+.fp-quiz-actions { margin-top: 1rem; }
+.fp-quiz-feedback:empty { display: none; }
+.fp-quiz-feedback { margin-top: 1rem; }
+.fp-quiz-bar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .75rem; margin-top: 1rem; padding: 1rem 1.25rem; background: var(--bg-alt); border: 1px solid var(--border); border-radius: 4px; }
+
+/* Final checklist — tickable */
+.fp-checkgroup { border: 1px solid var(--border); border-radius: 4px; background: var(--bg-alt); padding: 1.25rem 1.5rem 1rem; margin: 0 0 1rem; min-width: 0; }
+.fp-checkgroup > legend { float: left; width: 100%; padding: 0; font-weight: 700; font-size: 1.02rem; color: var(--text); }
+.fp-checkgroup > legend + * { clear: both; }
+.fp-page .post-body p.fp-check-progress { font-family: var(--font-mono); font-size: .7rem; color: var(--text-muted); margin: .2rem 0 .6rem; }
+.fp-checks { list-style: none !important; margin: 0 !important; gap: 0 !important; }
+.fp-checks li { border-bottom: 1px solid var(--border); }
+.fp-checks li:last-child { border-bottom: 0; }
+.fp-checks .fp-choice { display: flex; align-items: flex-start; padding: .5rem .25rem; font-size: .9rem; line-height: 1.5; }
+.fp-checks .fp-choice input { margin-top: .15rem; }
+.fp-checks .fp-choice:has(input:checked) { color: var(--text-muted); }
+
+/* Floating inspector (complementary landmark, non-modal). Sits above the
+   back-to-top button so the two never overlap. */
+.fp-inspector {
+  position: fixed; right: 1rem; bottom: 4.5rem; z-index: 90;
+  width: min(22rem, calc(100vw - 2rem)); max-height: min(45vh, 26rem); overflow: auto;
+  background: var(--bg-card); color: var(--text);
+  border: 1.5px solid var(--border-strong); border-radius: 6px;
+  box-shadow: 0 6px 24px rgba(0,0,0,.14);
+}
+.fp-inspector[hidden] { display: none; }
+.fp-inspector-head { display: flex; align-items: center; justify-content: space-between; gap: .75rem; padding: .7rem .9rem; border-bottom: 1px solid var(--border); background: var(--bg-alt); position: sticky; top: 0; }
+.fp-inspector-head h2 { font-size: .9rem; font-weight: 700; margin: 0; }
+.fp-inspector-note { font-size: .75rem; color: var(--text-muted); padding: .6rem .9rem 0; margin: 0; line-height: 1.5; }
+.fp-inspector dl { padding: .5rem .9rem .9rem; margin: 0; }
+.fp-inspector dt { font-family: var(--font-mono); font-size: .6rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--text-muted); margin-top: .6rem; }
+.fp-inspector dd { font-size: .85rem; margin: .1rem 0 0; overflow-wrap: anywhere; line-height: 1.45; }
+.fp-inspector dd code { font-family: var(--font-mono); font-size: .78rem; color: var(--accent-text); }
+.fp-inspector .fp-btn:focus-visible, .fp-back-top:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+.fp-back-top {
+  position: fixed; right: 1rem; bottom: 1rem; z-index: 90;
+  display: inline-flex; align-items: center; gap: .4rem; min-height: 2.75rem; padding: .5rem 1rem;
+  font-family: var(--font-body); font-size: .78rem; font-weight: 700;
+  color: var(--text); background: var(--bg-card);
+  border: 2px solid var(--border-strong); border-radius: 4px; cursor: pointer;
+  transition: background var(--ease), color var(--ease);
+}
+.fp-back-top:hover { background: var(--text); color: var(--bg); }
+.fp-back-top[hidden] { display: none; }
+.fp-back-top svg { width: 1rem; height: 1rem; }
+
+/* ═══════════════════════════════════════════════════════════════
    REDUCED MOTION
    ═══════════════════════════════════════════════════════════════ */
 @media (prefers-reduced-motion: reduce) {
@@ -838,6 +1162,22 @@ main   { padding: 0 0 5rem; }
   .quiz-stats-row { grid-template-columns: 1fr 1fr; }
   .post-title   { font-size: 1.75rem; }
   .toc-grid     { grid-template-columns: 1fr 1fr; }
+  /* Five nav items no longer fit one row at phone width; without wrapping,
+     body{overflow-x:hidden} would silently clip the last links (1.4.10). */
+  .header-inner { flex-wrap: wrap; row-gap: .6rem; }
+  .header-nav   { flex-wrap: wrap; row-gap: .4rem; }
+  /* Playground */
+  .fp-form-card { padding: 1.1rem; }
+  .fp-fieldset  { padding: .9rem .9rem .25rem; }
+  .fp-quiz-set  { padding: 1rem 1.1rem; }
+  .fp-checkgroup { padding: 1rem 1.1rem .75rem; }
+  .fp-inspector { bottom: 4.25rem; max-height: 45vh; }
+}
+/* A wrapped sticky header can take a third of a phone screen, and most of the
+   viewport at 400% zoom — let it scroll away instead of hiding focused content (2.4.11). */
+@media (max-width: 640px), (max-height: 500px) {
+  .site-header { position: static; }
+  html:has(.fp-page) { scroll-padding-top: 1rem; }
 }
 @media (max-width: 400px) {
   .scheme-btns  { flex-wrap: wrap; }
@@ -854,4 +1194,14 @@ main   { padding: 0 0 5rem; }
   .scheme-label.is-selected { border: 2px solid Highlight; }
   .cert-pill, .skill, .article-tag, .post-tag { border: 1px solid ButtonText; }
   .f-btn.active { border: 2px solid Highlight; }
+  /* Playground: backgrounds vanish in forced colours, so state must live in borders/outlines */
+  .fp-page input.fp-switch { border-color: ButtonText; }
+  .fp-page input.fp-switch::before { background: ButtonText; forced-color-adjust: none; }
+  .fp-page input.fp-switch:checked { background: Highlight; forced-color-adjust: none; }
+  .fp-strength-fill { background: CanvasText !important; forced-color-adjust: none; }
+  .fp-btn[aria-pressed="true"], .fp-btn[aria-expanded="true"] { border: 3px solid Highlight; }
+  .fp-toggle-box { forced-color-adjust: none; border-color: ButtonText; }
+  .fp-btn[aria-pressed="true"] .fp-toggle-box, .fp-btn[aria-expanded="true"] .fp-toggle-box { background: Highlight; }
+  .fp-opt.is-correct, .fp-opt.is-wrong { border-width: 3px; }
+  .fp-page .fp-flag { outline-color: Mark !important; }
 }
